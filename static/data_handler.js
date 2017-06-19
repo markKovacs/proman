@@ -7,6 +7,7 @@ app.dataHandler = {
     loadTestBoards: function() {
         // if the settings say that we are in developer environment then it loads in
         // some test data, like the ones you find in sample_data.json
+        this.boards = JSON.parse(app.testBoards).boards;
     },
     loadBoards: function() {
         // loads data from local storage to this.boards property
@@ -24,4 +25,4 @@ app.dataHandler = {
         // creates new card in the given board, saves it and returns its id
     }
     // here can come another features
-}
+};

@@ -7,14 +7,15 @@
         <title>ProMan</title>
 
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="{{url_for('static', filename='settings.js')}}" defer></script>
+        <script src="{{url_for('static', filename='test_boards.js')}}" defer></script>
         <script src="{{url_for('static', filename='data_handler.js')}}" defer></script>
         <script src="{{url_for('static', filename='dom.js')}}" defer></script>
         <script src="{{url_for('static', filename='main.js')}}" defer></script>
     </head>
     <body>
         <h1>ProMan</h1>
-        <div id="boards">Boards are loading...</div>
-        <div id="cards">Cards are loading...</div>
+        <div id="wrapper"></div>
     </body>
 </html>
