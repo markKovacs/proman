@@ -3,7 +3,7 @@ var app = app || {};
 // this object contains the functions which handle the data and its reading/writing
 // feel free to extend and change to fit your needs
 app.dataHandler = {
-    database: {
+    database: {boards: [], boardCounter: 0, cardCounter: 0,
     },
     loadTestBoards: function() {
         // if the settings say that we are in developer environment then it loads in
@@ -11,40 +11,31 @@ app.dataHandler = {
     },
     loadBoards: function() {
        // loads data from local storage to this.boards property
-        var boards = localStorage.getItem('boards');
-        var boardCounter = localStorage.getItem('boardCounter');
-        var cardCounter =  localStorage.getItem('cardCounter');
-        if (boards && boardCounter && cardCounter) {
-            alert("ok");
-            this.database.boards = boards;
-            this.database.boardCounter = boardCounter;
-            this.database.cardCounter = cardCounter;
-        } 
-        else {
-            alert("not ok");
-            this.database.boards = [];
-            this.database.boardCounter = 0;
-            this.database.cardCounter = 0;
-            var newArray = [];
-            newArray = JSON.stringify(newArray);
-            localStorage.setItem('boards', newArray);
-            localStorage.setItem('boardCounter', 0);
-            localStorage.setItem('cardCounter', 0);
-        }
+       this.database.boards = JSON.parse(localStorage.getItem('boards'));
+       this.database.boardCounter = JSON.parse(localStorage.getItem('bCounter'));
+       this.database.cardCounter = JSON.parse(localStorage.getItem('cCounter'));
     },
     saveBoards: function() {
         // saves data to local storage from this.boards property
-        var boardsString = JSON.stringify(this.database.boards);
-        localStorage.setItem("boards", boardsString);
+        localStorage.setItem("boards", JSON.stringify(this.database.boards));
+        localStorage.setItem("bCounter", JSON.stringify(this.database.boardCounter));
+        localStorage.setItem("cCounter", JSON.stringify(this.database.cardCounter));
     },
     getBoard: function(boardId) {
         // returns the board with the given id from this.boards
     },
     createNewBoard: function(boardTitle) {
         // creates new board, saves it and returns its id
+        this.loadBoards()
+        if (this.database.boards === null) {
+            this.database.boards = []
+        }
+        if (this.database.boardCounter === null) {
+            this.database.boardCounter = 0
+        }
         var boardId = this.database.boardCounter;
+        alert(this.database.boardCounter)
         this.database.boardCounter += 1;
-
         var boardObj = {id: boardId,
                         title: boardTitle,
                         state: "active",
