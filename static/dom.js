@@ -8,6 +8,10 @@ app.dom = {
         // using the boards data it creates the boards
         // on the page, appending them to #boards div
 
+        // To be implemented:
+        // 1. hide other stuff
+        // 2. button to create new board and store in local storage
+
         if (app.settings.environment === 'prod') {
             app.dataHandler.loadBoards();
         }
@@ -25,7 +29,7 @@ app.dom = {
                 showBoards(boards[i].id);
             });
             boardDiv.html('<h2 class="board-title">' + boards[i].title + '</h2>' +
-                          '<p class="card-count">Cards: ' + boards[i].cardCount + '</p>');
+                          '<p class="card-count">Cards: ' + boards[i].cards.length + '</p>');
             boardsDiv.append(boardDiv);
         }
     },

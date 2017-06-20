@@ -5,7 +5,6 @@ app.testBoards =    `{"boards": [
                                 "id": 1,
                                 "title": "Test Board 1",
                                 "state": "active",
-                                "cardCount": 3,
                                 "cards": [
                                     {
                                         "id": 1,
@@ -31,7 +30,6 @@ app.testBoards =    `{"boards": [
                                 "id": 2,
                                 "title": "Test Board 2",
                                 "state": "active",
-                                "cardCount": 3,
                                 "cards": [
                                     {
                                         "id": 4,
@@ -58,7 +56,6 @@ app.testBoards =    `{"boards": [
                                 "id": 3,
                                 "title": "Test Board 3",
                                 "state": "active",
-                                "cardCount": 3,
                                 "cards": [
                                     {
                                         "id": 7,
@@ -85,7 +82,6 @@ app.testBoards =    `{"boards": [
                                 "id": 4,
                                 "title": "Test Board 4",
                                 "state": "active",
-                                "cardCount": 3,
                                 "cards": [
                                     {
                                         "id": 10,
@@ -111,7 +107,6 @@ app.testBoards =    `{"boards": [
                                 "id": 5,
                                 "title": "Test Board 5",
                                 "state": "active",
-                                "cardCount": 3,
                                 "cards": [
                                     {
                                         "id": 13,
