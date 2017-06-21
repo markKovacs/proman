@@ -10,7 +10,7 @@ app.dataHandler = {
         // some test data, like the ones you find in sample_data.json
     },
     loadBoards: function() {
-       // loads data from local storage to this.boards property
+       // loads data from loc    storage to this.boards property
        this.database.boards = JSON.parse(localStorage.getItem('boards'));
        this.database.boardCounter = JSON.parse(localStorage.getItem('bCounter'));
        this.database.cardCounter = JSON.parse(localStorage.getItem('cCounter'));
@@ -34,7 +34,6 @@ app.dataHandler = {
             this.database.boardCounter = 0
         }
         var boardId = this.database.boardCounter;
-        alert(this.database.boardCounter)
         this.database.boardCounter += 1;
         var boardObj = {id: boardId,
                         title: boardTitle,
