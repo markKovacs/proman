@@ -30,3 +30,13 @@ h1 {
 .row {
     border: 1px solid black;
 }
+
+
+.card-title {
+    background-color: white;
+}
+
+
+.disabled-title {
+    background-color: gray;
+}

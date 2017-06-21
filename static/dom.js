@@ -45,57 +45,120 @@ app.dom = {
 
         var selectedBoard = app.dataHandler.getBoard(boardId);
 
+
+        // New code for card into 4 START
+
+        var newCards = new Array();
+        var inProgressCards = new Array();
+        var doneCards = new Array();
+        var reviewCards = new Array();
+
+        for (let i = 0; i < selectedBoard.cards.length; i++) {
+            switch (selectedBoard.cards[i].status) {
+                case 'new':
+                    newCards.push(selectedBoard.cards[i]);
+                    break;
+                case 'in_progress':
+                    inProgressCards.push(selectedBoard.cards[i]);
+                    break;
+                case 'done':
+                    doneCards.push(selectedBoard.cards[i]);
+                    break;
+                case 'review':
+                    reviewCards.push(selectedBoard.cards[i]);
+                    break;
+            }
+        }
+
+        // Sort the 4 new pools:
+
+        newCards.sort(function(a, b) {
+            return a.order - b.order;
+        });
+
+        inProgressCards.sort(function(a, b) {
+            return a.order - b.order;
+        });
+
+        doneCards.sort(function(a, b) {
+            return a.order - b.order;
+        });
+
+        reviewCards.sort(function(a, b) {
+            return a.order - b.order;
+        });
+
+        // New code for cards into 4 END
+
+
+
+
+
         var cardsNavRow = createCardNavDiv(boardId, selectedBoard.title);
         $('#cards').append(cardsNavRow);
 
+        // New code START
+        var cardsMainRow = $('<div class="row" id="cards-main-row"></div>');
 
+        var newCardsCol = $('<div class="col-sm-12 col-lg-3" id="new-cards-col"></div>');
+        var inProgressCardsCol = $('<div class="col-sm-12 col-lg-3" id="inprogress-cards-col"></div>');
+        var doneCardsCol = $('<div class="col-sm-12 col-lg-3" id="done-cards-col"></div>');
+        var reviewCardsCol = $('<div class="col-sm-12 col-lg-3" id="review-cards-col"></div>');
 
-
-
-
-
-
-
-
-
-
-
-
-        if (selectedBoard.cards.length > 0) {
-            for (let i = 0; i < selectedBoard.cards.length; i++) {
-                if (i === 0 || i % 4 === 0) {
-                    var cardsRow = $('<div class="row"></div>');
-                    $('#cards').append(cardsRow);
-                }
-                var cardDiv = $('<div class="col-sm-3 card-div"></div>');
-                var cardTitle = $('<h2 class="card-title" id="card-h2-id-' + selectedBoard.cards[i].id + '">' + selectedBoard.cards[i].title + '</div>');
-                var cardEditForm = $('<div class="card-edit-form" id="card-form-id-' + selectedBoard.cards[i].id + '"></div>');
-                var cardTitleInput = $('<input type="text" class="card-new-title" id="card-title-id-' + selectedBoard.cards[i].id + '">');
-                var cardNewTitleSubmit = $('<button>Submit</button>');
-                var cardToggle = $('<button>Toggle</button>');
-
-                cardNewTitleSubmit.on('click', function() {
-                    var newTitle = $('#card-title-id-' + selectedBoard.cards[i].id);
-                    var newTitleValue = newTitle.val();
-                    app.dataHandler.editCard(selectedBoard.id, selectedBoard.cards[i].id, newTitleValue);
-
-                    $('#card-form-id-' + selectedBoard.cards[i].id).hide();
-                    newTitle.val('');
-                    $('#card-h2-id-' + selectedBoard.cards[i].id).text(newTitleValue);
-                })
-
-                cardEditForm.append(cardTitleInput, cardNewTitleSubmit);
-                cardEditForm.css('display', 'none');
-
-                cardToggle.on('click', function() {
-                    $('#card-form-id-' + selectedBoard.cards[i].id).toggle();
-                });
-
-                cardDiv.append(cardTitle, cardToggle, cardEditForm);
-                cardsRow.append(cardDiv);
-                $('#cards').append(cardsRow);
-            }
+        if (newCards.length > 0) {
+            createCardDivsAndAppend(newCards, newCardsCol, boardId);
         }
+        if (inProgressCards.length > 0) {
+            createCardDivsAndAppend(inProgressCards, inProgressCardsCol, boardId);
+        }
+        if (doneCards.length > 0) {
+            createCardDivsAndAppend(doneCards, doneCardsCol, boardId);
+        }
+        if (reviewCards.length > 0) {
+            createCardDivsAndAppend(reviewCards, reviewCardsCol, boardId);
+        }
+
+        // Then append 4 cols to main row
+        cardsMainRow.append(newCardsCol, inProgressCardsCol, doneCardsCol, reviewCardsCol);
+        $('#cards').append(cardsMainRow);
+
+        // New code END
+
+        // if (selectedBoard.cards.length > 0) {
+        //     for (let i = 0; i < selectedBoard.cards.length; i++) {
+        //         if (i === 0 || i % 4 === 0) {
+        //             var cardsRow = $('<div class="row"></div>');
+        //             $('#cards').append(cardsRow);
+        //         }
+        //         var cardDiv = $('<div class="col-sm-3 card-div"></div>');
+        //         var cardTitle = $('<h2 class="card-title" id="card-h2-id-' + selectedBoard.cards[i].id + '">' + selectedBoard.cards[i].title + '</div>');
+        //         var cardEditForm = $('<div class="card-edit-form" id="card-form-id-' + selectedBoard.cards[i].id + '"></div>');
+        //         var cardTitleInput = $('<input type="text" class="card-new-title" id="card-title-id-' + selectedBoard.cards[i].id + '">');
+        //         var cardNewTitleSubmit = $('<button>Submit</button>');
+        //         var cardToggle = $('<button>Toggle</button>');
+
+        //         cardNewTitleSubmit.on('click', function() {
+        //             var newTitle = $('#card-title-id-' + selectedBoard.cards[i].id);
+        //             var newTitleValue = newTitle.val();
+        //             app.dataHandler.editCard(selectedBoard.id, selectedBoard.cards[i].id, newTitleValue);
+
+        //             $('#card-form-id-' + selectedBoard.cards[i].id).hide();
+        //             newTitle.val('');
+        //             $('#card-h2-id-' + selectedBoard.cards[i].id).text(newTitleValue);
+        //         })
+
+        //         cardEditForm.append(cardTitleInput, cardNewTitleSubmit);
+        //         cardEditForm.css('display', 'none');
+
+        //         cardToggle.on('click', function() {
+        //             $('#card-form-id-' + selectedBoard.cards[i].id).toggle();
+        //         });
+
+        //         cardDiv.append(cardTitle, cardToggle, cardEditForm);
+        //         cardsRow.append(cardDiv);
+        //         $('#cards').append(cardsRow);
+        //     }
+        // }
 
     }
     // here comes more features
@@ -163,4 +226,52 @@ function createCardNavDiv (boardId, boardTitle) {
     cardsNavRow.append(cardsNavDiv);
 
     return cardsNavRow;
+}
+
+
+function createCardDivsAndAppend (cardPool, cardPoolDiv, boardId) {
+    // Load (append) card object divs in order into 4 cols
+    // In a for cycle, create all necessary elements and create card blocks with unique ID
+    for (let i = 0; i < cardPool.length; i++) {
+
+        var cardDiv = $('<div class="row card-div" id="card-div-id-' + cardPool[i].id + '"></div>');
+        var cardTitleInput = $('<input type="text" class="card-title disabled-title" id="card-title-id-' + cardPool[i].id + '" disabled value="' + cardPool[i].title + '">');
+        var cardOrder = $('<p class="card-order" id="card-order-id-' + cardPool[i].id + '"></p>');
+        var cardNewTitleSubmit = $('<button id="card-submit-id-' + cardPool[i].id + '">Submit</button>');
+        var cardToggle = $('<button>Edit</button>');
+
+        cardOrder.text('Order: ' + String(cardPool[i].order));
+
+
+        cardNewTitleSubmit.on('click', function() {
+            var newTitle = $('#card-title-id-' + cardPool[i].id);
+            var newTitleValue = newTitle.val();
+            app.dataHandler.editCard(boardId, cardPool[i].id, newTitleValue);
+
+            $('#card-title-id-' + cardPool[i].id).text(newTitleValue);
+            
+            var selectedCardTitle = $('#card-title-id-' + cardPool[i].id);
+            selectedCardTitle.toggleClass('disabled-title');
+            if (selectedCardTitle.attr('disabled')) {
+                selectedCardTitle.prop('disabled', false);
+            } else {
+                selectedCardTitle.prop('disabled', true);
+            }
+        })
+
+        cardToggle.on('click', function() {
+            // new stuff: classToggle for cardTitleInput and cancel disabled
+            var selectedCardTitle = $('#card-title-id-' + cardPool[i].id);
+            selectedCardTitle.toggleClass('disabled-title');
+            if (selectedCardTitle.attr('disabled')) {
+                selectedCardTitle.prop('disabled', false);
+            } else {
+                selectedCardTitle.prop('disabled', true);
+            }
+        })
+
+        // APPENDING
+        cardDiv.append(cardTitleInput, cardOrder, cardNewTitleSubmit, cardToggle);
+        cardPoolDiv.append(cardDiv);
+    }
 }

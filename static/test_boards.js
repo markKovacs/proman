@@ -17,7 +17,7 @@ app.testBoards =  `{"boardCount": 5,
                                     {
                                         "id": 2,
                                         "title": "task2",
-                                        "status": "in progress",
+                                        "status": "in_progress",
                                         "order": 2
                                     },
                                     {
@@ -42,7 +42,7 @@ app.testBoards =  `{"boardCount": 5,
                                     {
                                         "id": 5,
                                         "title": "task5",
-                                        "status": "in progress",
+                                        "status": "in_progress",
                                         "order": 2
                                     },
                                     {
@@ -68,7 +68,7 @@ app.testBoards =  `{"boardCount": 5,
                                     {
                                         "id": 8,
                                         "title": "task5",
-                                        "status": "in progress",
+                                        "status": "in_progress",
                                         "order": 2
                                     },
                                     {
@@ -94,7 +94,7 @@ app.testBoards =  `{"boardCount": 5,
                                     {
                                         "id": 11,
                                         "title": "task5",
-                                        "status": "in progress",
+                                        "status": "in_progress",
                                         "order": 2
                                     },
                                     {
@@ -119,7 +119,7 @@ app.testBoards =  `{"boardCount": 5,
                                     {
                                         "id": 14,
                                         "title": "task5",
-                                        "status": "in progress",
+                                        "status": "in_progress",
                                         "order": 2
                                     },
                                     {

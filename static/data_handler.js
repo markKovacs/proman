@@ -115,16 +115,18 @@ app.dataHandler = {
 function getMaxOrder (boardId) {
     for (var i = 0; i < app.dataHandler.boards.length; i++) {
         if (app.dataHandler.boards[i].id === boardId) {
+            
+            var theseCards = app.dataHandler.boards[i].cards;
+            return theseCards.length;
+            // var cardOrders = new Array();
 
-            var cardOrders = new Array();
+            // for (var j = 0; j < theseCards.length; j++) {
+            //     if (theseCards.status === 'new') {
+            //         cardOrders.push(theseCards.order);
+            //     }
+            // }
 
-            for (var j = 0; j < app.dataHandler.boards[i].cards.length; j++) {
-                if (app.dataHandler.boards[i].cards.status === 'new') {
-                    cardOrders.push(app.dataHandler.boards[i].cards.order);
-                }
-            }
-
-            return Math.max(...cardOrders);
+            // return Math.max(...cardOrders);
         }
     }
 }
