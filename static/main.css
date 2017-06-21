@@ -1,26 +1,32 @@
-#cards {
-    display: none;
-}
 
-#wrapper {
-    width: 80%;
+.container {
     border: 1px solid red;
-    margin: auto;
 }
 
-#boards {
-    width: 80%;
-    border: 1px solid blue;
-    margin: 10px auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-.board-div {
-    width: 20%;
-    border: 1px solid black;
-    margin: 10px;
-    display: inline-block;
+h1 {
     text-align: center;
+}
+
+
+#content {
+    border: 1px solid yellow;
+}
+
+.board-div, .card-div {
+    border: 1px solid black;
+    /*display: inline-block;*/
+    text-align: center;
+}
+
+
+.col-sm-12 {
+    border: 1px solid blue;
+}
+
+.col-sm-3 {
+    border: 1px solid green;
+}
+
+.row {
+    border: 1px solid black;
 }

@@ -1,6 +1,8 @@
 var app = app || {};
 
-app.testBoards =    `{"boards": [
+app.testBoards =  `{"boardCount": 5,
+                    "cardCount": 15,
+                    "boards": [
                             {
                                 "id": 1,
                                 "title": "Test Board 1",
