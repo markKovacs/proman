@@ -126,7 +126,7 @@ function createAddNewBoardDiv () {
     var newBoardButton = $('<button id="new-board-button">Add New Board</button>');
     var newBoardForm = $('<div id="new-board-form"></div>');
     var newBoardInput = $('<input type="text" id="new-board-title">');
-    var newBoardSubmit = $('<button>Submit</button>');
+    var newBoardSubmit = $('<button class="new-entry">Submit</button>');
 
     newBoardForm.append(newBoardInput);
     newBoardSubmit.click(function() {
@@ -156,7 +156,7 @@ function createCardNavDiv (boardId, boardTitle) {
     var backToBoardsButton = $('<button id="back-to-boards">Back to Boards</button>');
     var newCardForm = $('<div id="new-card-form"></div>');
     var newCardInput = $('<input type="text" id="new-card-title">');
-    var newCardSubmit = $('<button>Submit</button>');
+    var newCardSubmit = $('<button class="new-entry">Submit</button>');
 
     newCardSubmit.click(function() {
         var cardTitle = $('#new-card-title').val();
@@ -207,7 +207,7 @@ function createCardDivsAndAppend (cardPool, cardPoolDiv, boardId, cardPoolTitle)
             var cardDiv = $('<div class="row card-div" id="card-div-id-' + cardPool[i].id + '"></div>');
             var cardTitleInput = $('<input type="text" class="card-title disabled-title" id="card-title-id-' + cardPool[i].id + '" disabled value="' + cardPool[i].title + '">');
             var cardOrder = $('<div class="card-order" id="card-order-id-' + cardPool[i].id + '"></div>');
-            var cardNewTitleSubmit = $('<button id="card-submit-id-' + cardPool[i].id + '">Submit</button>');
+            var cardNewTitleSubmit = $('<button id="card-submit-id-' + cardPool[i].id + '">Rename card</button>');
             // var cardToggle = $('<button>Edit</button>');
 
             cardOrder.text('Order: ' + String(cardPool[i].order));
