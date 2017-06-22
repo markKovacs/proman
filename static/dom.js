@@ -173,6 +173,18 @@ function createCardNavDiv (boardId, boardTitle) {
         $('#cards').empty();
         $('#cards').hide();
         $('#boards').show();
+        // Refresh card count for boards:
+
+        var cardCountElements = $('.card-count');
+
+        var upToDateCardCounts = new Array();
+        for (let i = 0; i < app.dataHandler.boards.length; i++) {
+            upToDateCardCounts.push(app.dataHandler.boards[i].cards.length);
+        }
+
+        for (let i = 0; i < cardCountElements.length; i++) {
+            $(cardCountElements[i]).text('Cards: ' + upToDateCardCounts[i]);
+        }
     })
 
     newCardForm.css('display', 'none');
