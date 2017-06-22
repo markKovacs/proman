@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Anton');
 
 /*
 
@@ -24,11 +25,8 @@ IDs:
 
 */
 
-
-
-
-.container {
-    border: 1px solid red;
+body {
+    background-color: #ECF0F1;
 }
 
 h1 {
@@ -36,28 +34,11 @@ h1 {
 }
 
 
-#content {
-    border: 1px solid yellow;
-}
-
 .board-div, .card-div {
-    border: 1px solid black;
     /*display: inline-block;*/
     text-align: center;
 }
 
-
-.col-sm-12 {
-    border: 1px solid blue;
-}
-
-.col-sm-3 {
-    border: 1px solid green;
-}
-
-.row {
-    border: 1px solid black;
-}
 
 
 .card-title {
@@ -80,12 +61,7 @@ h1 {
 .drop-zone {
     border: 3px dashed grey;
     margin: 15px 7px;
-    min-height: 30px;
     border-radius: 10px;
-    /*background-image: url('/static/dropzone.png');
-    background-size: 50px;*/
-    /*background-repeat: no-repeat;*/
-    background-color: white;
     min-height: 100px;
 }
 
@@ -95,4 +71,82 @@ h1 {
 
 .no-border {
     border: none;
+}
+
+.title {
+    color: #3498DB;
+    font-family: Anton, serif;
+    font-size: 3em;
+    user-select: none;
+    cursor: default;
+}
+
+.main-content {
+    background-color: #D9DDDE;
+    padding: 15px;
+    border-radius: 3px;
+}
+
+.board-div {
+    color: white;
+    background-color:#2C3E50;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+}
+
+.board-div:hover {
+    /* background-color: #243342; */
+    background-color: #E74C3C;
+    cursor: pointer;
+}
+
+h2 {
+    margin-top:10px;
+}
+
+#new-board-button, #new-card-button {
+    padding: 15px;
+    margin: 0px 5px 15px 0px;
+    background-color: #2AB932;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #24A12B;
+}
+
+#new-board-button:hover, #new-card-button:hover {
+    background-color: #24A12B;
+}
+
+#new-board-button, #new-card-button {
+    padding: 15px;
+    margin: 0px 15px 15px 0px;
+    background-color: #2AB932;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #24A12B;
+}
+
+#back-to-boards {
+    padding: 15px;
+    margin: 0px 15px 15px 0px;
+    background-color: #E74C3C;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #CC4335;
+}
+
+#back-to-boards:hover {
+    background-color: #CC4335;
+}
+
+#new-cards-col h2 {
+    background-color: #2AB932;
+    padding: 8px 8px 8px 15px;
+    border-radius: 8px 8px 0px 0px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.3em;
 }

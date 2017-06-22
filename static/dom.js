@@ -7,7 +7,7 @@ app.dom = {
         // shows #boards div and hides #cards
         // using the boards data it creates the boards
         // on the page, appending them to #boards div
-
+        $('#cards').hide();
         if (app.settings.environment === 'prod') {
             app.dataHandler.loadBoards();
         }
@@ -25,15 +25,16 @@ app.dom = {
                     var boardsRow = $('<div class="row"></div>');
                     $('#boards').append(boardsRow);
                 }
-                var boardDiv = $('<div class="col-sm-3 board-div"></div>');
+                var boardDivOuter = $('<div class="col-sm-3"></div>')
+                var boardDiv = $('<div class="board-div"></div>');
                 boardDiv.on('click', function() {
                     var boardId = app.dataHandler.boards[i].id;
                     app.dom.showCards(boardId);
                 });
                 boardDiv.html('<h2 class="board-title">' + boards[i].title + '</h2>' +
                               '<p class="card-count">Cards: ' + boards[i].cards.length + '</p>');
-
-            boardsRow.append(boardDiv);
+            boardDivOuter.append(boardDiv);
+            boardsRow.append(boardDivOuter);
             }
         }
     },
@@ -42,6 +43,7 @@ app.dom = {
         // using the boards data it creates the cards
         // on the page, appending them to #cards div
         $('#boards').hide();
+        $('#cards').show();
 
         var selectedBoard = app.dataHandler.getBoard(boardId);
 
@@ -169,6 +171,7 @@ function createCardNavDiv (boardId, boardTitle) {
 
     backToBoardsButton.click(function() {
         $('#cards').empty();
+        $('#cards').hide();
         $('#boards').show();
     })
 
