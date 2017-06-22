@@ -118,15 +118,6 @@ function getMaxOrder (boardId) {
             
             var theseCards = app.dataHandler.boards[i].cards;
             return theseCards.length;
-            // var cardOrders = new Array();
-
-            // for (var j = 0; j < theseCards.length; j++) {
-            //     if (theseCards.status === 'new') {
-            //         cardOrders.push(theseCards.order);
-            //     }
-            // }
-
-            // return Math.max(...cardOrders);
         }
     }
 }
