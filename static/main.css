@@ -1,3 +1,211 @@
-#cards {
-    display: none;
+@import url('https://fonts.googleapis.com/css?family=Anton');
+
+/*
+
+Classes:
+
+.container
+.row
+.col-sm-12
+.col-lg-3
+.board-title (for a h2)
+.card-count (for p-s)
+.card-pool-col
+
+IDs:
+
+#boards
+#cards
+#cards-main-row
+
+#new-cards-col
+#inprogress-cards-col
+#done-cards-col
+#review-cards-col
+
+*/
+
+
+body {
+    background-color: #ECF0F1;
+}
+
+h1 {
+    text-align: center;
+}
+
+
+.board-div, .card-div {
+    /*display: inline-block;*/
+    text-align: center;
+}
+
+
+
+.card-title {
+    background-color: white;
+    text-align: center;
+}
+
+
+.disabled-title {
+    background-color: gray;
+}
+
+.card-order {
+    text-align: right;
+    color: rgba(0,0,0,0);
+}
+
+.card-div {
+    margin: 10px 5px;
+}
+
+.drop-zone {
+    border: 3px dashed grey;
+    margin: 15px 7px;
+    border-radius: 10px;
+    min-height: 100px;
+}
+
+.card-pool-col {
+    min-height: 300px;
+}
+
+.no-border {
+    border: none;
+}
+
+.title {
+    color: #3498DB;
+    font-family: Anton, serif;
+    font-size: 3em;
+    user-select: none;
+    cursor: default;
+}
+
+.board-div {
+    color: white;
+    background-color:#2C3E50;
+    padding: 5px 5px 5px 5px;
+    border-radius: 10px;
+    border-color: #2C3E50;
+}
+
+.board-div:hover {
+    /* background-color: #243342; */
+    position: relative;
+    background-color: #E74C3C;
+    cursor: pointer;
+    padding-bottom: 2px;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-color: #CC4335;
+    transition: background-color 0.2s, border-color 0.2s;
+    
+}
+
+h2 {
+    margin-top:10px;
+}
+
+#new-board-button, #new-card-button {
+    padding: 15px;
+    margin: 0px 5px 15px 0px;
+    background-color: #2AB932;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #24A12B;
+}
+
+#new-board-button:hover, #new-card-button:hover {
+    background-color: #24A12B;
+}
+
+#new-board-button, #new-card-button {
+    padding: 15px;
+    margin: 0px 15px 15px 0px;
+    background-color: #2AB932;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #24A12B;
+}
+
+#back-to-boards {
+    padding: 15px;
+    margin: 0px 15px 15px 0px;
+    background-color: #E74C3C;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #CC4335;
+}
+
+#back-to-boards:hover {
+    background-color: #CC4335;
+    }
+
+button[id^="card-submit-id-"] {
+    padding: 5px;
+    background-color: #3d3d3d;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 0.8em;    
+    color: white;
+    border: 1px solid #1f1f1f;
+}
+
+.card-pool-col h2 {
+    background-color: #243342;
+    padding: 8px 8px 8px 15px;
+    border-radius: 8px 8px 0px 0px;
+    color: white;
+    font-weight: bold;
+    font-size: 1.3em;
+    border-bottom: 3px solid #18222B;
+}
+
+.card-div {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    border-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    margin: 10px 0px;
+    cursor: pointer;
+    
+}
+
+.card-div:hover {
+    border-bottom: 3px solid rgba(0,0,0,0.2);
+    padding-bottom: 12px;
+    background-color: rgba(52,152,219,0.5);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.disabled-title {
+    background-color: rgba(0,0,0,0); 
+    border: none;
+    text-align: center;
+    font-weight: bold;
+}
+
+.new-entry {
+    padding: 5px;
+    background-color: #3d3d3d;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 1em;    
+    color: white;
+    border: 1px solid #1f1f1f;
+    margin: 0px 0px 5px 5px;
+}
+
+#boards .row {
+    margin-bottom: 25px;
+}
+
+#cards-nav-div h2 {
+    font-weight: bold;
 }

@@ -5,12 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>ProMan</title>
-        
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
-    
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='normalize.css')}}">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="{{url_for('static', filename='settings.js')}}" defer></script>
+        <script src="{{url_for('static', filename='test_boards.js')}}" defer></script>
         <script src="{{url_for('static', filename='data_handler.js')}}" defer></script>
         <script src="{{url_for('static', filename='dom.js')}}" defer></script>
         <script src="{{url_for('static', filename='main.js')}}" defer></script>
@@ -18,19 +18,10 @@
     <body>
         <header class="container">
             <div class="row">
-                <div class="col-sm-12">
-                    <h1>ProMan</h1>
-                </div>
+                <h1 class="col-sm-12 title">ProMan</h1>
             </div>
         </header>
-        <section class="jumbotron">
-            <div class="container">
-                <div class="row" id="boardlist">
-                </div>
-            </div>
-            <div class="create">
-                <button id="new_board">NEW</button>
-            </div>
-        </section>
+        <section class="container main-content" id="boards"></section>
+        <section class="container main-content" id="cards"></section>
     </body>
 </html>
