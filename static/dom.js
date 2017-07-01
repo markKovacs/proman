@@ -71,27 +71,27 @@ app.dom = {
             <div class="row" id="cards-main-row">
                 <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
                 <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
                 <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
             </div>
         `);
 
         // Create and append cards to their respective card pool:
         appendCards(newCards, 'new-cards-col', boardId, 'New');
         appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress');
-        appendCards(reviewCards, 'done-cards-col', boardId, 'Review');
-        appendCards(doneCards, 'review-cards-col', boardId, 'Done');
+        appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
+        appendCards(doneCards, 'done-cards-col', boardId, 'Done');
 
         $('#boards').hide();
         $('#cards').show();
     }
-    // here comes more features
 }
 
 
 function appendBoardNavDiv () {
     // Create and append the div responsible for
     // the addition of new boards with given title.
+
     $('#boards').append(`
         <div class="row">
             <div class="col-sm-12">
@@ -119,7 +119,8 @@ function appendBoardNavDiv () {
 
 
 function appendBoards () {
-    // Create and append boards, based on stored boards data. 
+    // Create and append boards, based on stored boards data.
+
     var boardsData = app.dataHandler.boards;
 
     for (let i = 0; i < boardsData.length; i++) {
@@ -149,6 +150,7 @@ function appendBoards () {
 function appendCardNavDiv (boardId, boardTitle) {
     // Create and append div responsible for
     // navigation back to boards and new card creation.
+
     $('#cards').append(`
         <div class="row">
             <div class="col-sm-12">
@@ -190,99 +192,95 @@ function appendCardNavDiv (boardId, boardTitle) {
 
 
 function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
-    debugger;
+    // Append cards to cards pool divs respectively.
+    // Assign event listeners to drag and drop and edit title buttons.
+
     var cardPoolDiv = $(`#${cardPoolDivId}`);
     cardPoolDiv.append(`<h2>${cardPoolTitle}</h2>`);
 
     if (cardPool.length > 0) {
         for (let i = 0; i < cardPool.length; i++) {
 
-            var cardDiv = $('<div class="row card-div" id="card-div-id-' + cardPool[i].id + '"></div>');
-            var cardTitleInput = $('<input type="text" class="card-title disabled-title" id="card-title-id-' + cardPool[i].id + '" disabled value="' + cardPool[i].title + '">');
-            var cardOrder = $('<div class="card-order" id="card-order-id-' + cardPool[i].id + '"></div>');
-            var cardNewTitleSubmit = $('<button id="card-submit-id-' + cardPool[i].id + '">Edit</button>');
-
-            cardOrder.text('Order: ' + String(cardPool[i].order));
-
-            cardNewTitleSubmit.on('click', function() {
-                var newTitle = $('#card-title-id-' + cardPool[i].id);
-                var newTitleValue = newTitle.val();
-                app.dataHandler.editCard(boardId, cardPool[i].id, newTitleValue);
-
-                $('#card-title-id-' + cardPool[i].id).text(newTitleValue);
-                
-                var selectedCardTitle = $('#card-title-id-' + cardPool[i].id);
-                selectedCardTitle.toggleClass('disabled-title');
-                if (selectedCardTitle.attr('disabled')) {
-                    selectedCardTitle.prop('disabled', false);
-                    $(this).text('Submit');
-                } else {
-                    selectedCardTitle.prop('disabled', true);
-                    $(this).text('Edit');
-                }
-            })
-
-            // Event listeners: drag and drop on card divs
-
-            cardDiv.on('dragstart', function(ev) {
-                drag(ev);
-            });
-
-            cardDiv.attr('draggable', true);
-
-            cardDiv.on('drop', function(ev) {
-                drop(ev);
-            });
-
-            cardDiv.on('dragover', function(ev) {
-                allowDrop(ev);
-            });
-
-            cardDiv.append(cardTitleInput, cardOrder, cardNewTitleSubmit);
-            cardPoolDiv.append(cardDiv);
+            cardPoolDiv.append(`
+                <div class="row card-div" id="card-div-id-${cardPool[i].id}" draggable="true">
+                    <input class="card-title disabled-title" id="card-title-id-${cardPool[i].id}" disabled value="${cardPool[i].title}">
+                    <div class="card-order" id="card-order-id-${cardPool[i].id}">Order: ${cardPool[i].order}</div>
+                    <button class="edit-title" id="card-submit-id-${cardPool[i].id}" data-card-id="${cardPool[i].id}">Edit</button>
+                </div>
+            `);
         }
 
-        var dropZone = $('<div class="drop-zone no-border"></div>')
+        // Title edit / Submit button event listener:
+        cardPoolDiv.on('click', '.edit-title', function(ev) {
+            ev.stopPropagation();
+            var cardId = $(this).data('card-id');
 
-        dropZone.on('drop', function(ev) {
-            drop(ev);
-        });
+            var titleInput = $(`#card-title-id-${cardId}`);
+            var newTitleValue = titleInput.val();
+            app.dataHandler.editCard(boardId, cardId, newTitleValue);
 
-        dropZone.on('dragover', function(ev) {
-            allowDrop(ev);
-        });
+            titleInput.text(newTitleValue);
+            titleInput.toggleClass('disabled-title');
 
-        cardPoolDiv.append(dropZone);
+            if (titleInput.attr('disabled')) {
+                titleInput.prop('disabled', false);
+                $(this).text('Submit');
+            } else {
+                titleInput.prop('disabled', true);
+                $(this).text('Edit');
+            }
+        })
 
-    } else {
-        var dropZone = $('<div class="drop-zone no-border"></div>')
-
-        dropZone.on('drop', function(ev) {
-            drop(ev);
-        });
-
-        dropZone.on('dragover', function(ev) {
-            allowDrop(ev);
-        });
-
-        cardPoolDiv.append(dropZone);
+        // Drag and drop event listeners for card divs:
+        cardPoolDiv.on({
+            dragstart: function(ev) {
+                drag(ev);
+            },
+            drop: function(ev) {
+                drop(ev);
+            },
+            dragover: function(ev) {
+                allowDrop(ev);
+            }
+        }, '.card-div');
     }
+
+    // Appending drop zone at the end of column:
+    var dropZone = $('<div class="drop-zone no-border"></div>');
+
+    dropZone.on({
+        drop: function(ev) {
+            drop(ev);
+        },
+        dragover: function(ev) {
+            allowDrop(ev);
+        }
+    });
+
+    cardPoolDiv.append(dropZone);
 }
 
 
-// Drag and drop:
-
 function allowDrop(ev) {
+    // Allow drop upon 'dragover' by canceling the default behaviour.
+
     ev.preventDefault();
     ev.stopPropagation();
 }
 
 function drag(ev) {
+    // Upon 'dragstart' save the id of dragged item,
+    // preparing it to be replaced in the DOM tree.
+
     ev.stopPropagation();
-    ev.originalEvent.dataTransfer.setData("text", ev.target.id);
+    ev.originalEvent.dataTransfer.setData("text", $(ev.target).attr('id'));
 }
 
 function drop(ev) {
+    // Upon 'drop' replace the element being dragged
+    // by inserting before the element it was moved over.
+    // Function checks class and adjusts drop target accordingly.
+
     ev.preventDefault();
     ev.stopPropagation();
     var movedElementId = ev.originalEvent.dataTransfer.getData("text");
@@ -297,15 +295,15 @@ function drop(ev) {
     }
 
     dropTarget.before(movedElement);
-
     makePersistent(movedElement, dropTarget);
 }
 
 
 function makePersistent (movedElement, dropTarget) {
+    // Based on DOM tree, does re-ordering of all cards in board,
+    // furthermore overwrites dragged card status with new status.
 
     var movedCardId = Number(movedElement.attr('id').slice(12));
-
     var parentColId = dropTarget.parent().attr('id');
 
     var newStatus;
@@ -343,5 +341,5 @@ function makePersistent (movedElement, dropTarget) {
         }
     }
 
-    localStorage.setItem('boards', JSON.stringify(app.dataHandler.boards));
+    app.dataHandler.saveBoards();
 }

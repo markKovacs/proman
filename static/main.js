@@ -1,9 +1,10 @@
 
 var app = app || {};
 
-// app.init initializes the JS application
 
 app.init = function() {
+    // Initializes the JS application
+
     app.dom.showBoards();
 }
 
