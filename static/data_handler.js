@@ -4,8 +4,8 @@ var app = app || {};
 // feel free to extend and change to fit your needs
 app.dataHandler = {
     boards: [], // it contains the boards and their cards
-    boardCount: 6,
-    cardCount: 6,
+    boardCount: 0,
+    cardCount: 0,
     loadTestBoards: function() {
         // if the settings say that we are in developer environment then it loads in
         // some test data, like the ones you find in sample_data.json

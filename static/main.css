@@ -1,31 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Anton');
 
-/*
-
-Classes:
-
-.container
-.row
-.col-sm-12
-.col-lg-3
-.board-title (for a h2)
-.card-count (for p-s)
-.card-pool-col
-
-IDs:
-
-#boards
-#cards
-#cards-main-row
-
-#new-cards-col
-#inprogress-cards-col
-#done-cards-col
-#review-cards-col
-
-*/
-
-
 body {
     background-color: #ECF0F1;
 }
@@ -107,6 +81,7 @@ h1 {
 
 h2 {
     margin-top:10px;
+    font-weight: bold;
 }
 
 #new-board-button, #new-card-button {
@@ -191,7 +166,7 @@ button[id^="card-submit-id-"] {
     font-weight: bold;
 }
 
-.new-entry {
+#new-board-entry, #new-card-entry {
     padding: 5px;
     background-color: #3d3d3d;
     border-radius: 3px;
@@ -206,6 +181,10 @@ button[id^="card-submit-id-"] {
     margin-bottom: 25px;
 }
 
-#cards-nav-div h2 {
-    font-weight: bold;
+#new-board-form, #new-card-form {
+    display: none;
+}
+
+#cards {
+    display: none;
 }
