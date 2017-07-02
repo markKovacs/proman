@@ -29,6 +29,7 @@ h1 {
 .card-order {
     text-align: right;
     color: rgba(0,0,0,0);
+    width: 1px;
 }
 
 .card-div {
@@ -39,7 +40,7 @@ h1 {
     border: 3px dashed grey;
     margin: 15px 7px;
     border-radius: 10px;
-    min-height: 100px;
+    min-height: 100px;  
 }
 
 .card-pool-col {

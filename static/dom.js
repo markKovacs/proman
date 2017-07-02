@@ -241,6 +241,15 @@ function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
             },
             dragover: function(ev) {
                 allowDrop(ev);
+            },
+            dragenter: function(ev) {
+                if (!$(ev.target).hasClass('card-title')) {
+                    $('.card-div').css('border', 'none');
+                }
+                $(this).css('border-top', '12px double #243342');
+            },
+            dragend: function(ev) {
+                $('.card-div').css('border', 'none');
             }
         }, '.card-div');
     }
@@ -257,6 +266,7 @@ function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
             allowDrop(ev);
         },
         dragenter: function() {
+            $('.card-div').css('border', 'none');
             $(this).css('border', '3px dashed gray');
         },
         dragleave: function() {
