@@ -251,9 +251,16 @@ function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
     dropZone.on({
         drop: function(ev) {
             drop(ev);
+            $(ev.target).css('border', 'none');
         },
         dragover: function(ev) {
             allowDrop(ev);
+        },
+        dragenter: function() {
+            $(this).css('border', '3px dashed gray');
+        },
+        dragleave: function() {
+           $(this).css('border', 'none');
         }
     });
 
@@ -273,7 +280,7 @@ function drag(ev) {
     // preparing it to be replaced in the DOM tree.
 
     ev.stopPropagation();
-    ev.originalEvent.dataTransfer.setData("text", $(ev.target).attr('id'));
+    ev.originalEvent.dataTransfer.setData("target_id", $(ev.target).attr('id'));
 }
 
 function drop(ev) {
@@ -283,8 +290,8 @@ function drop(ev) {
 
     ev.preventDefault();
     ev.stopPropagation();
-    var movedElementId = ev.originalEvent.dataTransfer.getData("text");
-    var movedElement = $('#' + movedElementId);
+    var movedElementId = ev.originalEvent.dataTransfer.getData("target_id");
+    var movedElement = $(`#${movedElementId}`);
 
     var dropTarget = $(event.target);
 
