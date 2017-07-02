@@ -151,13 +151,11 @@ h2 {
     margin: 10px 0px;
     cursor: pointer;
     
-}
+}   
 
 .card-div:hover {
-    border-bottom: 3px solid rgba(0,0,0,0.2);
-    padding-bottom: 12px;
     background-color: rgba(52,152,219,0.5);
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color 0.5s, border-color 0.5s;
 }
 
 .disabled-title {
