@@ -156,7 +156,7 @@ def login_user():
     user_name = request.form['login_acc_name']
     session['user_name'] = user_name
 
-    flash('Successfully logged in as {}.'.format(user_name), 'success')
+    flash('Successfully logged in as {}. Welcome back in ProMan!'.format(user_name), 'success')
 
     return redirect(url_for('index'))
 
