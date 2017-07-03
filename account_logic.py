@@ -2,12 +2,59 @@
 # Account and session management related logic
 
 from datetime import datetime, timedelta
+from functools import wraps
 from string import ascii_lowercase, ascii_uppercase, digits
 
 from flask import abort, flash, redirect, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 
 import data_manager
+
+
+# Decorators for server-side access management
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_name' in session:
+            return func(*args, **kwargs)
+
+        flash('Restricted area. Please login to gain access.', 'error')
+        return redirect(url_for('manage_account'))
+
+    return wrapper
+
+
+def not_loggedin(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'user_name' not in session:
+            return func(*args, **kwargs)
+        else:
+            flash("Cannot access page. You are already logged in.", "error")
+            return redirect(url_for("index"))
+
+    return wrapper
+
+
+# Before request checks
+
+def make_session_permanent(app):
+    """Makes session permanent, set lifetime to 5 minutes, refresh upon each request."""
+    if 'user_name' in session:
+        session.permanent = True
+        app.permanent_session_lifetime = timedelta(minutes=5)
+
+
+def check_for_valid_request():
+    """Check if HTTP request is any of the allowed request methods,
+    and if function does not exist for requested URL, then abort.
+    """
+    allowed_req_methods = ('GET', 'POST')
+    if request.method not in allowed_req_methods:
+        abort(405)
+    if request.endpoint is None:
+        abort(404)
 
 
 # Registration and helper functions
@@ -97,7 +144,6 @@ def create_timestamp():
 
 
 # Login and helper functions
-
 
 def login_user():
     """Login user after validating credentials. Set session ID,
