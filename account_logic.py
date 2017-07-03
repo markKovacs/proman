@@ -1,9 +1,100 @@
 
 # Account and session management related logic
 
+from datetime import datetime, timedelta
+from string import ascii_lowercase, ascii_uppercase, digits
+
+from flask import abort, flash, redirect, request, session, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+
+import data_manager
+
+
+# Registration and helper functions
 
 def register_account():
-    pass
+    """Register account after validation and hashing process."""
+    user_name = request.form.get('register_acc_name')
+    password = request.form.get('register_password_1')
+    password_conf = request.form.get('register_password_2')
+    user_names = get_user_names()
+
+    if user_name in user_names:
+        flash("User name already exists. Please choose another one.", "error")
+        return redirect(url_for('manage_account'))
+
+    if not valid_user_name(user_name):
+        flash("Invalid user name. Should be 4-16 characters long, contain only letters, \
+        numbers, dashes and underscores.", "error")
+        return redirect(url_for('manage_account'))
+
+    if not valid_password(password, password_conf):
+        flash("Invalid password or not matching. Password should be 4-16 characters long, \
+        containing only letters, numbers, dashes and underscores.", "error")
+        return redirect(url_for('manage_account'))
+
+    create_account(user_name, password)
+    flash("Successful registration. Please log in.", "success")
+    return redirect(url_for('manage_account'))
+
+
+def get_user_names():
+    """Return all user names."""
+    sql = """SELECT account_name FROM accounts;"""
+    parameters = None
+    fetch = "col"
+
+    return data_manager.query(sql, parameters, fetch)
+
+
+def valid_user_name(user_name):
+    """Return True if user name string is valid.
+    Valid characters: lowercase, digits, underscore.
+    """
+    if len(user_name) >= 4 and len(user_name) <= 16:
+        for char in user_name:
+            if char not in (ascii_lowercase + ascii_uppercase + digits + '_-'):
+                break
+        else:
+            return True
+
+    return False
+
+
+def valid_password(password_1, password_2):
+    """Return True if password string is valid.
+    Valid characters: lowercase, uppercase, digits.
+    """
+    if password_1 == password_2:
+        if len(password_1) >= 4 and len(password_1) <= 16:
+            for char in password_1:
+                if char not in (ascii_lowercase + ascii_uppercase + digits + '-_'):
+                    break
+            else:
+                return True
+
+    return False
+
+
+def create_account(account_name, password):
+    """Create account in accounts table."""
+    reg_date = create_timestamp()
+    hashed_pw = generate_password_hash(password, method='pbkdf2:sha512:80000', salt_length=8)
+
+    sql = """INSERT INTO accounts (account_name, password, reg_date)
+             VALUES (%s, %s, %s);"""
+    parameters = (account_name, hashed_pw, reg_date)
+    fetch = None
+
+    data_manager.query(sql, parameters, fetch)
+
+
+def create_timestamp():
+    """Create timestamp, suitable for database timestamp format."""
+    return '{:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
+
+
+# Login and helper functions
 
 
 def login_user():
