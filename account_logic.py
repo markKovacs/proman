@@ -34,8 +34,10 @@ def register_account():
         return redirect(url_for('manage_account'))
 
     create_account(user_name, password)
-    flash("Successful registration. Please log in.", "success")
-    return redirect(url_for('manage_account'))
+    session['user_name'] = user_name
+    flash("Successful registration as '{}'. Welcome at ProMan!".format(user_name), "success")
+
+    return redirect(url_for('index'))
 
 
 def get_user_names():
@@ -98,4 +100,37 @@ def create_timestamp():
 
 
 def login_user():
-    pass
+    """Login user after validating credentials. Set session ID,
+    set client-side cookie and store session ID server-side as well.
+    """
+    if not valid_credentials(request.form):
+        flash("Invalid credentials.", "error")
+        return redirect(url_for('manage_account'))
+
+    user_name = request.form['login_acc_name']
+    session['user_name'] = user_name
+
+    flash('Successfully logged in as {}.'.format(user_name), 'success')
+
+    return redirect(url_for('index'))
+
+
+def valid_credentials(form):
+    """Return True if input credentials are valid."""
+    user_names = get_user_names()
+    user_name = form.get('login_acc_name')
+    if user_name in user_names:
+        user_password = get_user_password(user_name)
+        if check_password_hash(user_password, form.get('login_password')):
+            return True
+
+    return False
+
+
+def get_user_password(account_name):
+    """Get password for account_name in accounts table."""
+    sql = """SELECT password FROM accounts WHERE account_name = %s;"""
+    parameters = (account_name,)
+    fetch = 'cell'
+
+    return data_manager.query(sql, parameters, fetch)
