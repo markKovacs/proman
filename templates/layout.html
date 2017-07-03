@@ -1,28 +1,84 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>ProMan</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='normalize.css')}}">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-        <script src="{{url_for('static', filename='settings.js')}}" defer></script>
-        <script src="{{url_for('static', filename='test_boards.js')}}" defer></script>
-        <script src="{{url_for('static', filename='data_handler.js')}}" defer></script>
-        <script src="{{url_for('static', filename='dom.js')}}" defer></script>
-        <script src="{{url_for('static', filename='main.js')}}" defer></script>
-    </head>
-    <body>
-        <header class="container">
-            <div class="row">
-                <h1 class="col-sm-12 title">ProMan</h1>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}{% endblock %} - ProMan</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='normalize.css')}}">
+    <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='favicon.ico')}}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="{{url_for('static', filename='settings.js')}}" defer></script>
+    <script src="{{url_for('static', filename='test_boards.js')}}" defer></script>
+    <script src="{{url_for('static', filename='data_handler.js')}}" defer></script>
+    <script src="{{url_for('static', filename='dom.js')}}" defer></script>
+    <script src="{{url_for('static', filename='main.js')}}" defer></script>
+
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="container">
+        <div class="row">
+            <h1 class="col-sm-4">ProMan</h1>
+            <nav class="col-sm-8 text-right">
+
+                <p><a href="{{ url_for('index') }}">index</a></p>
+                <p><a href="{{ url_for('boards') }}">boards</a></p>
+
+                {% if session.user_name %}
+                <p class="profile-name"><img src="" alt="IMG" id="profile-picture">{{ session.user_name }}</p>
+                <p><a href="{{ url_for('logout') }}">logout</a></p>
+                {% else %}
+                <p><a href="{{ url_for('manage_account') }}">login/register</a></p>
+                {% endif %}
+
+            </nav>
+        </div>
+    </header>
+
+    <!-- Error messages in a loop with classes: error, success -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="row">
+        <div class="container">
+            <div class="col-sm-12">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
             </div>
-        </header>
-        <section class="container main-content" id="boards"></section>
-        <section class="container main-content" id="cards"></section>
-    </body>
+        </div>
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Modal Section -->
+    <section class="row">
+        <div id="modal">
+            <div class="container" id="modal-content">
+                <span class="close">&times;</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section(s) -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    <footer class="container">
+        <div class="row">
+            <p class="col-sm-12" id="footer">&copy; 2017 RushBit</p>
+        </div>
+    </footer>
+
+</body>
 </html>
