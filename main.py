@@ -1,7 +1,8 @@
 
 from os import urandom
 
-from flask import Flask, flash, redirect, render_template, request, session, jsonify
+from flask import (Flask, flash, jsonify, redirect, render_template, request,
+                   session, url_for)
 
 import account_logic as account
 import board_logic
@@ -63,7 +64,7 @@ def logout():
     session.pop('user_name', None)
     flash("Successfully logged out.", "success")
 
-    return redirect(url_for('planets'))
+    return redirect(url_for('index'))
 
 
 @app.route('/api/cards')

@@ -8,11 +8,6 @@ app.dom = {
         // Populate and show #boards div with 
         // board management div and all boards from database.
 
-        if (app.settings.environment === 'prod') {
-            app.dataHandler.loadBoards();
-        } else {
-            app.dataHandler.loadTestBoards();
-        }
 
         appendBoardNavDiv();
         appendBoards();
