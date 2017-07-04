@@ -64,6 +64,13 @@ def save_new_board(title):
     query = (sql, parameters)
 
 
+def edit_board(board_id):
+    """Edit the name of the board based on the given id."""
+    sql = """UPDATE boards SET title WHERE id = %s;"""
+    parameters = (board_id,)
+    query = (sql, parameters)
+
+
 def delete_card(card_id):
     """Delete a card based on the given id."""
     sql = """DELETE FROM cards WHERE id = %s;"""
