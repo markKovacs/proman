@@ -11,8 +11,9 @@
     <title>{% block title %}{% endblock %} - ProMan</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='normalize.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='proman.css')}}">
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='favicon.png')}}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
@@ -25,8 +26,22 @@
 </head>
 
 <body>
+    <!-- Navigation bar -->
+    <nav class="container pronav">
+        <div class="row">
 
-    <!-- Header -->
+            <div class="col-sm-3">
+                <img src="{{url_for('static', filename='proman-logo-ondark.png')}}" class="logo">
+            </div>
+            <div class="col-sm-9">
+                <ul class="menu">
+                    <li><a href="#" class="cta">Log in</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header 
     <header class="container">
         <div class="row">
             <h1 class="col-sm-4">ProMan</h1>
@@ -45,6 +60,7 @@
             </nav>
         </div>
     </header>
+    -->
 
     <!-- Error messages in a loop with classes: error, success -->
     {% with messages = get_flashed_messages(with_categories=true) %}

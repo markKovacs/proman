@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800&subset=latin-ext');
+/* Navbar */
+
+.pronav {
+    position: fixed;
+    display: block;
+    background-color: #2A2A2F;
+    height: 80px;
+    width: 100%;
+    margin: 0px;
+    color: #EBEBE6;
+    border-top: 2px solid #E95846;
+}
+
+.pronav .logo {
+    height: 50px;
+}
+
+.pronav .row {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+ul {
+    text-decoration: none;
+    list-style-type: none;
+}
+
+.pronav ul {
+    float: right;
+}
+
+.pronav .menu {
+    margin-top: 12px;
+    margin-right: 15px;
+}
+
+.pronav .menu .cta {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    background-color: #00B7DC;
+    border-radius: 3px;
+}
+
+.pronav .menu .cta:hover {
+    background-color: #85C1E9; 
+    transition: background-color, 0.3s;
+}
+
+
+.main-content {
+    margin-top: 90px;
+}
+
