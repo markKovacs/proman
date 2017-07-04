@@ -1,10 +1,6 @@
-
-# Database connection and run statements
-
+import config
 import psycopg2
 import psycopg2.extras
-
-import config
 
 
 def query(sql, parameters, fetch):
@@ -39,7 +35,6 @@ def run_statement(sql, parameters, fetch, cursor):
         cursor.execute(sql, parameters)
     else:
         cursor.execute(sql)
-
     result = None
     if fetch == "all":
         result = cursor.fetchall()
@@ -49,6 +44,5 @@ def run_statement(sql, parameters, fetch, cursor):
         result = tuple(row[0] for row in cursor)
     elif fetch == "cell":
         result = cursor.fetchone()[0]
-
     if result:
         return result
