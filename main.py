@@ -70,8 +70,9 @@ def logout():
 @app.route('/api/cards')
 @account.login_required
 def load_cards():
-    board_id = request.args.get("board_id")
+    board_id = request.args.get("id")
     cards = board_logic.load_cards(board_id)
+    print(cards)
     return jsonify(cards)
 
 

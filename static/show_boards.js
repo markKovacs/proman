@@ -46,7 +46,7 @@ function appendBoards () {
 
         boardsRow.append(`
             <div class="col-sm-3">
-                <div class="board-div" data-board-id="${boardsData[i].id}">
+                <div class="board-div" data-board-id="${boardsData[i].id}" data-board-title="${boardsData[i].title}">
                     <h2 class="board-title">${boardsData[i].title}</h2>
                     <p class="card-count">Cards: ${boardsData[i].card_count}</p>
                 </div>
@@ -56,7 +56,8 @@ function appendBoards () {
 
     $('.board-div').on('click', function() {
         var boardId = $(this).data('board-id');
-        app.dom.showCards(boardId); // not working yet
+        var boardTitle = $(this).data('board-title');
+        app.dom.showCards(boardId, boardTitle); // not working yet
     });
 }
 

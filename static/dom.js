@@ -13,7 +13,7 @@ app.dom = {
         appendBoards();
     },
 
-    showCards: function (boardId) {
+    showCards_old: function (boardId) {
         // Populate and show #cards div and hide #boards div.
         // Create and append cards navigation div and cards based board data.
 
@@ -70,6 +70,72 @@ app.dom = {
                 <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
             </div>
         `);
+
+        // Create and append cards to their respective card pool:
+        appendCards(newCards, 'new-cards-col', boardId, 'New');
+        appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress');
+        appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
+        appendCards(doneCards, 'done-cards-col', boardId, 'Done');
+
+        $('#boards').hide();
+        $('#cards').show();
+    },
+
+    showCards: function (boardId, boardTitle) {
+
+        var cards = app.dataHandler.getCards(boardId);
+
+        appendCardNavDiv(boardId, boardTitle);
+
+        var newCards = new Array();
+        var inProgressCards = new Array();
+        var doneCards = new Array();
+        var reviewCards = new Array();
+
+        // Group cards by card status:
+        for (let i = 0; i < cards.length; i++) {
+            switch (cards[i].status) {
+                case 'new':
+                    newCards.push(cards[i]);
+                    break;
+                case 'in_progress':
+                    inProgressCards.push(cards[i]);
+                    break;
+                case 'done':
+                    doneCards.push(cards[i]);
+                    break;
+                case 'review':
+                    reviewCards.push(cards[i]);
+                    break;
+            }
+        }
+
+        // Sort the 4 new card pools by card order:
+        newCards.sort(function (a, b) {
+            return a.order - b.order;
+        });
+
+        inProgressCards.sort(function (a, b) {
+            return a.order - b.order;
+        });
+
+        doneCards.sort(function (a, b) {
+            return a.order - b.order;
+        });
+
+        reviewCards.sort(function (a, b) {
+            return a.order - b.order;
+        });
+
+        // Append 4 card pools:
+        $('#cards').append(`
+                <div class="row" id="cards-main-row">
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
+                </div>
+            `);
 
         // Create and append cards to their respective card pool:
         appendCards(newCards, 'new-cards-col', boardId, 'New');

@@ -1,4 +1,5 @@
-
+var cards;
+var xhr;
 var app = app || {};
 
 app.dataHandler = {
@@ -123,6 +124,31 @@ app.dataHandler = {
                 }
             }
         }
+    },
+
+    getCards: function (boardId) {
+
+        xhr = $.ajax({
+                    dataType: "json",
+                    url: "/api/cards",
+                    data: {
+                        id: boardId
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        cards = response;
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+
+        $.when(xhr).done(function () {
+            console.log('cards1');
+            console.log(cards);
+            console.log('cards2');
+            return cards;
+        });
     }
 };
 
@@ -136,26 +162,3 @@ function getMaxOrder(boardId) {
         }
     }
 }
-
-//
-
-
-function getBoardData(boardId) {
-    var deferredObjects = [];
-    var cards = []
-    deferredObjects.push(
-        $.ajax({
-            dataType: "json",
-            url: "/api/cards",
-            success: function (response) {
-                for (var i = 0; i < response.length; i++) {
-                    cards.push(i);
-                };
-            }
-        })
-    );
-    $.when(...deferredObjects).done(function () {
-        app.dom.displayCards(cards, boardId);
-    });
-}
-
