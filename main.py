@@ -39,6 +39,7 @@ def index():
 
 
 @app.route("/boards")
+@account.login_required
 def boards():
     boards_data = board_logic.load_boards()
 
@@ -46,6 +47,7 @@ def boards():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@account.not_loggedin
 def manage_account():
     if request.method == 'POST':
         if request.form.get('register_acc_name'):
@@ -57,18 +59,12 @@ def manage_account():
 
 
 @app.route('/logout')
+@account.login_required
 def logout():
     session.pop('user_name', None)
     flash("Successfully logged out.", "success")
 
     return redirect(url_for('planets'))
-
-
-@app.route('/api/boards')
-@account.login_required
-def load_boards():
-    boards = board_logic.load_boards()
-    return jsonify(boards)
 
 
 @app.route('/api/cards')
@@ -100,7 +96,7 @@ def save_new_board():
 @account.login_required
 def add_new_card_title():
     title = request.form.get("title")
-    card_id = request.form.("card_id")
+    card_id = request.form.get("card_id")
     board_logic.save_new_card_title(card_id, title)
     return jsonify("Done")
 
