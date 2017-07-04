@@ -57,7 +57,7 @@ function appendBoards () {
     $('.board-div').on('click', function() {
         var boardId = $(this).data('board-id');
         var boardTitle = $(this).data('board-title');
-        app.dom.showCards(boardId, boardTitle); // not working yet
+        app.dataHandler.getCards(boardId, boardTitle); // not working yet
     });
 }
 

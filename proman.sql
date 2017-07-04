@@ -41,6 +41,7 @@ DROP SEQUENCE IF EXISTS public.cards_id_seq;
 CREATE TABLE cards (
     id serial NOT NULL,
     title varchar(50) NOT NULL,
+    card_order int NOT NULL,
     status varchar(11) CHECK(status IN ('new', 'in_progress', 'review', 'done')),
     board_id int NOT NULL,
     creation_date timestamp without time zone NOT NULL
@@ -67,6 +68,6 @@ INSERT INTO boards VALUES (2, 'Archived Board Title', 'archived', 5, '2017-06-23
 SELECT pg_catalog.setval('boards_id_seq', 2, true);
 
 
-INSERT INTO cards VALUES (1, 'New Card Title', 'new', 1, '2017-06-24 10:25:32');
-INSERT INTO cards VALUES (2, 'New Card Title', 'new', 2, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (1, 'New Card Title', 1, 'new', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (2, 'New Card Title', 2, 'new', 1, '2017-06-24 10:25:32');
 SELECT pg_catalog.setval('cards_id_seq', 2, true);

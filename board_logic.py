@@ -26,7 +26,7 @@ def load_boards():
 
 def load_cards(board_id):
     """Load cards related to the given board id."""
-    sql = """SELECT id, title, status FROM cards
+    sql = """SELECT id, title, card_order, status FROM cards
              WHERE board_id = %s;"""
     parameters = (board_id,)
     cards = query(sql, parameters, "all")

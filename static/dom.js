@@ -4,7 +4,7 @@ var app = app || {};
 app.dom = {
     // DOM manipulation related methods
 
-    showBoards: function () {
+    showBoards_old: function () {
         // Populate and show #boards div with 
         // board management div and all boards from database.
 
@@ -81,10 +81,8 @@ app.dom = {
         $('#cards').show();
     },
 
-    showCards: function (boardId, boardTitle) {
-
-        var cards = app.dataHandler.getCards(boardId);
-
+    showCards: function (cards, boardId, boardTitle) {
+        debugger;
         appendCardNavDiv(boardId, boardTitle);
 
         var newCards = new Array();
@@ -112,30 +110,30 @@ app.dom = {
 
         // Sort the 4 new card pools by card order:
         newCards.sort(function (a, b) {
-            return a.order - b.order;
+            return a.card_order - b.card_order;
         });
 
         inProgressCards.sort(function (a, b) {
-            return a.order - b.order;
+            return a.card_order - b.card_order;
         });
 
         doneCards.sort(function (a, b) {
-            return a.order - b.order;
+            return a.card_order - b.card_order;
         });
 
         reviewCards.sort(function (a, b) {
-            return a.order - b.order;
+            return a.card_order - b.card_order;
         });
 
         // Append 4 card pools:
         $('#cards').append(`
-                <div class="row" id="cards-main-row">
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
-                </div>
-            `);
+            <div class="row" id="cards-main-row">
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
+            </div>
+        `);
 
         // Create and append cards to their respective card pool:
         appendCards(newCards, 'new-cards-col', boardId, 'New');

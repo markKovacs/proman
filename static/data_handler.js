@@ -1,5 +1,4 @@
-var cards;
-var xhr;
+
 var app = app || {};
 
 app.dataHandler = {
@@ -126,28 +125,17 @@ app.dataHandler = {
         }
     },
 
-    getCards: function (boardId) {
+    getCards: function (boardId, boardTitle) {
 
-        xhr = $.ajax({
-                    dataType: "json",
-                    url: "/api/cards",
-                    data: {
-                        id: boardId
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        cards = response;
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-
-        $.when(xhr).done(function () {
-            console.log('cards1');
-            console.log(cards);
-            console.log('cards2');
-            return cards;
+        $.ajax({
+            dataType: "json",
+            url: "/api/cards",
+            data: {
+                id: boardId
+            },
+            success: function(cards) {
+                app.dom.showCards(cards, boardId, boardTitle);
+            }
         });
     }
 };
