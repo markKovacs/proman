@@ -10,7 +10,7 @@ app.dataHandler = {
     boardCount: 0,
     cardCount: 0,
 
-    loadTestBoards: function() {
+    loadTestBoards: function () {
         // If settings.environment === 'dev', loads data via this function.
 
         this.boards = JSON.parse(app.testBoards).boards;
@@ -18,7 +18,7 @@ app.dataHandler = {
         this.cardCount = JSON.parse(app.testBoards).cardCount;
     },
 
-    loadBoards: function() {
+    loadBoards: function () {
         // If settings.environment === 'prod', loads data via this function.
 
         var boardsString = localStorage.getItem('boards');
@@ -37,22 +37,22 @@ app.dataHandler = {
 
         try {
             this.boards = JSON.parse(localStorage.getItem('boards'));
-        } catch(err) {
+        } catch (err) {
             this.boards = [];
         }
-        
+
         this.boardCount = JSON.parse(localStorage.getItem('boardCount'));
         this.cardCount = JSON.parse(localStorage.getItem('cardCount'));
     },
 
-    saveBoards: function() {
+    saveBoards: function () {
         // Save data to local storage from this.boards/boardCount properties.
 
         localStorage.setItem('boards', JSON.stringify(this.boards));
         localStorage.setItem('boardCount', JSON.stringify(this.boardCount));
     },
 
-    getBoard: function(boardId) {
+    getBoard: function (boardId) {
         // Return the board with the given id from this.boards.
 
         for (var i = 0; i < this.boards.length; i++) {
@@ -62,7 +62,7 @@ app.dataHandler = {
         }
     },
 
-    createNewBoard: function(boardTitle) {
+    createNewBoard: function (boardTitle) {
         // Create new board, saves it.
 
         var boardId = this.boardCount;
@@ -83,7 +83,7 @@ app.dataHandler = {
         this.saveBoards();
     },
 
-    createNewCard: function(boardId, cardTitle) {
+    createNewCard: function (boardId, cardTitle) {
         // Create new card in the given board, saves it.
 
         var cardId = this.cardCount;
@@ -101,7 +101,7 @@ app.dataHandler = {
         for (var i = 0; i < this.boards.length; i++) {
             if (this.boards[i].id === boardId) {
                 this.boards[i].cards.push(newCardObj);
-            break;
+                break;
             }
         }
 
@@ -109,7 +109,7 @@ app.dataHandler = {
         localStorage.setItem('cardCount', JSON.stringify(this.cardCount));
     },
 
-    editCard: function(boardId, cardId, newTitle) {
+    editCard: function (boardId, cardId, newTitle) {
         // Edit card title and save in localStorage.
 
         for (var i = 0; i < this.boards.length; i++) {
@@ -127,12 +127,35 @@ app.dataHandler = {
 };
 
 
-function getMaxOrder (boardId) {
+function getMaxOrder(boardId) {
     for (var i = 0; i < app.dataHandler.boards.length; i++) {
         if (app.dataHandler.boards[i].id === boardId) {
-            
+
             var theseCards = app.dataHandler.boards[i].cards;
             return theseCards.length;
         }
     }
 }
+
+//
+
+
+function getBoardData(boardId) {
+    var deferredObjects = [];
+    var cards = []
+    deferredObjects.push(
+        $.ajax({
+            dataType: "json",
+            url: "/api/cards",
+            success: function (response) {
+                for (var i = 0; i < response.length; i++) {
+                    cards.push(i);
+                };
+            }
+        })
+    );
+    $.when(...deferredObjects).done(function () {
+        app.dom.displayCards(cards, boardId);
+    });
+}
+
