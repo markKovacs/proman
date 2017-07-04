@@ -1,5 +1,5 @@
 from flask import session
-from data_manager import query
+from data_manager import query, run_statement
 from datetime import datetime
 
 
@@ -14,8 +14,7 @@ def load_boards():
     sql = """SELECT id FROM accounts WHERE account_name = %s;"""
     parameters = (account_name,)
     account_id = query(sql, parameters, "cell")
-
-    sql = """SELECT boards.id, boards.title, boards.status, COUNT(cards.title)
+    sql = """SELECT boards.id, boards.title, boards.status, COUNT(cards.title) as card_count
              FROM boards
              LEFT JOIN cards ON boards.id = cards.board_id
              WHERE account_id = %s

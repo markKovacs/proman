@@ -8,7 +8,7 @@
     <section class="container main-content" id="boards"></section>
     <section class="container main-content" id="cards"></section>
 
-    <script type="text/javascript">var boardsData = {{ boards_data }}</script>
+    <script type="text/javascript">var boardsData = {{ boards_data|tojson }}</script>
     <script type="text/javascript" src="{{url_for('static', filename='show_boards.js')}}"></script>
 
 {% endblock %}

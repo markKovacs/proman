@@ -42,7 +42,6 @@ def index():
 @account.login_required
 def boards():
     boards_data = board_logic.load_boards()
-
     return render_template('boards.html', boards_data=boards_data)
 
 
