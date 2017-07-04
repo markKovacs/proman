@@ -2,6 +2,7 @@
 # Database connection and run statements
 
 import psycopg2
+import psycopg2.extras
 
 import config
 
@@ -18,8 +19,12 @@ def query(sql, parameters, fetch):
 
     else:
         conn.autocommit = True
-        with conn.cursor() as cursor:
-            result = run_statement(sql, parameters, fetch, cursor)
+        if fetch == "all" or fetch == "one":
+            with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cursor:
+                result = run_statement(sql, parameters, fetch, cursor)
+        else:
+            with conn.cursor() as cursor:
+                result = run_statement(sql, parameters, fetch, cursor)
         if result:
             return result
 
