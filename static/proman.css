@@ -18,36 +18,40 @@
 
 }
 
-#hero-image .cta .start {
+#hero-image .start {
     text-decoration: none;
     color: #EBEBE6;
     background-color: #00B7DC;
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 1.5em;
-    padding: 15px 55px;
+    padding: 19px 59px;
     border-radius: 500px;
 }
 
-#hero-image .cta .start:hover {
+#hero-image .start:hover {
     background-color: #85C1E9;
     transition: background-color, 0.3s;
 }
 
-#hero-image .cta .learn {
+#hero-image .learn {
     text-decoration: none;
     color: #EBEBE6;
-    background-color: #00B7DC;
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 1.5em;
     padding: 15px 55px;
     border-radius: 500px;
+    border: 2px solid rgb(235, 235, 230);
 }
 
-#hero-image .cta .learn:hover {
-    background-color: #85C1E9;
+#hero-image .learn:hover {
+    background-color: rgba(235, 235, 230, 0.2);
     transition: background-color, 0.3s;
+}
+
+#hero-image .learn, #hero-image .start {
+    margin: 0px 15px;
 }
 
 #dark-overlay {
