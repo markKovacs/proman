@@ -342,6 +342,7 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
                     <input class="card-title disabled-title" id="card-title-id-${cardPool[i].id}" disabled value="${cardPool[i].title}">
                     <div class="card-order" id="card-order-id-${cardPool[i].id}">Order: ${cardPool[i].order}</div>
                     <button class="edit-title" id="card-submit-id-${cardPool[i].id}" data-card-id="${cardPool[i].id}">Edit</button>
+                    <div class="delete" data-card-id="${cardPool[i].id}">X</div>
                 </div>
             `);
         }

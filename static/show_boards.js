@@ -47,6 +47,7 @@ function appendBoards () {
                 <div class="board-div" data-board-id="${boardsData[i].id}" data-board-title="${boardsData[i].title}">
                     <h2 class="board-title">${boardsData[i].title}</h2>
                     <p class="card-count">Cards: ${boardsData[i].card_count}</p>
+                    <div class="delete" data-board-id="${boardsData[i].id}">X</div>
                 </div>
             </div>
         `);
@@ -56,8 +57,16 @@ function appendBoards () {
         $('.success').remove();
         var boardId = $(this).data('board-id');
         var boardTitle = $(this).data('board-title');
-        app.dataHandler.getCards(boardId, boardTitle); // not working yet
+        app.dataHandler.getCards(boardId, boardTitle);
     });
+
+    // TO BE IMPLEMENTED
+    
+    // $('#boards').on('click', '.delete', function(ev) {
+    //     $('.success').remove();
+    //     var boardId = $(this).data('board-id');
+    //     app.dataHandler.removeBoard(boardId);
+    // });
 }
 
 

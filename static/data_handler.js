@@ -125,7 +125,8 @@ app.dataHandler = {
                     <div class="row card-div" id="card-div-id-${cardId}" draggable="true">
                         <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
                         <div class="card-order" id="card-order-id-${cardId}">Order: ${response.order}</div>
-                        <button class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</button>
+                        <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
+                        <div class="delete" data-card-id="${cardId}">X</div>
                     </div>
                 `);
             }
