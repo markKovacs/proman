@@ -29,38 +29,16 @@
     <!-- Navigation bar -->
     <nav class="container pronav">
         <div class="row">
-
-            <div class="col-sm-3">
-                <img src="{{url_for('static', filename='proman-logo-ondark.png')}}" class="logo">
-            </div>
-            <div class="col-sm-9">
+            <div class="col-sm-12">
+                <a href="{{url_for('index')}}"><img src="{{url_for('static', filename='proman-logo-ondark.png')}}" class="logo"></a>
                 <ul class="menu">
-                    <li><a href="#" class="cta">Log in</a></li>
+                    <li><a href="{{url_for('index')}}#engine" class="anchor bttn">About</a></li>
+                    <li><a href="{{url_for('index')}}#developers" class="anchor bttn">Developers</a></li>
+                    <li><a href="#" class="cta login">Log in</a></li>
                 </ul>
             </div>
         </div>
     </nav>
-
-    <!-- Header 
-    <header class="container">
-        <div class="row">
-            <h1 class="col-sm-4">ProMan</h1>
-            <nav class="col-sm-8 text-right">
-
-                <p><a href="{{ url_for('index') }}">index</a></p>
-                <p><a href="{{ url_for('boards') }}">boards</a></p>
-
-                {% if session.user_name %}
-                <p class="profile-name"><img src="" alt="IMG" id="profile-picture">{{ session.user_name }}</p>
-                <p><a href="{{ url_for('logout') }}">logout</a></p>
-                {% else %}
-                <p><a href="{{ url_for('manage_account') }}">login/register</a></p>
-                {% endif %}
-
-            </nav>
-        </div>
-    </header>
-    -->
 
     <!-- Error messages in a loop with classes: error, success -->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -88,13 +66,6 @@
 
     <!-- Content Section(s) -->
     {% block content %}{% endblock %}
-
-    <!-- Footer -->
-    <footer class="container">
-        <div class="row">
-            <p class="col-sm-12" id="footer">&copy; 2017 RushBit</p>
-        </div>
-    </footer>
 
 </body>
 </html>
