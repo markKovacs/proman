@@ -164,6 +164,55 @@ app.dom = {
         appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
         appendCards(doneCards, 'done-cards-col', boardId, 'Done');
 
+
+        // Title edit / Submit button event listener:
+        $('#cards-main-row').on('click', '.edit-title', function (ev) {
+            ev.stopPropagation();
+            $('.success').remove();
+            var cardId = $(this).data('card-id');
+
+            var titleInput = $(`#card-title-id-${cardId}`);
+            var newTitleValue = titleInput.val();
+
+            if (!titleInput.hasClass('disabled-title')) {
+                app.dataHandler.editCard(cardId, newTitleValue);
+            }
+
+            titleInput.toggleClass('disabled-title');
+
+            if (titleInput.attr('disabled')) {
+                titleInput.prop('disabled', false);
+                $(this).text('Submit');
+            } else {
+                titleInput.prop('disabled', true);
+                $(this).text('Edit');
+            }
+        });
+
+        // Drag and drop event listeners for card divs:
+        $('#cards-main-row').on({
+            dragstart: function (ev) {
+                drag(ev);
+            },
+            drop: function (ev) {
+                drop(ev);
+            },
+            dragover: function (ev) {
+                allowDrop(ev);
+            },
+            dragenter: function (ev) {
+                if (!$(ev.target).hasClass('card-title')) {
+                    $('.card-div').css('border', 'none');
+                }
+                $(this).css('border-top', '12px double #243342');
+            },
+            dragend: function (ev) {
+                $('.card-div').css('border', 'none');
+            }
+        }, '.card-div');
+
+
+
         $('#boards').hide();
         $('#cards').show();
     }
@@ -248,10 +297,14 @@ function appendCardNavDiv(boardId, boardTitle) {
     `);
 
     $('#new-card-entry').on('click', function () {
+        $('.success').remove();
         var cardTitle = $('#new-card-title').val();
         app.dataHandler.createNewCard(boardId, cardTitle);
-        $('#cards').empty();
-        app.dom.showCards(boardId);
+
+        // These will not be needed anymore:
+
+        // $('#cards').empty();
+        // app.dom.showCards(boardId);
     });
 
     $('#new-card-button').on('click', function () {
@@ -260,6 +313,7 @@ function appendCardNavDiv(boardId, boardTitle) {
 
     $('#back-to-boards').on('click', function () {
         // Refresh card count for boards:
+        $('.success').remove();
         var cardCountElements = $('.card-count');
         for (let i = 0; i < app.dataHandler.boards.length; i++) {
             let cardLength = app.dataHandler.boards[i].cards.length;
@@ -291,49 +345,6 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
                 </div>
             `);
         }
-
-        // Title edit / Submit button event listener:
-        cardPoolDiv.on('click', '.edit-title', function (ev) {
-            ev.stopPropagation();
-            var cardId = $(this).data('card-id');
-
-            var titleInput = $(`#card-title-id-${cardId}`);
-            var newTitleValue = titleInput.val();
-            app.dataHandler.editCard(boardId, cardId, newTitleValue);
-
-            titleInput.text(newTitleValue);
-            titleInput.toggleClass('disabled-title');
-
-            if (titleInput.attr('disabled')) {
-                titleInput.prop('disabled', false);
-                $(this).text('Submit');
-            } else {
-                titleInput.prop('disabled', true);
-                $(this).text('Edit');
-            }
-        })
-
-        // Drag and drop event listeners for card divs:
-        cardPoolDiv.on({
-            dragstart: function (ev) {
-                drag(ev);
-            },
-            drop: function (ev) {
-                drop(ev);
-            },
-            dragover: function (ev) {
-                allowDrop(ev);
-            },
-            dragenter: function (ev) {
-                if (!$(ev.target).hasClass('card-title')) {
-                    $('.card-div').css('border', 'none');
-                }
-                $(this).css('border-top', '12px double #243342');
-            },
-            dragend: function (ev) {
-                $('.card-div').css('border', 'none');
-            }
-        }, '.card-div');
     }
 
     // Appending drop zone at the end of column:

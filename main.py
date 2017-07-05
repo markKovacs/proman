@@ -72,7 +72,6 @@ def logout():
 def load_cards():
     board_id = request.args.get("id")
     cards = board_logic.load_cards(board_id)
-    print(cards)
     return jsonify(cards)
 
 
@@ -81,8 +80,8 @@ def load_cards():
 def save_new_card():
     title = request.form.get("title")
     board_id = request.form.get("board_id")
-    board_logic.save_new_card(title, board_id)
-    return jsonify("Done")
+    card_id = board_logic.save_new_card(title, board_id)
+    return jsonify(id=card_id)
 
 
 @app.route('/api/new_board', methods=["POST"])
@@ -99,7 +98,7 @@ def add_new_card_title():
     title = request.form.get("title")
     card_id = request.form.get("card_id")
     board_logic.save_new_card_title(card_id, title)
-    return jsonify("Done")
+    return jsonify(status="success")
 
 
 @app.route('/api/new_board_title', methods=["POST"])
