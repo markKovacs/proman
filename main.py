@@ -89,8 +89,8 @@ def save_new_card():
 @account.login_required
 def save_new_board():
     title = request.form.get("title")
-    board_logic.save_new_board(title)
-    return jsonify("Done")
+    board_id = board_logic.save_new_board(title)
+    return jsonify(id=board_id)
 
 
 @app.route('/api/new_card_title', methods=["POST"])

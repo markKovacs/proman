@@ -21,11 +21,9 @@ function appendBoardNavDiv () {
     `);
 
     $('#new-board-entry').on('click', function() {
+        $('.success').remove();
         var boardTitle = $('#new-board-title').val();
         app.dataHandler.createNewBoard(boardTitle);
-        $('#boards').empty();
-        $('#cards').hide();
-        showBoards();
     });
 
     $('#new-board-button').on('click', function() {
@@ -54,7 +52,8 @@ function appendBoards () {
         `);
     }
 
-    $('.board-div').on('click', function() {
+    $('#boards').on('click', '.board-div', function() {
+        $('.success').remove();
         var boardId = $(this).data('board-id');
         var boardTitle = $(this).data('board-title');
         app.dataHandler.getCards(boardId, boardTitle); // not working yet

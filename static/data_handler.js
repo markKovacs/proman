@@ -65,9 +65,6 @@ app.dataHandler = {
     createNewBoard: function (boardTitle) {
         // Create new board, saves it.
 
-        // var boardId = this.boardCount;
-        // this.boardCount += 1;
-
         $.ajax({
             url:'/api/new_board',
             method: 'POST',
@@ -76,17 +73,36 @@ app.dataHandler = {
             },
             dataType: 'json',
             success: function(response) {
-                // $('#boards div:last-child').append();
+                var boardsInLastRow = $('#boards div.row:last').children().length;
+                if (boardsInLastRow === 0 || boardsInLastRow % 4 !== 0 ) {
+                    $('#boards').prepend(`<p class="success">Board '${boardTitle}' added.</p>`);
+                    $('#boards div.row:last').append(`
+                        <div class="col-sm-3">
+                            <div class="board-div" data-board-id="${response.id}" data-board-title="${boardTitle}">
+                                <h2 class="board-title">${boardTitle}</h2>
+                                <p class="card-count">Cards: 0</p>
+                            </div>
+                        </div>
+                    `);
+                } else {
+                    $('#boards').prepend(`<p class="success">Board '${boardTitle}' added.</p>`);
+                    $('#boards').append(`
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="board-div" data-board-id="${response.id}" data-board-title="${boardTitle}">
+                                    <h2 class="board-title">${boardTitle}</h2>
+                                    <p class="card-count">Cards: 0</p>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                }
+
+                $('#new-board-title').val('');
+                $('#new-board-form').toggle();
             }
 
         });
-
-        if (this.boards.length > 0) {
-            this.boards.push(newBoardObj);
-        } else {
-            this.boards = [newBoardObj];
-        }
-        this.saveBoards();
     },
 
     createNewCard: function (boardId, cardTitle) {
