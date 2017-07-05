@@ -35,6 +35,7 @@ def not_allowed_method(error):
 # Routing Endpoints:
 
 @app.route("/")
+@account.not_loggedin
 def index():
     return render_template('index.html')
 
@@ -66,6 +67,8 @@ def logout():
 
     return redirect(url_for('index'))
 
+
+# API Endpoints:
 
 @app.route('/api/cards')
 @account.login_required
@@ -101,6 +104,17 @@ def add_new_card_title():
     return jsonify(status="success")
 
 
+@app.route('/api/persistent_dnd', methods=['POST'])
+@account.login_required
+def make_drag_and_drop_persistent():
+    moved_card_id = request.form.get("moved_card_id")
+    new_status = request.form.get("new_status")
+    card_ids = request.form.get("card_ids")
+    board_logic.make_drag_and_drop_persistent(moved_card_id, new_status, card_ids)
+    return jsonify(status="success")
+
+
+# Not yet impltemented
 @app.route('/api/new_board_title', methods=["POST"])
 @account.login_required
 def add_new_board_title():
@@ -110,6 +124,7 @@ def add_new_board_title():
     return jsonify("Done")
 
 
+# Not yet impltemented
 @app.route('/api/delete_board')
 @account.login_required
 def delete_board():
@@ -118,6 +133,7 @@ def delete_board():
     return jsonify("Done")
 
 
+# Not yet impltemented
 @app.route('/api/delete_card')
 @account.login_required
 def delete_card():

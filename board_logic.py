@@ -93,3 +93,23 @@ def delete_board(board_id):
     sql = """DELETE FROM boards WHERE id = %s;"""
     parameters = (board_id,)
     query(sql, parameters)
+
+
+def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):
+    """Make drag and drop persistent in database:
+    - update all values in card_order column,
+    - update status of moved card.
+    """
+    card_ids = card_ids.strip('[]')
+    card_ids = card_ids.split(',')
+
+    for i, card_id in enumerate(card_ids):
+        sql = """UPDATE cards SET card_order = %s WHERE id = %s;"""
+        parameters = (i, card_id)
+        fetch = None
+        query(sql, parameters, fetch)
+
+    sql = """UPDATE cards SET status = %s WHERE id = %s;"""
+    parameters = (new_status, moved_card_id)
+    fetch = None
+    query(sql, parameters, fetch)

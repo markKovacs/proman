@@ -144,17 +144,6 @@ app.dataHandler = {
             },
             success: function(response) {
                 $('#cards').prepend(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);
-
-                // var titleInput = $(`#card-title-id-${cardId}`);
-                // titleInput.val(newTitle).toggleClass('disabled-title');
-
-                // if (titleInput.attr('disabled')) {
-                //     titleInput.prop('disabled', false);
-                //     $(this).text('Submit');
-                // } else {
-                //     titleInput.prop('disabled', true);
-                //     $(this).text('Edit');
-                // }
             }
         });
     },
@@ -171,16 +160,25 @@ app.dataHandler = {
                 app.dom.showCards(cards, boardId, boardTitle);
             }
         });
+    },
+
+    makeDragAndDropPersistent: function (movedCardId, newStatus, iDsOfcardsOnBoard) {
+        // Make result of drag and drop persistent in database.
+        console.log(iDsOfcardsOnBoard);
+        console.log('iDsOfcardsOnBoard');
+        console.log(JSON.stringify(iDsOfcardsOnBoard));
+        $.ajax({
+            url: '/api/persistent_dnd',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                moved_card_id: movedCardId,
+                new_status: newStatus,
+                card_ids: JSON.stringify(iDsOfcardsOnBoard)
+            },
+            success: function(response) {
+                $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
+            }
+        });
     }
 };
-
-
-function getMaxOrder(boardId) {
-    for (var i = 0; i < app.dataHandler.boards.length; i++) {
-        if (app.dataHandler.boards[i].id === boardId) {
-
-            var theseCards = app.dataHandler.boards[i].cards;
-            return theseCards.length;
-        }
-    }
-}

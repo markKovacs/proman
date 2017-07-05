@@ -393,6 +393,9 @@ function drop(ev) {
 
     ev.preventDefault();
     ev.stopPropagation();
+
+    $('.success').remove();
+
     var movedElementId = ev.originalEvent.dataTransfer.getData("target_id");
     var movedElement = $(`#${movedElementId}`);
 
@@ -431,25 +434,31 @@ function makePersistent(movedElement, dropTarget) {
             newStatus = 'new';
             break;
     }
-
+    debugger;
     var cardsOnBoard = $('.card-div');
     var iDsOfcardsOnBoard = new Array();
     for (let i = 0; i < cardsOnBoard.length; i++) {
         iDsOfcardsOnBoard.push(Number(cardsOnBoard[i].id.slice(12)));
     }
 
-    for (var h = 0; h < iDsOfcardsOnBoard.length; h++) {
-        for (var i = 0; i < app.dataHandler.boards.length; i++) {
-            for (var j = 0; j < app.dataHandler.boards[i].cards.length; j++) {
-                if (movedCardId === app.dataHandler.boards[i].cards[j].id) {
-                    app.dataHandler.boards[i].cards[j].status = newStatus;
-                }
-                if (iDsOfcardsOnBoard[h] === app.dataHandler.boards[i].cards[j].id) {
-                    app.dataHandler.boards[i].cards[j].order = h + 1;
-                }
-            }
-        }
-    }
 
-    app.dataHandler.saveBoards();
+    // ajax call doing the logic below
+    app.dataHandler.makeDragAndDropPersistent(movedCardId, newStatus, iDsOfcardsOnBoard);
+
+
+
+    // for (var h = 0; h < iDsOfcardsOnBoard.length; h++) {
+    //     for (var i = 0; i < app.dataHandler.boards.length; i++) {
+    //         for (var j = 0; j < app.dataHandler.boards[i].cards.length; j++) {
+    //             if (movedCardId === app.dataHandler.boards[i].cards[j].id) {
+    //                 app.dataHandler.boards[i].cards[j].status = newStatus;
+    //             }
+    //             if (iDsOfcardsOnBoard[h] === app.dataHandler.boards[i].cards[j].id) {
+    //                 app.dataHandler.boards[i].cards[j].order = h + 1;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // app.dataHandler.saveBoards();
 }

@@ -32,7 +32,7 @@ def not_loggedin(func):
             return func(*args, **kwargs)
         else:
             flash("Cannot access page. You are already logged in.", "error")
-            return redirect(url_for("index"))
+            return redirect(url_for("boards"))
 
     return wrapper
 
@@ -82,9 +82,9 @@ def register_account():
 
     create_account(user_name, password)
     session['user_name'] = user_name
-    flash("Successful registration as '{}'. Welcome at ProMan!".format(user_name), "success")
+    flash("Successful registration as '{}'.".format(user_name), "success")
 
-    return redirect(url_for('index'))
+    return redirect(url_for('boards'))
 
 
 def get_user_names():
@@ -158,7 +158,7 @@ def login_user():
 
     flash('Successfully logged in as {}. Welcome back in ProMan!'.format(user_name), 'success')
 
-    return redirect(url_for('index'))
+    return redirect(url_for('boards'))
 
 
 def valid_credentials(form):
