@@ -82,12 +82,31 @@ app.dom = {
     },
 
     showCards: function (cardsData, boardId, boardTitle) {
+        appendCardNavDiv(boardId, boardTitle);
 
         if (!cardsData) {
+            $('#cards').append(`
+                <p>There are no cards added yet.</p>
+                <div class="row" id="cards-main-row">
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col">
+                        <h2>New</h2>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col">
+                        <h2>In Progress</h2>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col">
+                        <h2>Review</h2>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col">
+                        <h2>Done</h2>
+                    </div>
+                </div>
+            `);
+            $('#boards').hide();
+            $('#cards').show();
             return;
         }
 
-        appendCardNavDiv(boardId, boardTitle);
 
         var newCards = new Array();
         var inProgressCards = new Array();

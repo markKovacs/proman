@@ -65,15 +65,21 @@ app.dataHandler = {
     createNewBoard: function (boardTitle) {
         // Create new board, saves it.
 
-        var boardId = this.boardCount;
-        this.boardCount += 1;
+        // var boardId = this.boardCount;
+        // this.boardCount += 1;
 
-        var newBoardObj = {
-            id: boardId,
-            title: boardTitle,
-            state: "active",
-            cards: []
-        };
+        $.ajax({
+            url:'/api/new_board',
+            method: 'POST',
+            data: {
+                title: boardTitle
+            },
+            dataType: 'json',
+            success: function(response) {
+                // $('#boards div:last-child').append();
+            }
+
+        });
 
         if (this.boards.length > 0) {
             this.boards.push(newBoardObj);

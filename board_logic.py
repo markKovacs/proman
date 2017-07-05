@@ -18,7 +18,8 @@ def load_boards():
              FROM boards
              LEFT JOIN cards ON boards.id = cards.board_id
              WHERE account_id = %s
-             GROUP BY boards.id;"""
+             GROUP BY boards.id
+             ORDER BY boards.creation_date;"""
     parameters = (account_id,)
     boards = query(sql, parameters, "all")
     return boards
@@ -60,7 +61,7 @@ def save_new_board(title):
     sql = """INSERT INTO boards (title, status, account_id, creation_date)
              VALUES(%s, %s, %s, %s);"""
     parameters = (title, "active", account_id, date)
-    query = (sql, parameters)
+    query(sql, parameters, None)
 
 
 def edit_board(title, board_id):

@@ -66,6 +66,8 @@ function showBoards () {
     appendBoardNavDiv();
     if (boardsData) {
         appendBoards();
+    } else {
+        $('#boards').append('<div class="row"></div>');
     }
 }
 
