@@ -16,12 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='proman.css')}}">
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='favicon.png')}}">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-    <script src="{{url_for('static', filename='settings.js')}}" defer></script>
-    <script src="{{url_for('static', filename='test_boards.js')}}" defer></script>
-    <script src="{{url_for('static', filename='data_handler.js')}}" defer></script>
-    <script src="{{url_for('static', filename='dom.js')}}" defer></script>
-    <script src="{{url_for('static', filename='main.js')}}" defer></script>
+    {% block scripts %}{% endblock %}
 
 </head>
 

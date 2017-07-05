@@ -4,21 +4,16 @@ var app = app || {};
 app.dom = {
     // DOM manipulation related methods
 
-    showBoards: function() {
+    showBoards_old: function () {
         // Populate and show #boards div with 
         // board management div and all boards from database.
 
-        if (app.settings.environment === 'prod') {
-            app.dataHandler.loadBoards();
-        } else {
-            app.dataHandler.loadTestBoards();
-        }
 
         appendBoardNavDiv();
         appendBoards();
     },
 
-    showCards: function(boardId) {
+    showCards_old: function (boardId) {
         // Populate and show #cards div and hide #boards div.
         // Create and append cards navigation div and cards based board data.
 
@@ -50,20 +45,107 @@ app.dom = {
         }
 
         // Sort the 4 new card pools by card order:
-        newCards.sort(function(a, b) {
+        newCards.sort(function (a, b) {
             return a.order - b.order;
         });
 
-        inProgressCards.sort(function(a, b) {
+        inProgressCards.sort(function (a, b) {
             return a.order - b.order;
         });
 
-        doneCards.sort(function(a, b) {
+        doneCards.sort(function (a, b) {
             return a.order - b.order;
         });
 
-        reviewCards.sort(function(a, b) {
+        reviewCards.sort(function (a, b) {
             return a.order - b.order;
+        });
+
+        // Append 4 card pools:
+        $('#cards').append(`
+            <div class="row" id="cards-main-row">
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
+                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
+            </div>
+        `);
+
+        // Create and append cards to their respective card pool:
+        appendCards(newCards, 'new-cards-col', boardId, 'New');
+        appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress');
+        appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
+        appendCards(doneCards, 'done-cards-col', boardId, 'Done');
+
+        $('#boards').hide();
+        $('#cards').show();
+    },
+
+    showCards: function (cardsData, boardId, boardTitle) {
+        appendCardNavDiv(boardId, boardTitle);
+
+        if (!cardsData) {
+            $('#cards').append(`
+                <p>There are no cards added yet.</p>
+                <div class="row" id="cards-main-row">
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col">
+                        <h2>New</h2>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col">
+                        <h2>In Progress</h2>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col">
+                        <h2>Review</h2>
+                    </div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col">
+                        <h2>Done</h2>
+                    </div>
+                </div>
+            `);
+            $('#boards').hide();
+            $('#cards').show();
+            return;
+        }
+
+
+        var newCards = new Array();
+        var inProgressCards = new Array();
+        var doneCards = new Array();
+        var reviewCards = new Array();
+
+        // Group cards by card status:
+        for (let i = 0; i < cardsData.length; i++) {
+            switch (cardsData[i].status) {
+                case 'new':
+                    newCards.push(cardsData[i]);
+                    break;
+                case 'in_progress':
+                    inProgressCards.push(cardsData[i]);
+                    break;
+                case 'done':
+                    doneCards.push(cardsData[i]);
+                    break;
+                case 'review':
+                    reviewCards.push(cardsData[i]);
+                    break;
+            }
+        }
+
+        // Sort the 4 new card pools by card order:
+        newCards.sort(function (a, b) {
+            return a.card_order - b.card_order;
+        });
+
+        inProgressCards.sort(function (a, b) {
+            return a.card_order - b.card_order;
+        });
+
+        doneCards.sort(function (a, b) {
+            return a.card_order - b.card_order;
+        });
+
+        reviewCards.sort(function (a, b) {
+            return a.card_order - b.card_order;
         });
 
         // Append 4 card pools:
@@ -88,66 +170,66 @@ app.dom = {
 }
 
 
-function appendBoardNavDiv () {
-    // Create and append the div responsible for
-    // the addition of new boards with given title.
+// function appendBoardNavDiv() {
+//     // Create and append the div responsible for
+//     // the addition of new boards with given title.
 
-    $('#boards').append(`
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="new-board-button">Add New Board</button>
-                <div id="new-board-form">
-                    <input type="text" id="new-board-title">
-                    <button id="new-board-entry">Submit</button>
-                </div>
-            </div>
-        </div>
-    `);
+//     $('#boards').append(`
+//         <div class="row">
+//             <div class="col-sm-12">
+//                 <button id="new-board-button">Add New Board</button>
+//                 <div id="new-board-form">
+//                     <input type="text" id="new-board-title">
+//                     <button id="new-board-entry">Submit</button>
+//                 </div>
+//             </div>
+//         </div>
+//     `);
 
-    $('#new-board-entry').on('click', function() {
-        var boardTitle = $('#new-board-title').val();
-        app.dataHandler.createNewBoard(boardTitle);
-        $('#boards').empty();
-        $('#cards').hide();
-        app.dom.showBoards();
-    });
+//     $('#new-board-entry').on('click', function () {
+//         var boardTitle = $('#new-board-title').val();
+//         app.dataHandler.createNewBoard(boardTitle);
+//         $('#boards').empty();
+//         $('#cards').hide();
+//         app.dom.showBoards();
+//     });
 
-    $('#new-board-button').on('click', function() {
-        $('#new-board-form').toggle();
-    });
-}
-
-
-function appendBoards () {
-    // Create and append boards, based on stored boards data.
-
-    var boardsData = app.dataHandler.boards;
-
-    for (let i = 0; i < boardsData.length; i++) {
-
-        if (i === 0 || i % 4 === 0) {
-            var boardsRow = $('<div class="row"></div>');
-            $('#boards').append(boardsRow);
-        }
-
-        boardsRow.append(`
-            <div class="col-sm-3">
-                <div class="board-div" data-board-id="${app.dataHandler.boards[i].id}">
-                    <h2 class="board-title">${boardsData[i].title}</h2>
-                    <p class="card-count">Cards: ${boardsData[i].cards.length}</p>
-                </div>
-            </div>
-        `);
-    }
-
-    $('.board-div').on('click', function() {
-        var boardId = $(this).data('board-id');
-        app.dom.showCards(boardId);
-    });
-}
+//     $('#new-board-button').on('click', function () {
+//         $('#new-board-form').toggle();
+//     });
+// }
 
 
-function appendCardNavDiv (boardId, boardTitle) {
+// function appendBoards() {
+//     // Create and append boards, based on stored boards data.
+
+//     var boardsData = app.dataHandler.boards;
+
+//     for (let i = 0; i < boardsData.length; i++) {
+
+//         if (i === 0 || i % 4 === 0) {
+//             var boardsRow = $('<div class="row"></div>');
+//             $('#boards').append(boardsRow);
+//         }
+
+//         boardsRow.append(`
+//             <div class="col-sm-3">
+//                 <div class="board-div" data-board-id="${app.dataHandler.boards[i].id}">
+//                     <h2 class="board-title">${boardsData[i].title}</h2>
+//                     <p class="card-count">Cards: ${boardsData[i].cards.length}</p>
+//                 </div>
+//             </div>
+//         `);
+//     }
+
+//     $('.board-div').on('click', function () {
+//         var boardId = $(this).data('board-id');
+//         app.dom.showCards(boardId);
+//     });
+// }
+
+
+function appendCardNavDiv(boardId, boardTitle) {
     // Create and append div responsible for
     // navigation back to boards and new card creation.
 
@@ -165,18 +247,18 @@ function appendCardNavDiv (boardId, boardTitle) {
         </div>
     `);
 
-    $('#new-card-entry').on('click', function() {
+    $('#new-card-entry').on('click', function () {
         var cardTitle = $('#new-card-title').val();
         app.dataHandler.createNewCard(boardId, cardTitle);
         $('#cards').empty();
         app.dom.showCards(boardId);
     });
 
-    $('#new-card-button').on('click', function() {
+    $('#new-card-button').on('click', function () {
         $('#new-card-form').toggle();
     });
 
-    $('#back-to-boards').on('click', function() {
+    $('#back-to-boards').on('click', function () {
         // Refresh card count for boards:
         var cardCountElements = $('.card-count');
         for (let i = 0; i < app.dataHandler.boards.length; i++) {
@@ -191,7 +273,7 @@ function appendCardNavDiv (boardId, boardTitle) {
 }
 
 
-function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
+function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
     // Append cards to cards pool divs respectively.
     // Assign event listeners to drag and drop and edit title buttons.
 
@@ -211,7 +293,7 @@ function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
         }
 
         // Title edit / Submit button event listener:
-        cardPoolDiv.on('click', '.edit-title', function(ev) {
+        cardPoolDiv.on('click', '.edit-title', function (ev) {
             ev.stopPropagation();
             var cardId = $(this).data('card-id');
 
@@ -233,22 +315,22 @@ function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
 
         // Drag and drop event listeners for card divs:
         cardPoolDiv.on({
-            dragstart: function(ev) {
+            dragstart: function (ev) {
                 drag(ev);
             },
-            drop: function(ev) {
+            drop: function (ev) {
                 drop(ev);
             },
-            dragover: function(ev) {
+            dragover: function (ev) {
                 allowDrop(ev);
             },
-            dragenter: function(ev) {
+            dragenter: function (ev) {
                 if (!$(ev.target).hasClass('card-title')) {
                     $('.card-div').css('border', 'none');
                 }
                 $(this).css('border-top', '12px double #243342');
             },
-            dragend: function(ev) {
+            dragend: function (ev) {
                 $('.card-div').css('border', 'none');
             }
         }, '.card-div');
@@ -258,19 +340,19 @@ function appendCards (cardPool, cardPoolDivId, boardId, cardPoolTitle) {
     var dropZone = $('<div class="drop-zone no-border"></div>');
 
     dropZone.on({
-        drop: function(ev) {
+        drop: function (ev) {
             drop(ev);
             $(ev.target).css('border', 'none');
         },
-        dragover: function(ev) {
+        dragover: function (ev) {
             allowDrop(ev);
         },
-        dragenter: function() {
+        dragenter: function () {
             $('.card-div').css('border', 'none');
             $(this).css('border', '3px dashed gray');
         },
-        dragleave: function() {
-           $(this).css('border', 'none');
+        dragleave: function () {
+            $(this).css('border', 'none');
         }
     });
 
@@ -305,7 +387,7 @@ function drop(ev) {
 
     var dropTarget = $(event.target);
 
-    if (!dropTarget.hasClass('drop-zone')){
+    if (!dropTarget.hasClass('drop-zone')) {
         while (!dropTarget.hasClass('card-div')) {
             dropTarget = dropTarget.parent();
         }
@@ -316,7 +398,7 @@ function drop(ev) {
 }
 
 
-function makePersistent (movedElement, dropTarget) {
+function makePersistent(movedElement, dropTarget) {
     // Based on DOM tree, does re-ordering of all cards in board,
     // furthermore overwrites dragged card status with new status.
 

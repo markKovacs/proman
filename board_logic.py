@@ -1,5 +1,5 @@
 from flask import session
-from data_manager import query
+from data_manager import query, run_statement
 from datetime import datetime
 
 
@@ -14,12 +14,12 @@ def load_boards():
     sql = """SELECT id FROM accounts WHERE account_name = %s;"""
     parameters = (account_name,)
     account_id = query(sql, parameters, "cell")
-
-    sql = """SELECT boards.id, boards.title, boards.status, COUNT(cards.title)
+    sql = """SELECT boards.id, boards.title, boards.status, COUNT(cards.title) as card_count
              FROM boards
              LEFT JOIN cards ON boards.id = cards.board_id
              WHERE account_id = %s
-             GROUP BY boards.id;"""
+             GROUP BY boards.id
+             ORDER BY boards.creation_date ASC;"""
     parameters = (account_id,)
     boards = query(sql, parameters, "all")
     return boards
@@ -27,7 +27,7 @@ def load_boards():
 
 def load_cards(board_id):
     """Load cards related to the given board id."""
-    sql = """SELECT id, title, status FROM cards
+    sql = """SELECT id, title, card_order, status FROM cards
              WHERE board_id = %s;"""
     parameters = (board_id,)
     cards = query(sql, parameters, "all")
@@ -59,9 +59,12 @@ def save_new_board(title):
     account_id = query(sql, parameters, "cell")
     date = create_timestamp()
     sql = """INSERT INTO boards (title, status, account_id, creation_date)
-             VALUES(%s, %s, %s, %s);"""
+             VALUES(%s, %s, %s, %s)
+             RETURNING id;"""
     parameters = (title, "active", account_id, date)
-    query = (sql, parameters)
+    board_id = query(sql, parameters, 'cell')
+
+    return board_id
 
 
 def edit_board(title, board_id):
@@ -83,4 +86,3 @@ def delete_board(board_id):
     sql = """DELETE FROM boards WHERE id = %s;"""
     parameters = (board_id,)
     query(sql, parameters)
-

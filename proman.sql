@@ -41,6 +41,7 @@ DROP SEQUENCE IF EXISTS public.cards_id_seq;
 CREATE TABLE cards (
     id serial NOT NULL,
     title varchar(50) NOT NULL,
+    card_order int NOT NULL,
     status varchar(11) CHECK(status IN ('new', 'in_progress', 'review', 'done')),
     board_id int NOT NULL,
     creation_date timestamp without time zone NOT NULL
@@ -62,11 +63,25 @@ INSERT INTO accounts VALUES (5, 'admin', 'pbkdf2:sha512:80000$emejRYOP$d93009f5a
 SELECT pg_catalog.setval('accounts_id_seq', 5, true);
 
 
-INSERT INTO boards VALUES (1, 'Active Board Title', 'active', 5, '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (2, 'Archived Board Title', 'archived', 5, '2017-06-23 10:25:33');
-SELECT pg_catalog.setval('boards_id_seq', 2, true);
+INSERT INTO boards VALUES (1, 'Active Board 1', 'active', 5, '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (2, 'Archived Board', 'archived', 5, '2017-06-23 10:25:33');
+INSERT INTO boards VALUES (3, 'Active Board 2', 'active', 5, '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (4, 'Active Board 3', 'active', 5, '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (5, 'Active Board 4', 'active', 5, '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (6, 'Active Board 5', 'active', 5, '2017-06-23 10:25:32');
+SELECT pg_catalog.setval('boards_id_seq', 6, true);
 
 
-INSERT INTO cards VALUES (1, 'New Card Title', 'new', 1, '2017-06-24 10:25:32');
-INSERT INTO cards VALUES (2, 'New Card Title', 'new', 2, '2017-06-24 10:25:32');
-SELECT pg_catalog.setval('cards_id_seq', 2, true);
+INSERT INTO cards VALUES (1, 'New Card 1', 1, 'new', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (2, 'New Card 2', 2, 'done', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (3, 'New Card 3', 3, 'review', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (4, 'New Card 4', 4, 'in_progress', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (5, 'New Card 5', 5, 'new', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (6, 'New Card 6', 6, 'done', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (7, 'New Card 7', 7, 'review', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (8, 'New Card 8', 8, 'in_progress', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (9, 'New Card 9', 9, 'new', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (10, 'New Card 10', 10, 'done', 1, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (11, 'New Card 11', 11, 'review', 2, '2017-06-24 10:25:32');
+INSERT INTO cards VALUES (12, 'New Card 12', 12, 'in_progress', 3, '2017-06-24 10:25:32');
+SELECT pg_catalog.setval('cards_id_seq', 12, true);
