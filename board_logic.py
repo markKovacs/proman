@@ -39,16 +39,23 @@ def save_new_card_title(card_id, title):
     sql = """UPDATE cards SET title = %s
              WHERE id = %s;"""
     parameters = (title, card_id)
-    query(sql, parameters)
+    query(sql, parameters, None)
 
 
 def save_new_card(title, board_id):
     """Save a newly created card"""
+    sql = """SELECT MAX(card_order) FROM cards;"""
+    card_order = query(sql, None, 'cell') + 1
+
     date = create_timestamp()
-    sql = """INSERT INTO cards (title, status, board_id, creation_date)
-             VALUES (%s, %s, %s, %s);"""
-    parameters = (title, "new", board_id, date)
-    query(sql, parameters)
+
+    sql = """INSERT INTO cards (title, card_order, status, board_id, creation_date)
+             VALUES (%s, %s, %s, %s, %s)
+             RETURNING id, card_order;"""
+    parameters = (title, card_order, "new", board_id, date)
+    card_id = query(sql, parameters, 'cell')
+
+    return card_id
 
 
 def save_new_board(title):
@@ -86,3 +93,23 @@ def delete_board(board_id):
     sql = """DELETE FROM boards WHERE id = %s;"""
     parameters = (board_id,)
     query(sql, parameters)
+
+
+def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):
+    """Make drag and drop persistent in database:
+    - update all values in card_order column,
+    - update status of moved card.
+    """
+    card_ids = card_ids.strip('[]')
+    card_ids = card_ids.split(',')
+
+    for i, card_id in enumerate(card_ids):
+        sql = """UPDATE cards SET card_order = %s WHERE id = %s;"""
+        parameters = (i, card_id)
+        fetch = None
+        query(sql, parameters, fetch)
+
+    sql = """UPDATE cards SET status = %s WHERE id = %s;"""
+    parameters = (new_status, moved_card_id)
+    fetch = None
+    query(sql, parameters, fetch)

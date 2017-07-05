@@ -35,6 +35,7 @@ def not_allowed_method(error):
 # Routing Endpoints:
 
 @app.route("/")
+@account.not_loggedin
 def index():
     return render_template('index.html')
 
@@ -67,12 +68,13 @@ def logout():
     return redirect(url_for('index'))
 
 
+# API Endpoints:
+
 @app.route('/api/cards')
 @account.login_required
 def load_cards():
     board_id = request.args.get("id")
     cards = board_logic.load_cards(board_id)
-    print(cards)
     return jsonify(cards)
 
 
@@ -81,8 +83,8 @@ def load_cards():
 def save_new_card():
     title = request.form.get("title")
     board_id = request.form.get("board_id")
-    board_logic.save_new_card(title, board_id)
-    return jsonify("Done")
+    card_id = board_logic.save_new_card(title, board_id)
+    return jsonify(id=card_id)
 
 
 @app.route('/api/new_board', methods=["POST"])
@@ -99,9 +101,20 @@ def add_new_card_title():
     title = request.form.get("title")
     card_id = request.form.get("card_id")
     board_logic.save_new_card_title(card_id, title)
-    return jsonify("Done")
+    return jsonify(status="success")
 
 
+@app.route('/api/persistent_dnd', methods=['POST'])
+@account.login_required
+def make_drag_and_drop_persistent():
+    moved_card_id = request.form.get("moved_card_id")
+    new_status = request.form.get("new_status")
+    card_ids = request.form.get("card_ids")
+    board_logic.make_drag_and_drop_persistent(moved_card_id, new_status, card_ids)
+    return jsonify(status="success")
+
+
+# Not yet impltemented
 @app.route('/api/new_board_title', methods=["POST"])
 @account.login_required
 def add_new_board_title():
@@ -111,6 +124,7 @@ def add_new_board_title():
     return jsonify("Done")
 
 
+# Not yet impltemented
 @app.route('/api/delete_board')
 @account.login_required
 def delete_board():
@@ -119,6 +133,7 @@ def delete_board():
     return jsonify("Done")
 
 
+# Not yet impltemented
 @app.route('/api/delete_card')
 @account.login_required
 def delete_card():

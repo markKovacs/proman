@@ -62,6 +62,9 @@ app.dataHandler = {
         }
     },
 
+
+
+
     createNewBoard: function (boardTitle) {
         // Create new board, saves it.
 
@@ -106,45 +109,44 @@ app.dataHandler = {
     },
 
     createNewCard: function (boardId, cardTitle) {
-        // Create new card in the given board, saves it.
-
-        var cardId = this.cardCount;
-        this.cardCount += 1;
-
-        var lastPlace = getMaxOrder(boardId) + 1;
-
-        var newCardObj = {
-            id: cardId,
-            title: cardTitle,
-            status: "new",
-            order: lastPlace
-        }
-
-        for (var i = 0; i < this.boards.length; i++) {
-            if (this.boards[i].id === boardId) {
-                this.boards[i].cards.push(newCardObj);
-                break;
+        // Create new card in the given board and save it.
+        $.ajax({
+            url: '/api/new_card',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                title: cardTitle,
+                board_id: boardId
+            },
+            success: function(response) {
+                var cardId = response.id;
+                $('#cards').prepend(`<p class="success">New card with title '${cardTitle}' added.</p>`);
+                $('#new-cards-col div.drop-zone').before(`
+                    <div class="row card-div" id="card-div-id-${cardId}" draggable="true">
+                        <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
+                        <div class="card-order" id="card-order-id-${cardId}">Order: ${response.order}</div>
+                        <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
+                        <div class="delete" data-card-id="${cardId}">X</div>
+                    </div>
+                `);
             }
-        }
-
-        localStorage.setItem('boards', JSON.stringify(this.boards));
-        localStorage.setItem('cardCount', JSON.stringify(this.cardCount));
+        });
     },
 
-    editCard: function (boardId, cardId, newTitle) {
-        // Edit card title and save in localStorage.
-
-        for (var i = 0; i < this.boards.length; i++) {
-            if (this.boards[i].id === boardId) {
-                for (var j = 0; j < this.boards[i].cards.length; j++) {
-                    if (this.boards[i].cards[j].id === cardId) {
-                        this.boards[i].cards[j].title = newTitle;
-                        localStorage.setItem('boards', JSON.stringify(this.boards));
-                        return;
-                    }
-                }
+    editCard: function (cardId, newTitle) {
+        // Edit card title and save in database.
+        $.ajax({
+            url: '/api/new_card_title',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                card_id: cardId,
+                title: newTitle
+            },
+            success: function(response) {
+                $('#cards').prepend(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);
             }
-        }
+        });
     },
 
     getCards: function (boardId, boardTitle) {
@@ -159,16 +161,25 @@ app.dataHandler = {
                 app.dom.showCards(cards, boardId, boardTitle);
             }
         });
+    },
+
+    makeDragAndDropPersistent: function (movedCardId, newStatus, iDsOfcardsOnBoard) {
+        // Make result of drag and drop persistent in database.
+        console.log(iDsOfcardsOnBoard);
+        console.log('iDsOfcardsOnBoard');
+        console.log(JSON.stringify(iDsOfcardsOnBoard));
+        $.ajax({
+            url: '/api/persistent_dnd',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                moved_card_id: movedCardId,
+                new_status: newStatus,
+                card_ids: JSON.stringify(iDsOfcardsOnBoard)
+            },
+            success: function(response) {
+                $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
+            }
+        });
     }
 };
-
-
-function getMaxOrder(boardId) {
-    for (var i = 0; i < app.dataHandler.boards.length; i++) {
-        if (app.dataHandler.boards[i].id === boardId) {
-
-            var theseCards = app.dataHandler.boards[i].cards;
-            return theseCards.length;
-        }
-    }
-}
