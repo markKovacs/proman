@@ -81,8 +81,12 @@ app.dom = {
         $('#cards').show();
     },
 
-    showCards: function (cards, boardId, boardTitle) {
-        debugger;
+    showCards: function (cardsData, boardId, boardTitle) {
+
+        if (!cardsData) {
+            return;
+        }
+
         appendCardNavDiv(boardId, boardTitle);
 
         var newCards = new Array();
@@ -91,19 +95,19 @@ app.dom = {
         var reviewCards = new Array();
 
         // Group cards by card status:
-        for (let i = 0; i < cards.length; i++) {
-            switch (cards[i].status) {
+        for (let i = 0; i < cardsData.length; i++) {
+            switch (cardsData[i].status) {
                 case 'new':
-                    newCards.push(cards[i]);
+                    newCards.push(cardsData[i]);
                     break;
                 case 'in_progress':
-                    inProgressCards.push(cards[i]);
+                    inProgressCards.push(cardsData[i]);
                     break;
                 case 'done':
-                    doneCards.push(cards[i]);
+                    doneCards.push(cardsData[i]);
                     break;
                 case 'review':
-                    reviewCards.push(cards[i]);
+                    reviewCards.push(cardsData[i]);
                     break;
             }
         }
@@ -147,63 +151,63 @@ app.dom = {
 }
 
 
-function appendBoardNavDiv() {
-    // Create and append the div responsible for
-    // the addition of new boards with given title.
+// function appendBoardNavDiv() {
+//     // Create and append the div responsible for
+//     // the addition of new boards with given title.
 
-    $('#boards').append(`
-        <div class="row">
-            <div class="col-sm-12">
-                <button id="new-board-button">Add New Board</button>
-                <div id="new-board-form">
-                    <input type="text" id="new-board-title">
-                    <button id="new-board-entry">Submit</button>
-                </div>
-            </div>
-        </div>
-    `);
+//     $('#boards').append(`
+//         <div class="row">
+//             <div class="col-sm-12">
+//                 <button id="new-board-button">Add New Board</button>
+//                 <div id="new-board-form">
+//                     <input type="text" id="new-board-title">
+//                     <button id="new-board-entry">Submit</button>
+//                 </div>
+//             </div>
+//         </div>
+//     `);
 
-    $('#new-board-entry').on('click', function () {
-        var boardTitle = $('#new-board-title').val();
-        app.dataHandler.createNewBoard(boardTitle);
-        $('#boards').empty();
-        $('#cards').hide();
-        app.dom.showBoards();
-    });
+//     $('#new-board-entry').on('click', function () {
+//         var boardTitle = $('#new-board-title').val();
+//         app.dataHandler.createNewBoard(boardTitle);
+//         $('#boards').empty();
+//         $('#cards').hide();
+//         app.dom.showBoards();
+//     });
 
-    $('#new-board-button').on('click', function () {
-        $('#new-board-form').toggle();
-    });
-}
+//     $('#new-board-button').on('click', function () {
+//         $('#new-board-form').toggle();
+//     });
+// }
 
 
-function appendBoards() {
-    // Create and append boards, based on stored boards data.
+// function appendBoards() {
+//     // Create and append boards, based on stored boards data.
 
-    var boardsData = app.dataHandler.boards;
+//     var boardsData = app.dataHandler.boards;
 
-    for (let i = 0; i < boardsData.length; i++) {
+//     for (let i = 0; i < boardsData.length; i++) {
 
-        if (i === 0 || i % 4 === 0) {
-            var boardsRow = $('<div class="row"></div>');
-            $('#boards').append(boardsRow);
-        }
+//         if (i === 0 || i % 4 === 0) {
+//             var boardsRow = $('<div class="row"></div>');
+//             $('#boards').append(boardsRow);
+//         }
 
-        boardsRow.append(`
-            <div class="col-sm-3">
-                <div class="board-div" data-board-id="${app.dataHandler.boards[i].id}">
-                    <h2 class="board-title">${boardsData[i].title}</h2>
-                    <p class="card-count">Cards: ${boardsData[i].cards.length}</p>
-                </div>
-            </div>
-        `);
-    }
+//         boardsRow.append(`
+//             <div class="col-sm-3">
+//                 <div class="board-div" data-board-id="${app.dataHandler.boards[i].id}">
+//                     <h2 class="board-title">${boardsData[i].title}</h2>
+//                     <p class="card-count">Cards: ${boardsData[i].cards.length}</p>
+//                 </div>
+//             </div>
+//         `);
+//     }
 
-    $('.board-div').on('click', function () {
-        var boardId = $(this).data('board-id');
-        app.dom.showCards(boardId);
-    });
-}
+//     $('.board-div').on('click', function () {
+//         var boardId = $(this).data('board-id');
+//         app.dom.showCards(boardId);
+//     });
+// }
 
 
 function appendCardNavDiv(boardId, boardTitle) {
@@ -418,71 +422,4 @@ function makePersistent(movedElement, dropTarget) {
     }
 
     app.dataHandler.saveBoards();
-}
-
-function displayCards(cards, boardId) {
-    //this should replace the showCards function in app.dom
-
-    var selectedBoard = app.dataHandler.getBoard(boardId);
-
-    appendCardNavDiv(boardId, selectedBoard.title);
-
-    var newCards = new Array();
-    var inProgressCards = new Array();
-    var doneCards = new Array();
-    var reviewCards = new Array();
-
-    // Group cards by card status:
-    for (let i = 0; i < cards.length; i++) {
-        switch (cards[i].status) {
-            case 'new':
-                newCards.push(cards[i]);
-                break;
-            case 'in_progress':
-                inProgressCards.push(cards[i]);
-                break;
-            case 'done':
-                doneCards.push(cards[i]);
-                break;
-            case 'review':
-                reviewCards.push(cards[i]);
-                break;
-        }
-    }
-
-    // Sort the 4 new card pools by card order:
-    newCards.sort(function (a, b) {
-        return a.order - b.order;
-    });
-
-    inProgressCards.sort(function (a, b) {
-        return a.order - b.order;
-    });
-
-    doneCards.sort(function (a, b) {
-        return a.order - b.order;
-    });
-
-    reviewCards.sort(function (a, b) {
-        return a.order - b.order;
-    });
-
-    // Append 4 card pools:
-    $('#cards').append(`
-            <div class="row" id="cards-main-row">
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
-            </div>
-        `);
-
-    // Create and append cards to their respective card pool:
-    appendCards(newCards, 'new-cards-col', boardId, 'New');
-    appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress');
-    appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
-    appendCards(doneCards, 'done-cards-col', boardId, 'Done');
-
-    $('#boards').hide();
-    $('#cards').show();
 }
