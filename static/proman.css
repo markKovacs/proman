@@ -166,3 +166,51 @@ ul {
     position: relative;
     bottom: 80px;
 }
+
+
+.main-content {
+    padding-top: 80px;
+    height: calc(100vh - 80px);
+}
+
+.log {
+    background-color: #4A4A50;
+}
+
+.reg {
+    background-color: #719EA7;
+}
+
+.log, .reg {
+    text-align: center;
+    color: #EBEBE6;
+    padding-top: 10%;
+}
+
+.log .note, .reg .note {
+    font-size: 1em;
+    width: 250px;
+}
+
+.nomargin {
+    margin: 0px !important;
+}
+
+.fullwidth-container {
+    margin: 0px;
+    width: 100%;
+}
+
+.nopadding {
+    padding-top: 0px;
+}
+
+.fullwindow {
+    height: calc(100vh - 80px);
+    padding-bottom: 0px;
+    margin-bottom: 0px;
+}
+
+.fill {
+    height: 100%;
+}
