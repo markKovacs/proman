@@ -41,16 +41,7 @@ function appendBoards () {
             var boardsRow = $('<div class="row"></div>');
             $('#boards').append(boardsRow);
         }
-
-        boardsRow.append(`
-            <div class="col-sm-3">
-                <div class="board-div" data-board-id="${boardsData[i].id}" data-board-title="${boardsData[i].title}">
-                    <h2 class="board-title">${boardsData[i].title}</h2>
-                    <p class="card-count">Cards: ${boardsData[i].card_count}</p>
-                    <div class="delete" data-board-id="${boardsData[i].id}">X</div>
-                </div>
-            </div>
-        `);
+        boardsRow.append(getBoardString(boardsData[i].title, boardsData[i].id));
     }
 
     $('#boards').on('click', '.board-div', function() {

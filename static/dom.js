@@ -245,6 +245,18 @@ app.dom = {
         $("#new-card-title").val('');
         $("#new-card-form").toggle();
         $('#cards').prepend(`<p class="success">New card with title '${cardTitle}' added.</p>`);
+    },
+
+    appendNewBoard: function(title, id) {
+        var boardsInLastRow = $('#boards div.row:last').children().length;
+        if ($(".board-div").children().length === 0 || boardsInLastRow % 4 === 0 ) {
+            $('#boards').append(`<div class="row"></div>`);
+        }
+                
+        $('#boards div.row:last').append(getBoardString(title, id));
+        $('#boards').prepend(`<p class="success">Board '${title}' added.</p>`);
+        $('#new-board-title').val('');
+        $('#new-board-form').toggle();
     }
 }
 
@@ -484,3 +496,21 @@ function addParamString(cardId, cardTitle, cardOrder) {
 }
 
 
+function getBoardString(title, id) {
+
+    return `<div class="col-sm-3">
+                <div class="board-div" data-board-id="${id}" data-board-title="${title}">
+                    <h2 class="board-title">${title}</h2>
+                    <p class="card-count">Cards: 0</p>
+                    <div class="delete" data-board-id=${id}>X</div>
+                </div>
+            </div>`;
+}
+
+function flashCardEditSuccess(cardId, newTitle) {
+    $('#cards').prepend(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);
+}
+
+function flashDragDropSuccess(movedCardId) {
+    $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
+}
