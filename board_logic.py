@@ -87,14 +87,16 @@ def delete_card(card_id):
     """Delete a card based on the given id."""
     sql = """DELETE FROM cards WHERE id = %s;"""
     parameters = (card_id,)
-    query(sql, parameters)
+    fetch = None
+    query(sql, parameters, fetch)
 
-
+ 
 def delete_board(board_id):
     """Delete a board based on the given id."""
     sql = """DELETE FROM boards WHERE id = %s;"""
     parameters = (board_id,)
-    query(sql, parameters)
+    fetch = None
+    query(sql, parameters, fetch)
 
 
 def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):

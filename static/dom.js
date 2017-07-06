@@ -252,73 +252,13 @@ app.dom = {
         if ($(".board-div").children().length === 0 || boardsInLastRow % 4 === 0 ) {
             $('#boards').append(`<div class="row"></div>`);
         }
-                
-        $('#boards div.row:last').append(getBoardString(title, id));
+        var initCardCount = 0;
+        $('#boards div.row:last').append(getBoardString(title, id, initCardCount));
         $('#boards').prepend(`<p class="success">Board '${title}' added.</p>`);
         $('#new-board-title').val('');
         $('#new-board-form').toggle();
     }
 }
-
-
-// function appendBoardNavDiv() {
-//     // Create and append the div responsible for
-//     // the addition of new boards with given title.
-
-//     $('#boards').append(`
-//         <div class="row">
-//             <div class="col-sm-12">
-//                 <button id="new-board-button">Add New Board</button>
-//                 <div id="new-board-form">
-//                     <input type="text" id="new-board-title">
-//                     <button id="new-board-entry">Submit</button>
-//                 </div>
-//             </div>
-//         </div>
-//     `);
-
-//     $('#new-board-entry').on('click', function () {
-//         var boardTitle = $('#new-board-title').val();
-//         app.dataHandler.createNewBoard(boardTitle);
-//         $('#boards').empty();
-//         $('#cards').hide();
-//         app.dom.showBoards();
-//     });
-
-//     $('#new-board-button').on('click', function () {
-//         $('#new-board-form').toggle();
-//     });
-// }
-
-
-// function appendBoards() {
-//     // Create and append boards, based on stored boards data.
-
-//     var boardsData = app.dataHandler.boards;
-
-//     for (let i = 0; i < boardsData.length; i++) {
-
-//         if (i === 0 || i % 4 === 0) {
-//             var boardsRow = $('<div class="row"></div>');
-//             $('#boards').append(boardsRow);
-//         }
-
-//         boardsRow.append(`
-//             <div class="col-sm-3">
-//                 <div class="board-div" data-board-id="${app.dataHandler.boards[i].id}">
-//                     <h2 class="board-title">${boardsData[i].title}</h2>
-//                     <p class="card-count">Cards: ${boardsData[i].cards.length}</p>
-//                 </div>
-//             </div>
-//         `);
-//     }
-
-//     $('.board-div').on('click', function () {
-//         var boardId = $(this).data('board-id');
-//         app.dom.showCards(boardId);
-//     });
-// }
-
 
 function appendCardNavDiv(boardId, boardTitle) {
     // Create and append div responsible for
@@ -350,17 +290,7 @@ function appendCardNavDiv(boardId, boardTitle) {
     });
 
     $('#back-to-boards').on('click', function () {
-        // Refresh card count for boards:
-        $('.success').remove();
-        var cardCountElements = $('.card-count');
-        for (let i = 0; i < app.dataHandler.boards.length; i++) {
-            let cardLength = app.dataHandler.boards[i].cards.length;
-            $(cardCountElements[i]).text(`Cards: ${cardLength}`);
-        }
-
-        $('#cards').hide();
-        $('#boards').show();
-        $('#cards').empty();
+        window.location.replace("/boards");
     });
 }
 
@@ -454,27 +384,7 @@ function makePersistent(movedElement, dropTarget) {
     for (let i = 0; i < cardsOnBoard.length; i++) {
         iDsOfcardsOnBoard.push(Number(cardsOnBoard[i].id.slice(12)));
     }
-
-
-    // ajax call doing the logic below
     app.dataHandler.makeDragAndDropPersistent(movedCardId, newStatus, iDsOfcardsOnBoard);
-
-
-
-    // for (var h = 0; h < iDsOfcardsOnBoard.length; h++) {
-    //     for (var i = 0; i < app.dataHandler.boards.length; i++) {
-    //         for (var j = 0; j < app.dataHandler.boards[i].cards.length; j++) {
-    //             if (movedCardId === app.dataHandler.boards[i].cards[j].id) {
-    //                 app.dataHandler.boards[i].cards[j].status = newStatus;
-    //             }
-    //             if (iDsOfcardsOnBoard[h] === app.dataHandler.boards[i].cards[j].id) {
-    //                 app.dataHandler.boards[i].cards[j].order = h + 1;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // app.dataHandler.saveBoards();
 }
 
 function addParamString(cardId, cardTitle, cardOrder) {
@@ -489,12 +399,12 @@ function addParamString(cardId, cardTitle, cardOrder) {
 }
 
 
-function getBoardString(title, id) {
+function getBoardString(title, id, cardCount) {
 
     return `<div class="col-sm-3">
                 <div class="board-div" data-board-id="${id}" data-board-title="${title}">
                     <h2 class="board-title">${title}</h2>
-                    <p class="card-count">Cards: 0</p>
+                    <p class="card-count">Cards: ${cardCount}</p>
                     <div class="delete" data-board-id=${id}>X</div>
                 </div>
             </div>`;
@@ -507,3 +417,9 @@ function flashCardEditSuccess(cardId, newTitle) {
 function flashDragDropSuccess(movedCardId) {
     $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
 }
+
+$("#boards").on("click", ".delete", function() {
+    $('.success').remove();
+    var boardId = $(this).data("board-id")
+    app.dataHandler.deleteBoard(boardId);
+});

@@ -86,5 +86,17 @@ app.dataHandler = {
                 flashDragDropSuccess(movedCardId);
             }
         });
+    },
+
+    deleteBoard: function(boardId) {
+        $.ajax({
+            url: "/api/delete_board",
+            data: {board_id: boardId},
+            dataType: "json",
+            success: function(response) {
+                $('#boards').prepend(`<p class="success">Board #${boardId} deletion saved.</p>`);
+                location.reload();
+            }
+        });
     }
 };
