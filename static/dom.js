@@ -375,13 +375,6 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
     if (cardPool.length > 0) {
         for (let i = 0; i < cardPool.length; i++) {
             cardPoolDiv.append(addParamString(cardPool[i].id, cardPool[i].title, cardPool[i].order));
-            //     <div class="row card-div" id="card-div-id-${cardPool[i].id}" draggable="true">
-            //         <input class="card-title disabled-title" id="card-title-id-${cardPool[i].id}" disabled value="${cardPool[i].title}">
-            //         <div class="card-order" id="card-order-id-${cardPool[i].id}">Order: ${cardPool[i].order}</div>
-            //         <button class="edit-title" id="card-submit-id-${cardPool[i].id}" data-card-id="${cardPool[i].id}">Edit</button>
-            //         <div class="delete" data-card-id="${cardPool[i].id}">X</div>
-            //     </div>
-            // `);
         }
     }
 
