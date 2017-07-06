@@ -90,15 +90,19 @@ app.dom = {
                 <div class="row" id="cards-main-row">
                     <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col">
                         <h2>New</h2>
+                        <div class="drop-zone no-border"></div>
                     </div>
                     <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col">
                         <h2>In Progress</h2>
+                        <div class="drop-zone no-border"></div>
                     </div>
                     <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col">
                         <h2>Review</h2>
+                        <div class="drop-zone no-border"></div>
                     </div>
                     <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col">
                         <h2>Done</h2>
+                        <div class="drop-zone no-border"></div>
                     </div>
                 </div>
             `);
@@ -164,6 +168,22 @@ app.dom = {
         appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
         appendCards(doneCards, 'done-cards-col', boardId, 'Done');
 
+        $('#cards-main-row').on({
+            drop: function (ev) {
+                drop(ev);
+                $(ev.target).css('border', 'none');
+            },
+            dragover: function (ev) {
+                allowDrop(ev);
+            },
+            dragenter: function () {
+                $('.card-div').css('border', 'none');
+                $(this).css('border', '3px dashed gray');
+            },
+            dragleave: function () {
+                $(this).css('border', 'none');
+            }
+        }, '.drop-zone');
 
         // Title edit / Submit button event listener:
         $('#cards-main-row').on('click', '.edit-title', function (ev) {
@@ -218,7 +238,6 @@ app.dom = {
     },
 
     insertNewCard: function(id, title, order) {
-        debugger;
         $('#new-cards-col div.drop-zone').before(addParamString(id, title, order));
     },
 
@@ -357,23 +376,6 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
     // Appending drop zone at the end of column:
     var dropZone = $('<div class="drop-zone no-border"></div>');
 
-    dropZone.on({
-        drop: function (ev) {
-            drop(ev);
-            $(ev.target).css('border', 'none');
-        },
-        dragover: function (ev) {
-            allowDrop(ev);
-        },
-        dragenter: function () {
-            $('.card-div').css('border', 'none');
-            $(this).css('border', '3px dashed gray');
-        },
-        dragleave: function () {
-            $(this).css('border', 'none');
-        }
-    });
-
     cardPoolDiv.append(dropZone);
 }
 
@@ -441,7 +443,7 @@ function makePersistent(movedElement, dropTarget) {
             newStatus = 'new';
             break;
     }
-    debugger;
+
     var cardsOnBoard = $('.card-div');
     var iDsOfcardsOnBoard = new Array();
     for (let i = 0; i < cardsOnBoard.length; i++) {
@@ -471,7 +473,6 @@ function makePersistent(movedElement, dropTarget) {
 }
 
 function addParamString(cardId, cardTitle, cardOrder) {
-    debugger;
     var str = 
         `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
             <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">

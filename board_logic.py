@@ -105,7 +105,7 @@ def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):
     card_ids = card_ids.strip('[]')
     card_ids = card_ids.split(',')
 
-    for i, card_id in enumerate(card_ids):
+    for i, card_id in enumerate(card_ids, 1):
         sql = """UPDATE cards SET card_order = %s WHERE id = %s;"""
         parameters = (i, card_id)
         fetch = None
