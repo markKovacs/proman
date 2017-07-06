@@ -114,17 +114,6 @@ def make_drag_and_drop_persistent():
     return jsonify(status="success")
 
 
-# Not yet impltemented
-@app.route('/api/new_board_title', methods=["POST"])
-@account.login_required
-def add_new_board_title():
-    title = reques.form.get("title")
-    board_id = reques.form.get("board_id")
-    board_logic.edit_board(title, board_id)
-    return jsonify("Done")
-
-
-# Not yet impltemented
 @app.route('/api/delete_board')
 @account.login_required
 def delete_board():
@@ -133,7 +122,6 @@ def delete_board():
     return jsonify("Done")
 
 
-# Not yet impltemented
 @app.route('/api/delete_card')
 @account.login_required
 def delete_card():

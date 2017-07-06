@@ -4,84 +4,8 @@ var app = app || {};
 app.dom = {
     // DOM manipulation related methods
 
-    showBoards_old: function () {
-        // Populate and show #boards div with 
-        // board management div and all boards from database.
-
-
-        appendBoardNavDiv();
-        appendBoards();
-    },
-
-    showCards_old: function (boardId) {
-        // Populate and show #cards div and hide #boards div.
-        // Create and append cards navigation div and cards based board data.
-
-        var selectedBoard = app.dataHandler.getBoard(boardId);
-
-        appendCardNavDiv(boardId, selectedBoard.title);
-
-        var newCards = new Array();
-        var inProgressCards = new Array();
-        var doneCards = new Array();
-        var reviewCards = new Array();
-
-        // Group cards by card status:
-        for (let i = 0; i < selectedBoard.cards.length; i++) {
-            switch (selectedBoard.cards[i].status) {
-                case 'new':
-                    newCards.push(selectedBoard.cards[i]);
-                    break;
-                case 'in_progress':
-                    inProgressCards.push(selectedBoard.cards[i]);
-                    break;
-                case 'done':
-                    doneCards.push(selectedBoard.cards[i]);
-                    break;
-                case 'review':
-                    reviewCards.push(selectedBoard.cards[i]);
-                    break;
-            }
-        }
-
-        // Sort the 4 new card pools by card order:
-        newCards.sort(function (a, b) {
-            return a.order - b.order;
-        });
-
-        inProgressCards.sort(function (a, b) {
-            return a.order - b.order;
-        });
-
-        doneCards.sort(function (a, b) {
-            return a.order - b.order;
-        });
-
-        reviewCards.sort(function (a, b) {
-            return a.order - b.order;
-        });
-
-        // Append 4 card pools:
-        $('#cards').append(`
-            <div class="row" id="cards-main-row">
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
-            </div>
-        `);
-
-        // Create and append cards to their respective card pool:
-        appendCards(newCards, 'new-cards-col', boardId, 'New');
-        appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress');
-        appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
-        appendCards(doneCards, 'done-cards-col', boardId, 'Done');
-
-        $('#boards').hide();
-        $('#cards').show();
-    },
-
     showCards: function (cardsData, boardId, boardTitle) {
+        $("#cards").empty();
         appendCardNavDiv(boardId, boardTitle);
 
         if (!cardsData) {
@@ -163,10 +87,10 @@ app.dom = {
         `);
 
         // Create and append cards to their respective card pool:
-        appendCards(newCards, 'new-cards-col', boardId, 'New');
-        appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress');
-        appendCards(reviewCards, 'review-cards-col', boardId, 'Review');
-        appendCards(doneCards, 'done-cards-col', boardId, 'Done');
+        appendCards(newCards, 'new-cards-col', boardId, 'New', boardTitle);
+        appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress', boardTitle);
+        appendCards(reviewCards, 'review-cards-col', boardId, 'Review', boardTitle);
+        appendCards(doneCards, 'done-cards-col', boardId, 'Done', boardTitle);
 
         $('#cards-main-row').on({
             drop: function (ev) {
@@ -237,8 +161,8 @@ app.dom = {
         $('#cards').show();
     },
 
-    insertNewCard: function(id, title, order) {
-        $('#new-cards-col div.drop-zone').before(addParamString(id, title, order));
+    insertNewCard: function(id, title, order, boardTitle, boardId) {
+        $('#new-cards-col div.drop-zone').before(addParamString(id, title, order, boardTitle, boardId));
     },
 
     resetForm: function(cardTitle) {
@@ -281,7 +205,7 @@ function appendCardNavDiv(boardId, boardTitle) {
     $('#new-card-entry').on('click', function () {
         $('.success').remove();
         var cardTitle = $('#new-card-title').val();
-        app.dataHandler.createNewCard(boardId, cardTitle);
+        app.dataHandler.createNewCard(boardId, cardTitle, boardTitle);
 
     });
 
@@ -295,7 +219,7 @@ function appendCardNavDiv(boardId, boardTitle) {
 }
 
 
-function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
+function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle, boardTitle) {
     // Append cards to cards pool divs respectively.
     // Assign event listeners to drag and drop and edit title buttons.
 
@@ -304,7 +228,7 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
 
     if (cardPool.length > 0) {
         for (let i = 0; i < cardPool.length; i++) {
-            cardPoolDiv.append(addParamString(cardPool[i].id, cardPool[i].title, cardPool[i].order));
+            cardPoolDiv.append(addParamString(cardPool[i].id, cardPool[i].title, cardPool[i].order, boardTitle, boardId));
         }
     }
 
@@ -387,13 +311,13 @@ function makePersistent(movedElement, dropTarget) {
     app.dataHandler.makeDragAndDropPersistent(movedCardId, newStatus, iDsOfcardsOnBoard);
 }
 
-function addParamString(cardId, cardTitle, cardOrder) {
+function addParamString(cardId, cardTitle, cardOrder, boardTitle, boardId) {
     var str = 
         `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
             <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
             <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
             <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
-            <div class="delete" data-card-id="${cardId}">X</div>
+            <div class="delete" data-card-id="${cardId}" data-board-id="${boardId}" data-board-title="${boardTitle}">X</div>
         </div>`;
     return str;
 }
@@ -402,10 +326,12 @@ function addParamString(cardId, cardTitle, cardOrder) {
 function getBoardString(title, id, cardCount) {
 
     return `<div class="col-sm-3">
-                <div class="board-div" data-board-id="${id}" data-board-title="${title}">
-                    <h2 class="board-title">${title}</h2>
-                    <p class="card-count">Cards: ${cardCount}</p>
-                    <div class="delete" data-board-id=${id}>X</div>
+                <div class="outer-board-div">
+                    <div class="board-div" data-board-id="${id}" data-board-title="${title}">
+                        <h2 class="board-title">${title}</h2>
+                        <p class="card-count">Cards: ${cardCount}</p>
+                    </div>
+                    <div><span class="delete" data-board-id=${id}>X</span></div>
                 </div>
             </div>`;
 }
@@ -422,4 +348,12 @@ $("#boards").on("click", ".delete", function() {
     $('.success').remove();
     var boardId = $(this).data("board-id")
     app.dataHandler.deleteBoard(boardId);
+});
+
+$("#cards").on("click", ".delete", function() {
+    $('.success').remove();
+    var cardId = $(this).data("card-id");
+    var boardId = $(this).data("board-id");
+    var boardTitle = $(this).data("board-title");
+    app.dataHandler.deleteCard(cardId, boardId, boardTitle);
 });

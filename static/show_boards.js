@@ -33,7 +33,7 @@ function appendBoardNavDiv () {
 
 
 function appendBoards () {
-    // Create and append boards, based on stored boards data.
+    // Create and append boards,insertNewCard based on stored boards data.
 
     for (let i = 0; i < boardsData.length; i++) {
 
@@ -41,18 +41,14 @@ function appendBoards () {
             var boardsRow = $('<div class="row"></div>');
             $('#boards').append(boardsRow);
         }
-        debugger;
         boardsRow.append(getBoardString(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
     }
 
     $('#boards').on('click', '.board-div', function(ev) {
-        ev.stopPropagation();
-        if($(this).hasClass("board-div")) {
-            $('.success').remove();
-            var boardId = $(this).data('board-id');
-            var boardTitle = $(this).data('board-title');
-            app.dataHandler.getCards(boardId, boardTitle);   
-        }
+        $('.success').remove();
+        var boardId = $(this).data('board-id');
+        var boardTitle = $(this).data('board-title');
+        app.dataHandler.getCards(boardId, boardTitle);   
     });
 }
 

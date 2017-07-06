@@ -19,7 +19,7 @@ app.dataHandler = {
         });
     },
 
-    createNewCard: function (boardId, cardTitle) {
+    createNewCard: function (boardId, cardTitle, boardTitle) {
         // Create new card in the given board and save it.
         $.ajax({
             url: '/api/new_card',
@@ -32,7 +32,7 @@ app.dataHandler = {
             success: function(response) {
                 var cardId = response.id;
                 var order = response.order;
-                app.dom.insertNewCard(cardId, cardTitle, order);
+                app.dom.insertNewCard(cardId, cardTitle, order, boardTitle, boardId );
                 app.dom.resetForm(cardTitle);
             }
         });
@@ -94,8 +94,20 @@ app.dataHandler = {
             data: {board_id: boardId},
             dataType: "json",
             success: function(response) {
-                $('#boards').prepend(`<p class="success">Board #${boardId} deletion saved.</p>`);
-                location.reload();
+                //$('#boards').prepend(`<p class="success">Board #${boardId} deletion saved.</p>`);
+                window.location.replace("/boards");
+            }
+        });
+    },
+
+    deleteCard: function(cardId, boardId, boardTitle) {
+        $.ajax({
+            url: "/api/delete_card",
+            data: {card_id: cardId},
+            dataType: "json",
+            success: function(response) {
+                //$('#boards').prepend(`<p class="success">Board #${boardId} deletion saved.</p>`);
+                app.dataHandler.getCards(boardId, boardTitle);
             }
         });
     }
