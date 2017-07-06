@@ -2,8 +2,6 @@
 // showBoards function automatically called
 // var boardsData already defined before script
 
-
-
 function appendBoardNavDiv () {
     // Create and append the div responsible for
     // the addition of new boards with given title.
@@ -33,7 +31,7 @@ function appendBoardNavDiv () {
 
 
 function appendBoards () {
-    // Create and append boards, based on stored boards data.
+    // Create and append boards,insertNewCard based on stored boards data.
 
     for (let i = 0; i < boardsData.length; i++) {
 
@@ -41,32 +39,15 @@ function appendBoards () {
             var boardsRow = $('<div class="row"></div>');
             $('#boards').append(boardsRow);
         }
-
-        boardsRow.append(`
-            <div class="col-sm-3">
-                <div class="board-div" data-board-id="${boardsData[i].id}" data-board-title="${boardsData[i].title}">
-                    <h2 class="board-title">${boardsData[i].title}</h2>
-                    <p class="card-count">Cards: ${boardsData[i].card_count}</p>
-                    <div class="delete" data-board-id="${boardsData[i].id}">X</div>
-                </div>
-            </div>
-        `);
+        boardsRow.append(getBoardString(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
     }
 
-    $('#boards').on('click', '.board-div', function() {
+    $('#boards').on('click', '.board-div', function(ev) {
         $('.success').remove();
         var boardId = $(this).data('board-id');
         var boardTitle = $(this).data('board-title');
-        app.dataHandler.getCards(boardId, boardTitle);
+        app.dataHandler.getCards(boardId, boardTitle);   
     });
-
-    // TO BE IMPLEMENTED
-    
-    // $('#boards').on('click', '.delete', function(ev) {
-    //     $('.success').remove();
-    //     var boardId = $(this).data('board-id');
-    //     app.dataHandler.removeBoard(boardId);
-    // });
 }
 
 

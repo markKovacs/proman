@@ -44,18 +44,20 @@ def save_new_card_title(card_id, title):
 
 def save_new_card(title, board_id):
     """Save a newly created card"""
-    sql = """SELECT MAX(card_order) FROM cards;"""
-    card_order = query(sql, None, 'cell') + 1
-
+    sql = """SELECT MAX(card_order) FROM cards WHERE board_id = %s;"""
+    parameters = (board_id,)
+    response = query(sql, parameters, 'cell')
+    print(board_id)
+    card_order = response + 1 if response else 1
     date = create_timestamp()
 
     sql = """INSERT INTO cards (title, card_order, status, board_id, creation_date)
              VALUES (%s, %s, %s, %s, %s)
              RETURNING id, card_order;"""
     parameters = (title, card_order, "new", board_id, date)
-    card_id = query(sql, parameters, 'cell')
+    card_row = query(sql, parameters, 'one')
 
-    return card_id
+    return card_row
 
 
 def save_new_board(title):
@@ -74,25 +76,20 @@ def save_new_board(title):
     return board_id
 
 
-def edit_board(title, board_id):
-    """Edit the name of the board based on the given id and title."""
-    sql = """UPDATE boards SET title = %s WHERE id = %s;"""
-    parameters = (title, board_id,)
-    query = (sql, parameters)
-
-
 def delete_card(card_id):
     """Delete a card based on the given id."""
     sql = """DELETE FROM cards WHERE id = %s;"""
     parameters = (card_id,)
-    query(sql, parameters)
+    fetch = None
+    query(sql, parameters, fetch)
 
-
+ 
 def delete_board(board_id):
     """Delete a board based on the given id."""
     sql = """DELETE FROM boards WHERE id = %s;"""
     parameters = (board_id,)
-    query(sql, parameters)
+    fetch = None
+    query(sql, parameters, fetch)
 
 
 def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):
@@ -103,7 +100,7 @@ def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):
     card_ids = card_ids.strip('[]')
     card_ids = card_ids.split(',')
 
-    for i, card_id in enumerate(card_ids):
+    for i, card_id in enumerate(card_ids, 1):
         sql = """UPDATE cards SET card_order = %s WHERE id = %s;"""
         parameters = (i, card_id)
         fetch = None

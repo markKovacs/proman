@@ -83,8 +83,8 @@ def load_cards():
 def save_new_card():
     title = request.form.get("title")
     board_id = request.form.get("board_id")
-    card_id = board_logic.save_new_card(title, board_id)
-    return jsonify(id=card_id)
+    card_data = board_logic.save_new_card(title, board_id)
+    return jsonify(id=card_data["id"], order=card_data["card_order"])
 
 
 @app.route('/api/new_board', methods=["POST"])
@@ -114,17 +114,6 @@ def make_drag_and_drop_persistent():
     return jsonify(status="success")
 
 
-# Not yet impltemented
-@app.route('/api/new_board_title', methods=["POST"])
-@account.login_required
-def add_new_board_title():
-    title = reques.form.get("title")
-    board_id = reques.form.get("board_id")
-    board_logic.edit_board(title, board_id)
-    return jsonify("Done")
-
-
-# Not yet impltemented
 @app.route('/api/delete_board')
 @account.login_required
 def delete_board():
@@ -133,7 +122,6 @@ def delete_board():
     return jsonify("Done")
 
 
-# Not yet impltemented
 @app.route('/api/delete_card')
 @account.login_required
 def delete_card():

@@ -60,7 +60,27 @@ h1 {
     cursor: default;
 }
 
-.board-div {
+/*.board-div {
+    color: white;
+    background-color:#2C3E50;
+    padding: 5px 5px 5px 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-color: #2C3E50;
+}
+
+.boardx {
+    text-align: center;
+    color: white;
+    background-color:#2C3E50;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 5px 5px 5px 5px;
+    border-color: #2C3E50;*/
+/*}*/
+
+.outer-board-div {
+    text-align: center;
     color: white;
     background-color:#2C3E50;
     padding: 5px 5px 5px 5px;
@@ -68,8 +88,7 @@ h1 {
     border-color: #2C3E50;
 }
 
-.board-div:hover {
-    /* background-color: #243342; */
+.outer-board-div:hover {
     position: relative;
     background-color: #E74C3C;
     cursor: pointer;
@@ -78,8 +97,20 @@ h1 {
     border-bottom-style: solid;
     border-color: #CC4335;
     transition: background-color 0.2s, border-color 0.2s;
-    
 }
+
+/*.board-div:hover {*/
+    /* background-color: #243342; */
+    /*position: relative;
+    background-color: #E74C3C;
+    cursor: pointer;
+    padding-bottom: 2px;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-color: #CC4335;
+    transition: background-color 0.2s, border-color 0.2s;
+    
+}*/
 
 h2 {
     margin-top:10px;
