@@ -44,18 +44,20 @@ def save_new_card_title(card_id, title):
 
 def save_new_card(title, board_id):
     """Save a newly created card"""
-    sql = """SELECT MAX(card_order) FROM cards;"""
-    card_order = query(sql, None, 'cell') + 1
-
+    sql = """SELECT MAX(card_order) FROM cards WHERE board_id = %s;"""
+    parameters = (board_id,)
+    response = query(sql, parameters, 'cell')
+    print(board_id)
+    card_order = response + 1 if response else 1
     date = create_timestamp()
 
     sql = """INSERT INTO cards (title, card_order, status, board_id, creation_date)
              VALUES (%s, %s, %s, %s, %s)
              RETURNING id, card_order;"""
     parameters = (title, card_order, "new", board_id, date)
-    card_id = query(sql, parameters, 'cell')
+    card_row = query(sql, parameters, 'one')
 
-    return card_id
+    return card_row
 
 
 def save_new_board(title):

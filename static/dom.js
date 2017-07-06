@@ -215,6 +215,17 @@ app.dom = {
 
         $('#boards').hide();
         $('#cards').show();
+    },
+
+    insertNewCard: function(id, title, order) {
+        debugger;
+        $('#new-cards-col div.drop-zone').before(addParamString(id, title, order));
+    },
+
+    resetForm: function(cardTitle) {
+        $("#new-card-title").val('');
+        $("#new-card-form").toggle();
+        $('#cards').prepend(`<p class="success">New card with title '${cardTitle}' added.</p>`);
     }
 }
 
@@ -301,10 +312,6 @@ function appendCardNavDiv(boardId, boardTitle) {
         var cardTitle = $('#new-card-title').val();
         app.dataHandler.createNewCard(boardId, cardTitle);
 
-        // These will not be needed anymore:
-
-        // $('#cards').empty();
-        // app.dom.showCards(boardId);
     });
 
     $('#new-card-button').on('click', function () {
@@ -336,15 +343,14 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle) {
 
     if (cardPool.length > 0) {
         for (let i = 0; i < cardPool.length; i++) {
-
-            cardPoolDiv.append(`
-                <div class="row card-div" id="card-div-id-${cardPool[i].id}" draggable="true">
-                    <input class="card-title disabled-title" id="card-title-id-${cardPool[i].id}" disabled value="${cardPool[i].title}">
-                    <div class="card-order" id="card-order-id-${cardPool[i].id}">Order: ${cardPool[i].order}</div>
-                    <button class="edit-title" id="card-submit-id-${cardPool[i].id}" data-card-id="${cardPool[i].id}">Edit</button>
-                    <div class="delete" data-card-id="${cardPool[i].id}">X</div>
-                </div>
-            `);
+            cardPoolDiv.append(addParamString(cardPool[i].id, cardPool[i].title, cardPool[i].order));
+            //     <div class="row card-div" id="card-div-id-${cardPool[i].id}" draggable="true">
+            //         <input class="card-title disabled-title" id="card-title-id-${cardPool[i].id}" disabled value="${cardPool[i].title}">
+            //         <div class="card-order" id="card-order-id-${cardPool[i].id}">Order: ${cardPool[i].order}</div>
+            //         <button class="edit-title" id="card-submit-id-${cardPool[i].id}" data-card-id="${cardPool[i].id}">Edit</button>
+            //         <div class="delete" data-card-id="${cardPool[i].id}">X</div>
+            //     </div>
+            // `);
         }
     }
 
@@ -463,3 +469,17 @@ function makePersistent(movedElement, dropTarget) {
 
     // app.dataHandler.saveBoards();
 }
+
+function addParamString(cardId, cardTitle, cardOrder) {
+    debugger;
+    var str = 
+        `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
+            <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
+            <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
+            <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
+            <div class="delete" data-card-id="${cardId}">X</div>
+        </div>`;
+    return str;
+}
+
+

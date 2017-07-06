@@ -120,15 +120,20 @@ app.dataHandler = {
             },
             success: function(response) {
                 var cardId = response.id;
-                $('#cards').prepend(`<p class="success">New card with title '${cardTitle}' added.</p>`);
-                $('#new-cards-col div.drop-zone').before(`
-                    <div class="row card-div" id="card-div-id-${cardId}" draggable="true">
-                        <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
-                        <div class="card-order" id="card-order-id-${cardId}">Order: ${response.order}</div>
-                        <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
-                        <div class="delete" data-card-id="${cardId}">X</div>
-                    </div>
-                `);
+                var order = response.order;
+                debugger;
+                app.dom.insertNewCard(cardId, cardTitle, order);
+                app.dom.resetForm(cardTitle);
+                
+
+                // $('#new-cards-col div.drop-zone').before(`
+                //     <div class="row card-div" id="card-div-id-${cardId}" draggable="true">
+                //         <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
+                //         <div class="card-order" id="card-order-id-${cardId}">Order: ${response.order}</div>
+                //         <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
+                //         <div class="delete" data-card-id="${cardId}">X</div>
+                //     </div>
+                // `);
             }
         });
     },
