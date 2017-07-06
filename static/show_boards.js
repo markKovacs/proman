@@ -2,8 +2,6 @@
 // showBoards function automatically called
 // var boardsData already defined before script
 
-
-
 function appendBoardNavDiv () {
     // Create and append the div responsible for
     // the addition of new boards with given title.

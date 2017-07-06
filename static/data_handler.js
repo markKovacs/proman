@@ -70,9 +70,6 @@ app.dataHandler = {
 
     makeDragAndDropPersistent: function (movedCardId, newStatus, iDsOfcardsOnBoard) {
         // Make result of drag and drop persistent in database.
-        console.log(iDsOfcardsOnBoard);
-        console.log('iDsOfcardsOnBoard');
-        console.log(JSON.stringify(iDsOfcardsOnBoard));
         $.ajax({
             url: '/api/persistent_dnd',
             method: 'POST',
@@ -94,7 +91,6 @@ app.dataHandler = {
             data: {board_id: boardId},
             dataType: "json",
             success: function(response) {
-                //$('#boards').prepend(`<p class="success">Board #${boardId} deletion saved.</p>`);
                 window.location.replace("/boards");
             }
         });
@@ -106,7 +102,6 @@ app.dataHandler = {
             data: {card_id: cardId},
             dataType: "json",
             success: function(response) {
-                //$('#boards').prepend(`<p class="success">Board #${boardId} deletion saved.</p>`);
                 app.dataHandler.getCards(boardId, boardTitle);
             }
         });

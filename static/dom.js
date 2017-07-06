@@ -30,67 +30,63 @@ app.dom = {
                     </div>
                 </div>
             `);
-            $('#boards').hide();
-            $('#cards').show();
-            return;
-        }
+        } else {
+            var newCards = new Array();
+            var inProgressCards = new Array();
+            var doneCards = new Array();
+            var reviewCards = new Array();
 
-
-        var newCards = new Array();
-        var inProgressCards = new Array();
-        var doneCards = new Array();
-        var reviewCards = new Array();
-
-        // Group cards by card status:
-        for (let i = 0; i < cardsData.length; i++) {
-            switch (cardsData[i].status) {
-                case 'new':
-                    newCards.push(cardsData[i]);
-                    break;
-                case 'in_progress':
-                    inProgressCards.push(cardsData[i]);
-                    break;
-                case 'done':
-                    doneCards.push(cardsData[i]);
-                    break;
-                case 'review':
-                    reviewCards.push(cardsData[i]);
-                    break;
+            // Group cards by card status:
+            for (let i = 0; i < cardsData.length; i++) {
+                switch (cardsData[i].status) {
+                    case 'new':
+                        newCards.push(cardsData[i]);
+                        break;
+                    case 'in_progress':
+                        inProgressCards.push(cardsData[i]);
+                        break;
+                    case 'done':
+                        doneCards.push(cardsData[i]);
+                        break;
+                    case 'review':
+                        reviewCards.push(cardsData[i]);
+                        break;
+                }
             }
+
+            // Sort the 4 new card pools by card order:
+            newCards.sort(function (a, b) {
+                return a.card_order - b.card_order;
+            });
+
+            inProgressCards.sort(function (a, b) {
+                return a.card_order - b.card_order;
+            });
+
+            doneCards.sort(function (a, b) {
+                return a.card_order - b.card_order;
+            });
+
+            reviewCards.sort(function (a, b) {
+                return a.card_order - b.card_order;
+            });
+
+            // Append 4 card pools:
+            $('#cards').append(`
+                <div class="row" id="cards-main-row">
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
+                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
+                </div>
+            `);
+
+            // Create and append cards to their respective card pool:
+            appendCards(newCards, 'new-cards-col', boardId, 'New', boardTitle);
+            appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress', boardTitle);
+            appendCards(reviewCards, 'review-cards-col', boardId, 'Review', boardTitle);
+            appendCards(doneCards, 'done-cards-col', boardId, 'Done', boardTitle);
         }
-
-        // Sort the 4 new card pools by card order:
-        newCards.sort(function (a, b) {
-            return a.card_order - b.card_order;
-        });
-
-        inProgressCards.sort(function (a, b) {
-            return a.card_order - b.card_order;
-        });
-
-        doneCards.sort(function (a, b) {
-            return a.card_order - b.card_order;
-        });
-
-        reviewCards.sort(function (a, b) {
-            return a.card_order - b.card_order;
-        });
-
-        // Append 4 card pools:
-        $('#cards').append(`
-            <div class="row" id="cards-main-row">
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
-                <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
-            </div>
-        `);
-
-        // Create and append cards to their respective card pool:
-        appendCards(newCards, 'new-cards-col', boardId, 'New', boardTitle);
-        appendCards(inProgressCards, 'inprogress-cards-col', boardId, 'In Progress', boardTitle);
-        appendCards(reviewCards, 'review-cards-col', boardId, 'Review', boardTitle);
-        appendCards(doneCards, 'done-cards-col', boardId, 'Done', boardTitle);
 
         $('#cards-main-row').on({
             drop: function (ev) {
@@ -154,8 +150,6 @@ app.dom = {
                 $('.card-div').css('border', 'none');
             }
         }, '.card-div');
-
-
 
         $('#boards').hide();
         $('#cards').show();
@@ -234,7 +228,6 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle, boardTitle
 
     // Appending drop zone at the end of column:
     var dropZone = $('<div class="drop-zone no-border"></div>');
-
     cardPoolDiv.append(dropZone);
 }
 
@@ -279,7 +272,6 @@ function drop(ev) {
     makePersistent(movedElement, dropTarget);
 }
 
-
 function makePersistent(movedElement, dropTarget) {
     // Based on DOM tree, does re-ordering of all cards in board,
     // furthermore overwrites dragged card status with new status.
@@ -322,7 +314,6 @@ function addParamString(cardId, cardTitle, cardOrder, boardTitle, boardId) {
     return str;
 }
 
-
 function getBoardString(title, id, cardCount) {
 
     return `<div class="col-sm-3">
@@ -346,7 +337,7 @@ function flashDragDropSuccess(movedCardId) {
 
 $("#boards").on("click", ".delete", function() {
     $('.success').remove();
-    var boardId = $(this).data("board-id")
+    var boardId = $(this).data("board-id");
     app.dataHandler.deleteBoard(boardId);
 });
 
