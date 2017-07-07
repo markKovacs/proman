@@ -41,13 +41,6 @@ function appendBoards () {
         }
         boardsRow.append(getBoardString(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
     }
-
-    $('#boards').on('click', '.board-div', function(ev) {
-        $('.success').remove();
-        var boardId = $(this).data('board-id');
-        var boardTitle = $(this).data('board-title');
-        app.dataHandler.getCards(boardId, boardTitle);   
-    });
 }
 
 
@@ -59,5 +52,14 @@ function showBoards () {
         $('#boards').append('<div class="row"></div>');
     }
 }
+
+
+$('#boards').on('click', '.board-div', function(ev) {
+    $('.success').remove();
+    var boardId = $(this).data('board-id');
+    var boardTitle = $(this).data('board-title');
+    app.dataHandler.getCards(boardId, boardTitle);   
+});
+
 
 $(document).ready(showBoards());
