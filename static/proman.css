@@ -173,6 +173,10 @@ ul {
     height: calc(100vh - 80px);
 }
 
+.board-page {
+    padding-top: 100px;
+}
+
 .log {
     background-color: #4A4A50;
 }
@@ -184,16 +188,35 @@ ul {
 .log, .reg {
     text-align: center;
     color: #EBEBE6;
-    padding-top: 10%;
+    padding-top: 3%;
 }
 
 .log .note, .reg .note {
     font-size: 1em;
     width: 250px;
+    margin: 0 auto;
+    margin-bottom: 25px;
 }
 
-.nomargin {
-    margin: 0px !important;
+.log .button, .reg .button {
+    margin-top: 25px;
+}
+
+
+.log .field, .reg .field {
+    background-color: rgba(235, 235, 230, 0.0);
+    margin-bottom: 15px;
+    border-width: 3px;
+    border-color: white !important;
+    border-left-color: white !important;
+    border-top-color: white !important;
+    padding: 15px;
+    border-radius: 500px;
+    font-weight: 600;
+}
+
+.log .field:focus, .reg .field:focus {
+    background-color: rgba(235, 235, 230, 0.2);
 }
 
 .fullwidth-container {
@@ -213,4 +236,29 @@ ul {
 
 .fill {
     height: 100%;
+}
+
+.log .button {
+    padding: 15px;
+    margin: 25px 15px 15px 0px;
+    background-color: #00B7DC;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #00B7DC;
+}
+
+.reg .button {
+    padding: 15px;
+    margin: 25px 15px 15px 0px;
+    background-color: #E95846;
+    border-radius: 3px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #E95846;
+}
+
+.trash {
+    width: 24px;
+    margin: 15px;
 }

@@ -27,9 +27,15 @@
             <div class="col-sm-12">
                 <a href="{{url_for('index')}}"><img src="{{url_for('static', filename='proman-logo-ondark.png')}}" class="logo"></a>
                 <ul class="menu">
+                    {% if session.user_name %}
+                    <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
+                    <li><a href="#" class="anchor bttn">{{session.user_name}}</a></li>
+                    <li><a href="{{url_for('logout')}}" class="anchor bttn">Log out</a></li>
+                    {% else %}
                     <li><a href="{{url_for('index')}}#engine" class="anchor bttn">About</a></li>
                     <li><a href="{{url_for('index')}}#developers" class="anchor bttn">Developers</a></li>
-                    <li><a href="#" class="cta login">Log in</a></li>
+                    <li><a href="{{url_for('manage_account')}}" class="cta login">Log in</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
