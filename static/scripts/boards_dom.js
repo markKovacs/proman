@@ -62,12 +62,19 @@ app.boards = {
         // Add event listener to board divs, allowing navigation to cards on board.
 
         $('#boards').on('click', '.board-div', function(ev) {
-            if (!$(ev.target).hasClass('delete')) {
-                $('.success').remove();
-                var boardId = $(this).data('board-id');
-                var boardTitle = $(this).data('board-title');
-                app.dataHandler.getCards(boardId, boardTitle);
-            }
+            $('.success').remove();
+            var boardId = $(this).data('board-id');
+            var boardTitle = $(this).data('board-title');
+            app.dataHandler.getCards(boardId, boardTitle);
         });
     }
 };
+
+
+
+$("#boards").on("click", ".delete", function(ev) {
+    ev.stopPropagation();
+    $('.success').remove();
+    var boardId = $(this).data("board-id");
+    app.dataHandler.deleteBoard(boardId);
+});

@@ -344,12 +344,6 @@ function flashDragDropSuccess(movedCardId) {
     $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
 }
 
-$("#boards").on("click", ".delete", function(ev) {
-    $('.success').remove();
-    var boardId = $(this).data("board-id");
-    app.dataHandler.deleteBoard(boardId);
-});
-
 $("#cards").on("click", ".delete", function() {
     $('.success').remove();
     var cardId = $(this).data("card-id");
