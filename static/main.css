@@ -79,7 +79,11 @@ h1 {
     border-color: #2C3E50;*/
 /*}*/
 
+<<<<<<< HEAD
 .board-div {
+=======
+.outer-board-div {
+>>>>>>> 5cd4efe806ed396c6895092db0aecec084a52662
     text-align: center;
     color: white;
     background-color:#2C3E50;
@@ -88,7 +92,11 @@ h1 {
     border-color: #2C3E50;
 }
 
+<<<<<<< HEAD
 .board-div:hover {
+=======
+.outer-board-div:hover {
+>>>>>>> 5cd4efe806ed396c6895092db0aecec084a52662
     position: relative;
     background-color: #E74C3C;
     cursor: pointer;
@@ -99,6 +107,22 @@ h1 {
     transition: background-color 0.2s, border-color 0.2s;
 }
 
+<<<<<<< HEAD
+=======
+/*.board-div:hover {*/
+    /* background-color: #243342; */
+    /*position: relative;
+    background-color: #E74C3C;
+    cursor: pointer;
+    padding-bottom: 2px;
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    border-color: #CC4335;
+    transition: background-color 0.2s, border-color 0.2s;
+    
+}*/
+
+>>>>>>> 5cd4efe806ed396c6895092db0aecec084a52662
 h2 {
     margin-top:10px;
     font-weight: bold;
