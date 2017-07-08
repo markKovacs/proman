@@ -1,0 +1,23 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Boards{% endblock %}
+
+{% block content %}
+
+    <section class="container main-content" id="error-page">
+
+        {% if error == '404' %}
+
+        <h2>Error 404 - Page Not Found</h2>
+        <p>The requested page was not found. Please make sure the entered URL is correct.</p>
+
+        {% elif error == '405' %}
+        <h2>Error 405 - Method Not Allowed</h2>
+        <p>The requested method is not allowed. Please make sure to use the application GUI for navigation.</p>
+
+        {% endif %}
+
+    </section>
+
+{% endblock %}

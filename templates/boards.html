@@ -1,0 +1,24 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Boards{% endblock %}
+
+{% block scripts %}
+
+    <script type="text/javascript">var boardsData = {{ boards_data|tojson }}</script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="{{url_for('static', filename='scripts/data_handler.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/cards_dom.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/boards_dom.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/main.js')}}" defer></script>
+
+
+{% endblock %}
+
+{% block content %}
+
+    <section class="container main-content board-page" id="boards"></section>
+    <section class="container main-content board-page" id="cards"></section>
+
+{% endblock %}

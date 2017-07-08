@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>{% block title %}{% endblock %} - ProMan</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='normalize.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='proman.css')}}">
+    <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='favicon.png')}}">
+
+    {% block scripts %}{% endblock %}
+
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <nav class="container pronav">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="{{url_for('index')}}"><img src="{{url_for('static', filename='proman-logo-ondark.png')}}" class="logo"></a>
+                <ul class="menu">
+                    {% if session.user_name %}
+                    <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
+                    <li><a href="#" class="anchor bttn">{{session.user_name}}</a></li>
+                    <li><a href="{{url_for('logout')}}" class="anchor bttn">Log out</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('index')}}#engine" class="anchor bttn">About</a></li>
+                    <li><a href="{{url_for('index')}}#developers" class="anchor bttn">Developers</a></li>
+                    <li><a href="{{url_for('manage_account')}}" class="cta login">Log in</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Error messages in a loop with classes: error, success -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <section class="row">
+        <div class="container">
+            <div class="col-sm-12">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+    {% endwith %}
+
+    <!-- Modal Section -->
+    <section class="row">
+        <div id="modal">
+            <div class="container" id="modal-content">
+                <span class="close">&times;</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Section(s) -->
+    {% block content %}{% endblock %}
+
+</body>
+</html>
