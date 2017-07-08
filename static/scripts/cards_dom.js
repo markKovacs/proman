@@ -320,7 +320,7 @@ function addParamString(cardId, cardTitle, cardOrder, boardTitle, boardId) {
             <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
             <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
             <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
-            <div class="delete" data-card-id="${cardId}" data-board-id="${boardId}" data-board-title="${boardTitle}"><img src="static/trash.png" class="delete"></div>
+            <div class="delete" data-card-id="${cardId}" data-board-id="${boardId}" data-board-title="${boardTitle}"><img src="static/images/trash.png" class="delete"></div>
         </div>`;
     return str;
 }
@@ -331,7 +331,7 @@ function getBoardString(title, id, cardCount) {
                 <div class="board-div" data-board-id="${id}" data-board-title="${title}">
                     <h2 class="board-title">${title}</h2>
                     <p class="card-count">Cards: ${cardCount}</p>
-                    <div><img data-board-id="${id}" src="static/trash.png" class="delete"></div>
+                    <div><img data-board-id="${id}" src="static/images/trash.png" class="delete"></div>
                 </div>
             </div>`;
 }
