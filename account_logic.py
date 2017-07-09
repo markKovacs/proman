@@ -67,17 +67,17 @@ def register_account():
     user_names = get_user_names()
 
     if user_name in user_names:
-        flash("User name already exists. Please choose another one.", "error")
+        flash("User name already exists. Please choose another one.", "register_error")
         return redirect(url_for('manage_account'))
 
     if not valid_user_name(user_name):
         flash("Invalid user name. Should be 4-16 characters long, contain only letters, \
-        numbers, dashes and underscores.", "error")
+        numbers, dashes and underscores.", "register_error")
         return redirect(url_for('manage_account'))
 
     if not valid_password(password, password_conf):
         flash("Invalid password or not matching. Password should be 4-16 characters long, \
-        containing only letters, numbers, dashes and underscores.", "error")
+        containing only letters, numbers, dashes and underscores.", "register_error")
         return redirect(url_for('manage_account'))
 
     create_account(user_name, password)
@@ -150,7 +150,7 @@ def login_user():
     set client-side cookie and store session ID server-side as well.
     """
     if not valid_credentials(request.form):
-        flash("Invalid credentials.", "error")
+        flash("Invalid credentials.", "login_error")
         return redirect(url_for('manage_account'))
 
     user_name = request.form['login_acc_name']

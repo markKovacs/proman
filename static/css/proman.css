@@ -82,7 +82,8 @@
     width: 100%;
     margin: 0px;
     color: #EBEBE6;
-    border-top: 2px solid #E95846;
+    border-top: 1px solid #E95846;
+    border-bottom: 1px solid #E95846;
 }
 
 .pronav .logo {
@@ -160,21 +161,16 @@ ul {
     margin-bottom: 0px;
 }
 
-
-
 #engine, #developers {
     position: relative;
     bottom: 80px;
 }
 
-
 .main-content {
     padding-top: 80px;
-    height: calc(100vh - 80px);
-}
-
-.board-page {
-    padding-top: 100px;
+    /*height: calc(100vh - 80px);*/
+    min-height: 650px;
+    background-color: #B6B6B9;
 }
 
 .log {
@@ -242,7 +238,7 @@ ul {
     padding: 15px;
     margin: 25px 15px 15px 0px;
     background-color: #00B7DC;
-    border-radius: 3px;
+    border-radius: 10px;
     font-weight: bold;
     color: white;
     border: 1px solid #00B7DC;
@@ -252,13 +248,19 @@ ul {
     padding: 15px;
     margin: 25px 15px 15px 0px;
     background-color: #E95846;
-    border-radius: 3px;
+    border-radius: 10px;
     font-weight: bold;
     color: white;
     border: 1px solid #E95846;
 }
 
 .delete {
-    width: 24px;
+    width: 15%;
     margin: 15px;
+    padding: 7px;
+    border-radius: 30px;
+}
+
+#boards {
+    padding-top: 40px;
 }

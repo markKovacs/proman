@@ -63,7 +63,6 @@ def manage_account():
 @account.login_required
 def logout():
     session.pop('user_name', None)
-    flash("Successfully logged out.", "success")
 
     return redirect(url_for('index'))
 

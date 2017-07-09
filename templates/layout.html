@@ -21,6 +21,7 @@
 </head>
 
 <body>
+
     <!-- Navigation bar -->
     <nav class="container pronav">
         <div class="row">
@@ -29,9 +30,10 @@
                 <ul class="menu">
                     {% if session.user_name %}
                     <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
-                    <li><a href="#" class="anchor bttn">{{session.user_name}}</a></li>
+                    <li><span class="anchor bttn">{{session.user_name}}</san></li>
                     <li><a href="{{url_for('logout')}}" class="anchor bttn">Log out</a></li>
                     {% else %}
+                    <li><a href="{{url_for('index')}}#home" class="anchor bttn">Home</a></li>
                     <li><a href="{{url_for('index')}}#engine" class="anchor bttn">About</a></li>
                     <li><a href="{{url_for('index')}}#developers" class="anchor bttn">Developers</a></li>
                     <li><a href="{{url_for('manage_account')}}" class="cta login">Log in</a></li>
@@ -40,21 +42,6 @@
             </div>
         </div>
     </nav>
-
-    <!-- Error messages in a loop with classes: error, success -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <section class="row">
-        <div class="container">
-            <div class="col-sm-12">
-            {% for category, message in messages %}
-                <p class="{{ category }}">{{ message }}</p>
-            {% endfor %}
-            </div>
-        </div>
-    </section>
-    {% endif %}
-    {% endwith %}
 
     <!-- Modal Section -->
     <section class="row">
@@ -65,8 +52,21 @@
         </div>
     </section>
 
-    <!-- Content Section(s) -->
-    {% block content %}{% endblock %}
+    <!-- Content Section -->
+    <section class="main-content">
+
+        <!-- Content Block -->
+        {% block content %}{% endblock %}
+
+    </section>
+
+    <footer class="jumbotron" id="footer">
+        <div class="container">
+            <div class="row">
+                <p class="col-sm-12">&copy; 2017 RushBit</p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
