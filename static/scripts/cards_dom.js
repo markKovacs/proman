@@ -167,27 +167,15 @@ app.cards = {
 
     insertNewCard: function(id, title, order, boardTitle, boardId) {
         $('.no-cards').remove();
-        $('#new-cards-col div.drop-zone').before(addParamString(id, title, order, boardTitle, boardId));
+        $('#new-cards-col div.drop-zone').before(getCardHTML(id, title, order, boardTitle, boardId));
     },
 
     resetForm: function(cardTitle) {
         $("#new-card-title").val('');
         $("#new-card-form").toggle();
         $('#cards').prepend(`<p class="success">New card with title '${cardTitle}' added.</p>`);
-    },
-
-    appendNewBoard: function(title, id) {
-        var boardsInLastRow = $('#boards div.row:last').children().length;
-        if ($(".board-div").children().length === 0 || boardsInLastRow % 4 === 0 ) {
-            $('#boards').append(`<div class="row"></div>`);
-        }
-        var initCardCount = 0;
-        $('#boards div.row:last').append(getBoardString(title, id, initCardCount));
-        $('#boards').prepend(`<p class="success">Board '${title}' added.</p>`);
-        $('#new-board-title').val('');
-        $('#new-board-form').toggle();
     }
-}
+};
 
 function appendCardNavDiv(boardId, boardTitle) {
     // Create and append div responsible for
@@ -233,7 +221,7 @@ function appendCards(cardPool, cardPoolDivId, boardId, cardPoolTitle, boardTitle
 
     if (cardPool.length > 0) {
         for (let i = 0; i < cardPool.length; i++) {
-            cardPoolDiv.append(addParamString(cardPool[i].id, cardPool[i].title, cardPool[i].order, boardTitle, boardId));
+            cardPoolDiv.append(getCardHTML(cardPool[i].id, cardPool[i].title, cardPool[i].order, boardTitle, boardId));
         }
     }
 
@@ -314,26 +302,15 @@ function makePersistent(movedElement, dropTarget) {
     app.dataHandler.makeDragAndDropPersistent(movedCardId, newStatus, iDsOfcardsOnBoard);
 }
 
-function addParamString(cardId, cardTitle, cardOrder, boardTitle, boardId) {
+function getCardHTML(cardId, cardTitle, cardOrder, boardTitle, boardId) {
     var str = 
         `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
             <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
             <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
             <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
-            <div class="delete" data-card-id="${cardId}" data-board-id="${boardId}" data-board-title="${boardTitle}"><img src="static/images/trash.svg" class="delete"></div>
+            <div class="delete"><img data-card-id="${cardId}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
         </div>`;
     return str;
-}
-
-function getBoardString(title, id, cardCount) {
-
-    return `<div class="col-sm-3">
-                <div class="board-div" data-board-id="${id}" data-board-title="${title}">
-                    <h2 class="board-title">${title}</h2>
-                    <p class="card-count">Cards: ${cardCount}</p>
-                    <div><img data-board-id="${id}" src="static/images/trash.svg" class="delete"></div>
-                </div>
-            </div>`;
 }
 
 function flashCardEditSuccess(cardId, newTitle) {
@@ -344,7 +321,8 @@ function flashDragDropSuccess(movedCardId) {
     $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
 }
 
-$("#cards").on("click", ".delete", function() {
+$("#cards").on("click", ".delete", function(ev) {
+    ev.stopPropagation();
     $('.success').remove();
     var cardId = $(this).data("card-id");
     var boardId = $(this).data("board-id");

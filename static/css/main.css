@@ -329,8 +329,3 @@ header a:hover {
     z-index: 1;
     height: 80px;
 }
-
-.delete:hover {
-    background-color: white;
-    border: 3px solid #E95846;
-}

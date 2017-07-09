@@ -14,7 +14,7 @@ app.dataHandler = {
             },
             dataType: 'json',
             success: function(response) {
-                app.cards.appendNewBoard(boardTitle, response.id);
+                app.boards.appendNewBoard(boardTitle, response.id);
             }
         });
     },

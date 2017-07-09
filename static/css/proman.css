@@ -254,12 +254,23 @@ ul {
     border: 1px solid #E95846;
 }
 
-.delete {
-    width: 15%;
+.trash {
+    width: 40px;
     margin: 15px;
     padding: 7px;
     border-radius: 30px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
+
+.trash:hover {
+    background-color: white;
+    border: 3px solid #E95846;
+}
+
 
 #boards {
     padding-top: 40px;

@@ -11,10 +11,10 @@ app.boards = {
 
         this.appendBoardNavDiv();
 
-        if (boardsData) {
+        if (boardsData[0]) {
             this.appendBoards();
         } else {
-            $('#boards').append('<div class="row"></div>');
+            $('#boards').append(`<p class="no-boards">There are no boards added yet.</p>`);
         }
     },
 
@@ -54,7 +54,7 @@ app.boards = {
                 var boardsRow = $('<div class="row"></div>');
                 $('#boards').append(boardsRow);
             }
-            boardsRow.append(getBoardString(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
+            boardsRow.append(this.getBoardHTML(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
         }
     },
 
@@ -67,14 +67,38 @@ app.boards = {
             var boardTitle = $(this).data('board-title');
             app.dataHandler.getCards(boardId, boardTitle);
         });
+    },
+
+    addDeleteBoardEventListener: function () {
+        $("#boards").on("click", ".delete", function(ev) {
+            ev.stopPropagation();
+            $('.success').remove();
+            var boardId = $(this).data("board-id");
+            app.dataHandler.deleteBoard(boardId);
+        });
+    },
+
+    appendNewBoard: function (title, id) {
+        $('.no-boards').remove();
+
+        var boardsInLastRow = $('#boards div.row:last').children().length;
+        if ($(".board-div").length === 0 || boardsInLastRow % 4 === 0 ) {
+            $('#boards').append(`<div class="row"></div>`);
+        }
+        var initCardCount = 0;
+        $('#boards div.row:last').append(this.getBoardHTML(title, id, initCardCount));
+        $('#boards').prepend(`<p class="success">Board '${title}' added.</p>`);
+        $('#new-board-title').val('');
+        $('#new-board-form').toggle();
+    },
+
+    getBoardHTML: function (title, id, cardCount) {
+        return `<div class="col-sm-3">
+                    <div class="board-div" data-board-id="${id}" data-board-title="${title}">
+                        <h2 class="board-title">${title}</h2>
+                        <p class="card-count">Cards: ${cardCount}</p>
+                        <div><img data-board-id="${id}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
+                    </div>
+                </div>`;
     }
 };
-
-
-
-$("#boards").on("click", ".delete", function(ev) {
-    ev.stopPropagation();
-    $('.success').remove();
-    var boardId = $(this).data("board-id");
-    app.dataHandler.deleteBoard(boardId);
-});
