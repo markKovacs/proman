@@ -15,8 +15,8 @@ app.dataHandler = {
             success: function(response) {
                 app.boards.appendNewBoard(boardTitle, response.id);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     },
@@ -37,8 +37,8 @@ app.dataHandler = {
                 app.cards.insertNewCard(cardId, cardTitle, order, boardTitle, boardId );
                 app.cards.resetForm(cardTitle);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     },
@@ -56,8 +56,8 @@ app.dataHandler = {
             success: function(response) {
                 app.cards.flashCardEditSuccess(cardId, newTitle);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     },
@@ -70,11 +70,10 @@ app.dataHandler = {
                 id: boardId
             },
             success: function(cards) {
-                console.log(cards);
                 app.cards.showCards(cards, boardId, boardTitle);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     },
@@ -93,8 +92,8 @@ app.dataHandler = {
             success: function(response) {
                 app.cards.flashDragDropSuccess(movedCardId);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     },
@@ -107,11 +106,11 @@ app.dataHandler = {
             },
             dataType: "json",
             success: function(response) {
-                window.location.replace("/boards");
+                app.boards.removeBoardDiv(boardId);
                 app.boards.flashDeleteBoardMessage(boardTitle);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     },
@@ -126,8 +125,8 @@ app.dataHandler = {
             success: function(response) {
                 app.dataHandler.getCards(boardId, boardTitle);
             },
-            error: function(error) {
-                window.location.replace('/boards');
+            error: function() {
+                window.location.replace('/login');
             }
         });
     }

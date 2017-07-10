@@ -4,8 +4,8 @@
 
 ## Generic To-Do
 
-- window.location.replace upon board deletion ==> delete only board div
-- show deletion message for boards and cards
+- show deletion message for cards
+- back to boards button ==> should not reload whole page...
 - add card_id to cards
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
 - modal delete confirmation

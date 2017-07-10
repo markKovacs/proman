@@ -78,25 +78,34 @@ app.boards = {
         });
     },
 
-    appendNewBoard: function (title, id) {
+    appendNewBoard: function (boardTitle, boardId) {
         $('.no-boards').remove();
-        $('#boards').prepend(`<p class="success">Board '${title}' added.</p>`);
+        $('#boards').prepend(`<p class="success">Board '${boardTitle}' added.</p>`);
 
         $('#new-board-title').val('');
         $('#new-board-form').toggle();
 
         var initCardCount = 0;
-        $('#boards div.row:last').append(this.getBoardHTML(title, id, initCardCount));
+        $('#boards div.row:last').append(this.getBoardHTML(boardTitle, boardId, initCardCount));
     },
 
-    getBoardHTML: function (title, id, cardCount) {
+    getBoardHTML: function (boardTitle, boardId, cardCount) {
         return `<div class="col-sm-3">
-                    <div class="board-div" data-board-id="${id}" data-board-title="${title}">
-                        <h2 class="board-title">${title}</h2>
+                    <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}">
+                        <h2 class="board-title">${boardTitle}</h2>
                         <p class="card-count">Cards: ${cardCount}</p>
-                        <div><img data-board-id="${id}" data-board-title="${title}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
+                        <div><img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
                     </div>
                 </div>`;
+    },
+
+    removeBoardDiv: function (boardId) {
+        debugger;
+        $(`#board-id-${boardId}`).parent().remove();
+        var numberOfBoardDivs = $('.board-div').length;
+        if (numberOfBoardDivs === 0) {
+            $('#boards').append(`<p class="no-boards">There are no boards added yet.</p>`);
+        }
     },
 
     flashDeleteBoardMessage: function (boardTitle) {
