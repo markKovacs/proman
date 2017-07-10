@@ -8,6 +8,7 @@ app.init = function() {
     app.cards.addDropZoneEventListeners();
     app.cards.addEditTitleEventListener();
     app.cards.addCardsEventListeners();
+    app.cards.deleteCardEventListener();
 };
 
 $(document).ready(app.init());

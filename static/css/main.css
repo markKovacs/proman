@@ -46,7 +46,7 @@ input {
     border: 3px dashed grey;
     margin: 15px 7px;
     border-radius: 10px;
-    min-height: 100px;  
+    min-height: 150px;  
 }
 
 .card-pool-col {

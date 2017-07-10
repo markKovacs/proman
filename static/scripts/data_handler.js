@@ -5,7 +5,6 @@ app.dataHandler = {
 
     createNewBoard: function (boardTitle) {
         // Create new board, saves it.
-
         $.ajax({
             url:'/api/new_board',
             method: 'POST',
@@ -49,13 +48,12 @@ app.dataHandler = {
                 title: newTitle
             },
             success: function(response) {
-                flashCardEditSuccess(cardId, newTitle);
+                app.cards.flashCardEditSuccess(cardId, newTitle);
             }
         });
     },
 
     getCards: function (boardId, boardTitle) {
-
         $.ajax({
             dataType: "json",
             url: "/api/cards",
@@ -80,7 +78,7 @@ app.dataHandler = {
                 card_ids: JSON.stringify(iDsOfcardsOnBoard)
             },
             success: function(response) {
-                flashDragDropSuccess(movedCardId);
+                app.cards.flashDragDropSuccess(movedCardId);
             }
         });
     },
