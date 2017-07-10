@@ -4,9 +4,14 @@
 
 ## Generic To-Do
 
+- boards page structure change: new row is not necessary for every 4 boards!
+    + appending new board situation
+    + appending all boards
+- window.location.replace upon board deletion ==> delete only board div
 - show deletion message for boards and cards
 - add card_id to cards
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
+- modal delete confirmation
 
 - validate board and card title input
     + creation
@@ -26,9 +31,12 @@
 - search
 - messages
     + ajax call every few seconds
+    + toast messages
 - notifications
     + ajax call every few seconds
+    + toast messages
 - sandwich menu in mobile view
+- mobile drag and drop
 
 ## Database Changes Needed
 

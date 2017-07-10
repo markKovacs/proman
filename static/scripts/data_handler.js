@@ -83,7 +83,7 @@ app.dataHandler = {
         });
     },
 
-    deleteBoard: function(boardId) {
+    deleteBoard: function(boardId, boardTitle) {
         $.ajax({
             url: "/api/delete_board",
             data: {
@@ -92,6 +92,7 @@ app.dataHandler = {
             dataType: "json",
             success: function(response) {
                 window.location.replace("/boards");
+                app.boards.flashDeleteBoardMessage(boardTitle);
             }
         });
     },

@@ -74,7 +74,8 @@ app.boards = {
             ev.stopPropagation();
             $('.success').remove();
             var boardId = $(this).data("board-id");
-            app.dataHandler.deleteBoard(boardId);
+            var boardTitle = $(this).data('board-title');
+            app.dataHandler.deleteBoard(boardId, boardTitle);
         });
     },
 
@@ -97,8 +98,12 @@ app.boards = {
                     <div class="board-div" data-board-id="${id}" data-board-title="${title}">
                         <h2 class="board-title">${title}</h2>
                         <p class="card-count">Cards: ${cardCount}</p>
-                        <div><img data-board-id="${id}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
+                        <div><img data-board-id="${id}" data-board-title="${title}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
                     </div>
                 </div>`;
+    },
+
+    flashDeleteBoardMessage: function (boardTitle) {
+        $('#boards').prepend(`<p class="success">Board '${boardTitle}' deleted.</p>`);
     }
 };
