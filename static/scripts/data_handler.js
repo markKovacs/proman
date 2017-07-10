@@ -86,7 +86,9 @@ app.dataHandler = {
     deleteBoard: function(boardId) {
         $.ajax({
             url: "/api/delete_board",
-            data: {board_id: boardId},
+            data: {
+                board_id: boardId
+            },
             dataType: "json",
             success: function(response) {
                 window.location.replace("/boards");
@@ -97,7 +99,9 @@ app.dataHandler = {
     deleteCard: function(cardId, boardId, boardTitle) {
         $.ajax({
             url: "/api/delete_card",
-            data: {card_id: cardId},
+            data: {
+                card_id: cardId
+            },
             dataType: "json",
             success: function(response) {
                 app.dataHandler.getCards(boardId, boardTitle);
