@@ -48,14 +48,13 @@ app.boards = {
 
     appendBoards: function () {
         // Create and append boards,insertNewCard based on stored boards data.
+        var boardsRow = $('<div class="row"></div>');
 
         for (let i = 0; i < boardsData.length; i++) {
-            if (i === 0 || i % 4 === 0) {
-                var boardsRow = $('<div class="row"></div>');
-                $('#boards').append(boardsRow);
-            }
             boardsRow.append(this.getBoardHTML(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
         }
+
+        $('#boards').append(boardsRow);
     },
 
     addBoardsEventListener: function () {
@@ -81,16 +80,13 @@ app.boards = {
 
     appendNewBoard: function (title, id) {
         $('.no-boards').remove();
-
-        var boardsInLastRow = $('#boards div.row:last').children().length;
-        if ($(".board-div").length === 0 || boardsInLastRow % 4 === 0 ) {
-            $('#boards').append(`<div class="row"></div>`);
-        }
-        var initCardCount = 0;
-        $('#boards div.row:last').append(this.getBoardHTML(title, id, initCardCount));
         $('#boards').prepend(`<p class="success">Board '${title}' added.</p>`);
+
         $('#new-board-title').val('');
         $('#new-board-form').toggle();
+
+        var initCardCount = 0;
+        $('#boards div.row:last').append(this.getBoardHTML(title, id, initCardCount));
     },
 
     getBoardHTML: function (title, id, cardCount) {

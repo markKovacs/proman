@@ -74,6 +74,19 @@ input {
     border-color: #2C3E50;
     border: 1px solid #E95846;
     margin-bottom: 15px;
+    height: 200px;
+}
+
+.board-div h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.7em;
+    line-height: 1.15em;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* number of lines to show */
+    line-height: 1.15em;        /* fallback */
+    max-height: 3.45em;       /* fallback */
 }
 
 .board-div:hover {

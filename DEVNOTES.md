@@ -4,14 +4,12 @@
 
 ## Generic To-Do
 
-- boards page structure change: new row is not necessary for every 4 boards!
-    + appending new board situation
-    + appending all boards
 - window.location.replace upon board deletion ==> delete only board div
 - show deletion message for boards and cards
 - add card_id to cards
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
 - modal delete confirmation
+- autofocus on things, create new by pressing enter
 
 - validate board and card title input
     + creation
