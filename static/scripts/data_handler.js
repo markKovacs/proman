@@ -20,7 +20,7 @@ app.dataHandler = {
                 }
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
@@ -44,12 +44,12 @@ app.dataHandler = {
                 }
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
 
-    editCard: function (cardId, newTitle) {
+    editCard: function (cardId, newTitle, oldTitle) {
         // Edit card title and save in database.
         $.ajax({
             url: '/api/new_card_title',
@@ -60,10 +60,14 @@ app.dataHandler = {
                 title: newTitle
             },
             success: function(response) {
-                app.cards.flashCardEditSuccess(cardId, newTitle);
+                if (response === 'data_error') {
+                    app.cards.restoreCardTitle(cardId, oldTitle);
+                } else {
+                    app.cards.flashCardEditSuccess(cardId, newTitle);
+                }
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
@@ -79,7 +83,7 @@ app.dataHandler = {
                 app.cards.showCards(cards, boardId, boardTitle);
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
@@ -99,7 +103,7 @@ app.dataHandler = {
                 app.cards.flashDragDropSuccess(movedCardId);
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
@@ -116,7 +120,7 @@ app.dataHandler = {
                 app.boards.flashDeleteBoardMessage(boardTitle);
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
@@ -133,7 +137,7 @@ app.dataHandler = {
                 app.cards.flashDeleteCardMessage(cardTitle);
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         });
     },
@@ -147,7 +151,7 @@ app.dataHandler = {
                 app.boards.switchToBoardsPage();
             },
             error: function() {
-                window.location.replace('/login');
+                window.location.replace('/login?error=timedout');
             }
         })
     }

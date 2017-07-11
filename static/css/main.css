@@ -157,7 +157,7 @@ h2 {
     background-color: #CC4335;
     }
 
-.edit-title {
+.edit-title, .submit-title {
     padding: 5px;
     background-color: #3d3d3d;
     border-radius: 3px;

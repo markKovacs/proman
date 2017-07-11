@@ -115,29 +115,88 @@ app.cards = {
 
     addEditTitleEventListener: function () {
         // Title edit / Submit button event listener:
+
         $('#cards').on('click', '.edit-title', function (ev) {
             ev.stopPropagation();
-            $('.success').remove();
-            $('.error').remove();
-            var cardId = $(this).data('card-id');
 
-            var titleInput = $(`#card-title-id-${cardId}`);
-            var newTitleValue = titleInput.val();
-
-            if (!titleInput.hasClass('disabled-title')) {
-                app.dataHandler.editCard(cardId, newTitleValue);
+            if (prevCardTitle) {
+                var titleInputField = $($('.submit-title')[0]).prev();
+                titleInputField.val(prevCardTitle);
             }
 
-            titleInput.toggleClass('disabled-title');
+            // Disable all others:
+            $('.card-title').prop('disabled', true);
+            $('.card-title').addClass('disabled-title');
+            $('.edit-submit-button').text('Edit');
+            $('.edit-submit-button').addClass('edit-title');
+            $('.edit-submit-button').removeClass('submit-title');
 
-            if (titleInput.attr('disabled')) {
-                titleInput.prop('disabled', false);
-                $(this).text('Submit');
-            } else {
-                titleInput.prop('disabled', true);
-                $(this).text('Edit');
+            // Get cardId and title input that belongs to it:
+            var cardId = $(this).data('card-id');
+            var titleInputField = $(`#card-title-id-${cardId}`);
+
+            // Change input field appearance:
+            titleInputField.removeClass('disabled-title');
+            // Store previous title for later:
+            prevCardTitle = titleInputField.val();
+            // Enable input field and put in focus, put cursor at end:
+            titleInputField.prop('disabled', false);
+            titleInputField.focus();
+            titleInputField.val('');
+            titleInputField.val(prevCardTitle);
+            // Change button text:
+            $(this).text('Submit');
+            // Change class of clicked button:
+            $(this).addClass('submit-title');
+            $(this).removeClass('edit-title');
+        });
+
+        $('#cards').on('click', '.submit-title', function (ev) {
+            ev.stopPropagation();
+
+            // Get cardId and title input that belongs to it:
+            var cardId = $(this).data('card-id');
+            var titleInputField = $(`#card-title-id-${cardId}`);
+
+            if (prevCardTitle && titleInputField.val() !== prevCardTitle) {
+                app.dataHandler.editCard(cardId, titleInputField.val(), prevCardTitle);
+            }
+
+            prevCardTitle = undefined;
+
+            titleInputField.addClass('disabled-title');
+            titleInputField.prop('disabled', true);
+
+            $(this).text('Edit');
+            $(this).addClass('edit-title');
+            $(this).removeClass('submit-title');
+        });
+
+
+        $(window).on('click', function(event) {
+            var cardId = $(event.target).data('card-id');
+            var titleInputField = $($('.submit-title')[0]).prev();
+            if (prevCardTitle && !$(event.target).hasClass('edit-submit-button') && $(event.target).attr('id') !== `card-title-id-${cardId}` ) {
+                titleInputField.val(prevCardTitle);
+                prevCardTitle = undefined;
+
+                $('.card-title').prop('disabled', true);
+                $('.card-title').addClass('disabled-title');
+                $('.edit-submit-button').text('Edit');
+                $('.edit-submit-button').addClass('edit-title');
+                $('.edit-submit-button').removeClass('submit-title');
             }
         });
+    },
+
+    restoreCardTitle: function (cardId, oldTitle) {
+        debugger;
+        $('.success').remove();
+        $('.error').remove();
+
+        $(`#card-title-id-${cardId}`).val(oldTitle);
+
+        $('#cards h1').after(`<p class="error">Card title must be 1-30 characters long.</p>`);
     },
 
     addCardsEventListeners: function () {
@@ -299,9 +358,9 @@ app.cards = {
         return `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
                     <div class="card-order" id="card-order-id-${cardId}">Order:<br>${cardOrder}</div>
                     <div class="card-id">ID#${cardId}</div>
-                    <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3">${cardTitle}</textarea>
-                    <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
-                    <div class="delete">
+                    <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3" data-card-id="${cardId}">${cardTitle}</textarea>
+                    <div class="edit-submit-button edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
+                    <div>
                         <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
                             src="static/images/trash.svg" class="trash delete" alt="DEL">
                     </div>
@@ -312,6 +371,8 @@ app.cards = {
     // <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
 
     flashCardEditSuccess: function (cardId, newTitle) {
+        $('.success').remove();
+        $('.error').remove();
         $('#cards h1').after(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);
     },
 

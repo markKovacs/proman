@@ -1,5 +1,6 @@
 
 var app = app || {};
+var prevCardTitle;
 
 app.init = function() {
     app.boards.showBoards();

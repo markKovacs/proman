@@ -56,6 +56,9 @@ def manage_account():
         elif request.form.get('login_acc_name'):
             return account.login_user()
 
+    if request.args.get('error') == 'timedout':
+        flash('Your session has been timed out. Please log back in to continue.', 'error')
+
     return render_template('account.html')
 
 
@@ -102,8 +105,11 @@ def save_new_board():
 def add_new_card_title():
     title = request.form.get("title")
     card_id = request.form.get("card_id")
-    board_logic.save_new_card_title(card_id, title)
-    return jsonify(status="success")
+    response = board_logic.save_new_card_title(card_id, title)
+    if response == 'data_error':
+        return jsonify(response)
+
+    return jsonify("success")
 
 
 @app.route('/api/persistent_dnd', methods=['POST'])

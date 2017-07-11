@@ -56,7 +56,11 @@ def save_new_card_title(card_id, title):
     sql = """UPDATE cards SET title = %s
              WHERE id = %s;"""
     parameters = (title, card_id)
-    query(sql, parameters, None)
+    try:
+        query(sql, parameters, None)
+    except (DataError, IntegrityError) as err:
+        print('Data Error:\n{}'.format(err))
+        return 'data_error'
 
 
 def save_new_card(title, board_id):
