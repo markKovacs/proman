@@ -82,16 +82,19 @@ def load_cards():
 def save_new_card():
     title = request.form.get("title")
     board_id = request.form.get("board_id")
-    card_data = board_logic.save_new_card(title, board_id)
-    return jsonify(id=card_data["id"], order=card_data["card_order"])
+    response = board_logic.save_new_card(title, board_id)
+    if response == 'data_error':
+        return jsonify(response)
+
+    return jsonify(id=response["id"], card_order=response["card_order"])
 
 
 @app.route('/api/new_board', methods=["POST"])
 @account.login_required
 def save_new_board():
     title = request.form.get("title")
-    board_id = board_logic.save_new_board(title)
-    return jsonify(id=board_id)
+    response = board_logic.save_new_board(title)
+    return jsonify(response)
 
 
 @app.route('/api/new_card_title', methods=["POST"])

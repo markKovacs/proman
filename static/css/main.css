@@ -20,6 +20,12 @@ input, textarea {
     outline: none;
 }
 
+textarea {
+    resize: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .board-div, .card-div {
     text-align: center;
 }
@@ -78,6 +84,9 @@ input, textarea {
 }
 
 .board-div h2 {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1.7em;
@@ -87,15 +96,15 @@ input, textarea {
     -webkit-line-clamp: 3; /* number of lines to show */
     line-height: 1.15em;        /* fallback */
     max-height: 3.45em;       /* fallback */
+    width: 95%;
 }
 
 .card-title {
     text-align: center;
     margin-top: 30px;
-    height: 30px;
-    width: 50%;
-    white-space: normal;
-    -webkit-line-clamp: 3; /* number of lines to show */
+    font-size: 1.5em;
+    width: 95%;
+    height: 85px;
 }
 
 .disabled-title {

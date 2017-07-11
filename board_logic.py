@@ -1,6 +1,7 @@
 from flask import session
 from data_manager import query, run_statement
 from datetime import datetime
+from psycopg2 import DataError, IntegrityError
 
 
 def create_timestamp():
@@ -71,9 +72,13 @@ def save_new_card(title, board_id):
              VALUES (%s, %s, %s, %s, %s)
              RETURNING id, card_order;"""
     parameters = (title, card_order, "new", board_id, date)
-    card_row = query(sql, parameters, 'one')
+    try:
+        response = query(sql, parameters, 'one')
+    except (DataError, IntegrityError) as err:
+        print('Data Error:\n{}'.format(err))
+        response = 'data_error'
 
-    return card_row
+    return response
 
 
 def save_new_board(title):
@@ -87,9 +92,13 @@ def save_new_board(title):
              VALUES(%s, %s, %s, %s)
              RETURNING id;"""
     parameters = (title, "active", account_id, date)
-    board_id = query(sql, parameters, 'cell')
+    try:
+        response = query(sql, parameters, 'cell')
+    except (DataError, IntegrityError) as err:
+        print('Data Error:\n{}'.format(err))
+        response = 'data_error'
 
-    return board_id
+    return response
 
 
 def delete_card(card_id):

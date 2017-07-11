@@ -118,6 +118,7 @@ app.cards = {
         $('#cards').on('click', '.edit-title', function (ev) {
             ev.stopPropagation();
             $('.success').remove();
+            $('.error').remove();
             var cardId = $(this).data('card-id');
 
             var titleInput = $(`#card-title-id-${cardId}`);
@@ -171,16 +172,16 @@ app.cards = {
     resetForm: function (cardTitle) {
         $("#new-card-title").val('');
         $("#new-card-form").toggle();
-        $('#cards').prepend(`<p class="success">New card with title '${cardTitle}' added.</p>`);
+        $('#cards h1').after(`<p class="success">New card with title '${cardTitle}' added.</p>`);
     },
 
     appendCardNavDiv: function (boardId, boardTitle) {
         // Create and append div responsible for
         // navigation back to boards and new card creation.
         $('#cards').append(`
+            <h1>${boardTitle}</h1>
             <div class="row">
                 <div class="col-sm-12">
-                    <h2>${boardTitle}</h2>
                     <button id="new-card-button">Add New Card</button>
                     <button id="back-to-boards">Back to Boards</button>
                     <div id="new-card-form">
@@ -193,6 +194,7 @@ app.cards = {
 
         $('#new-card-entry').on('click', function () {
             $('.success').remove();
+            $('.error').remove();
             var cardTitle = $('#new-card-title').val();
             app.dataHandler.createNewCard(boardId, cardTitle, boardTitle);
         });
@@ -245,6 +247,7 @@ app.cards = {
         ev.stopPropagation();
 
         $('.success').remove();
+        $('.error').remove();
 
         var movedElementId = ev.originalEvent.dataTransfer.getData("target_id");
         var movedElement = $(`#${movedElementId}`);
@@ -294,9 +297,9 @@ app.cards = {
 
     getCardHTML: function (cardId, cardTitle, cardOrder, boardTitle, boardId) {
         return `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
-                    <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
-                    <div class="card-id">#${cardId}</div>   
-                    <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
+                    <div class="card-order" id="card-order-id-${cardId}">Order:<br>${cardOrder}</div>
+                    <div class="card-id">ID#${cardId}</div>
+                    <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3">${cardTitle}</textarea>
                     <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
                     <div class="delete">
                         <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
@@ -306,19 +309,21 @@ app.cards = {
     },
 
     // <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled>${cardTitle}</textarea>
+    // <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
 
     flashCardEditSuccess: function (cardId, newTitle) {
-        $('#cards').prepend(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);
+        $('#cards h1').after(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);
     },
 
     flashDragDropSuccess: function (movedCardId) {
-        $('#cards').prepend(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
+        $('#cards h1').after(`<p class="success">Card #${movedCardId} replacement saved.</p>`);
     },
 
     deleteCardEventListener: function () {
         $("#cards").on("click", ".delete", function(ev) {
             ev.stopPropagation();
             $('.success').remove();
+            $('.error').remove();
             var cardId = $(this).data("card-id");
             var cardTitle = $(this).data("card-title");
             var boardId = $(this).data("board-id");
@@ -336,6 +341,16 @@ app.cards = {
     },
 
     flashDeleteCardMessage: function (cardTitle) {
-        $('#cards').prepend(`<p class="success">Card '${cardTitle}' has been deleted.</p>`);
+        $('#cards h1').after(`<p class="success">Card '${cardTitle}' has been deleted.</p>`);
+    },
+
+    flashDataErrorMessage: function () {
+        $('.success').remove();
+        $('.error').remove();
+
+        $('#new-card-title').val('');
+        $('#new-card-form').toggle();
+
+        $('#cards h1').after(`<p class="error">Card title must be 1-30 characters long.</p>`);
     }
 };

@@ -22,7 +22,7 @@ DROP TABLE IF EXISTS public.boards;
 DROP SEQUENCE IF EXISTS public.boards_id_seq;
 CREATE TABLE boards (
     id serial NOT NULL,
-    title varchar(50) NOT NULL,
+    title varchar(30) CHECK (char_length(title) >= 1),
     status varchar(8) CHECK(status IN ('active', 'archived')),
     account_id int NOT NULL,
     creation_date timestamp without time zone NOT NULL
@@ -40,7 +40,7 @@ DROP TABLE IF EXISTS public.cards;
 DROP SEQUENCE IF EXISTS public.cards_id_seq;
 CREATE TABLE cards (
     id serial NOT NULL,
-    title varchar(50) NOT NULL,
+    title varchar(30) CHECK (char_length(title) >= 1),
     card_order int NOT NULL,
     status varchar(11) CHECK(status IN ('new', 'in_progress', 'review', 'done')),
     board_id int NOT NULL,

@@ -12,8 +12,12 @@ app.dataHandler = {
                 title: boardTitle
             },
             dataType: 'json',
-            success: function(response) {
-                app.boards.appendNewBoard(boardTitle, response.id);
+            success: function(boardId) {
+                if (boardId === 'data_error') {
+                    app.boards.flashDataErrorMessage();
+                } else {
+                    app.boards.appendNewBoard(boardTitle, boardId);
+                }
             },
             error: function() {
                 window.location.replace('/login');
@@ -32,10 +36,12 @@ app.dataHandler = {
                 board_id: boardId
             },
             success: function(response) {
-                var cardId = response.id;
-                var order = response.order;
-                app.cards.insertNewCard(cardId, cardTitle, order, boardTitle, boardId );
-                app.cards.resetForm(cardTitle);
+                if (response === 'data_error') {
+                    app.cards.flashDataErrorMessage();
+                } else {
+                    app.cards.insertNewCard(response.id, cardTitle, response.card_order, boardTitle, boardId);
+                    app.cards.resetForm(cardTitle);
+                }
             },
             error: function() {
                 window.location.replace('/login');

@@ -8,7 +8,6 @@ app.boards = {
     
     showBoards: function () {
         // Show boards page.
-        $('#boards').append('<h1>Personal Boards</h1>');
         this.appendBoardNavDiv();
 
         if (boardsData[0]) {
@@ -36,6 +35,7 @@ app.boards = {
 
         $('#new-board-entry').on('click', function() {
             $('.success').remove();
+            $('.error').remove();
             var boardTitle = $('#new-board-title').val();
             app.dataHandler.createNewBoard(boardTitle);
         });
@@ -62,6 +62,7 @@ app.boards = {
 
         $('#boards').on('click', '.board-div', function(ev) {
             $('.success').remove();
+            $('.error').remove();
             var boardId = $(this).data('board-id');
             var boardTitle = $(this).data('board-title');
             app.dataHandler.getCards(boardId, boardTitle);
@@ -72,6 +73,7 @@ app.boards = {
         $("#boards").on("click", ".delete", function(ev) {
             ev.stopPropagation();
             $('.success').remove();
+            $('.error').remove();
             var boardId = $(this).data("board-id");
             var boardTitle = $(this).data('board-title');
             app.dataHandler.deleteBoard(boardId, boardTitle);
@@ -128,5 +130,15 @@ app.boards = {
         $('#cards').hide();
         $('#boards').show();
         $('#cards').empty();
+    },
+
+    flashDataErrorMessage: function () {
+        $('.success').remove();
+        $('.error').remove();
+
+        $('#new-board-title').val('');
+        $('#new-board-form').toggle();
+
+        $('#boards h1').after(`<p class="error">Board title must be 1-30 characters long.</p>`);
     }
 };
