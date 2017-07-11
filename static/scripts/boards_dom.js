@@ -80,7 +80,7 @@ app.boards = {
 
     appendNewBoard: function (boardTitle, boardId) {
         $('.no-boards').remove();
-        $('#boards').prepend(`<p class="success">Board '${boardTitle}' added.</p>`);
+        $('#boards').prepend(`<p class="success">Board '${boardTitle}' has been created.</p>`);
 
         $('#new-board-title').val('');
         $('#new-board-form').toggle();
@@ -93,8 +93,10 @@ app.boards = {
         return `<div class="col-sm-3">
                     <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}">
                         <h2 class="board-title">${boardTitle}</h2>
-                        <p class="card-count">Cards: ${cardCount}</p>
-                        <div><img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="trash delete" alt="DEL"></div>
+                        <p class="card-count" data-board-id="${boardId}">Cards: ${cardCount}</p>
+                        <div>
+                            <img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="trash delete" alt="DEL">
+                        </div>
                     </div>
                 </div>`;
     },
@@ -109,5 +111,22 @@ app.boards = {
 
     flashDeleteBoardMessage: function (boardTitle) {
         $('#boards').prepend(`<p class="success">Board '${boardTitle}' has been deleted.</p>`);
+    },
+
+    refreshCardCount: function (currentCardCounts) {
+        var cardCountsElements = $('.card-count');
+        for (let j = 0; j < currentCardCounts.length; j++) {
+            for (let i = 0; i < cardCountsElements.length; i++) {
+                if (currentCardCounts[j].board_id === Number($(cardCountsElements[i]).data('board-id'))) {
+                    $(cardCountsElements[i]).text(`Cards: ${currentCardCounts[j].card_count}`);
+                }
+            }
+        }
+    },
+
+    switchToBoardsPage: function () {
+        $('#cards').hide();
+        $('#boards').show();
+        $('#cards').empty();
     }
 };

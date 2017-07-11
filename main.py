@@ -129,5 +129,12 @@ def delete_card():
     return jsonify("Done")
 
 
+@app.route('/api/current_card_counts')
+@account.login_required
+def get_current_card_counts():
+    boards_card_counts = board_logic.get_current_card_counts()
+    return jsonify(boards_card_counts)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

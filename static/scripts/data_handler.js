@@ -98,7 +98,7 @@ app.dataHandler = {
         });
     },
 
-    deleteBoard: function(boardId, boardTitle) {
+    deleteBoard: function (boardId, boardTitle) {
         $.ajax({
             url: "/api/delete_board",
             data: {
@@ -115,7 +115,7 @@ app.dataHandler = {
         });
     },
 
-    deleteCard: function(cardId, cardTitle, boardId, boardTitle) {
+    deleteCard: function (cardId, cardTitle, boardId, boardTitle) {
         $.ajax({
             url: "/api/delete_card",
             data: {
@@ -130,5 +130,19 @@ app.dataHandler = {
                 window.location.replace('/login');
             }
         });
+    },
+
+    getCurrentCardCounts: function () {
+        $.ajax({
+            url: '/api/current_card_counts',
+            dataType: 'json',
+            success: function(response) {
+                app.boards.refreshCardCount(response);
+                app.boards.switchToBoardsPage();
+            },
+            error: function() {
+                window.location.replace('/login');
+            }
+        })
     }
 };

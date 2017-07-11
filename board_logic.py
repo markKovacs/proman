@@ -25,6 +25,22 @@ def load_boards():
     return boards
 
 
+def get_current_card_counts():
+    """Return board ids with the current card count."""
+    account_name = session["user_name"]
+    sql = """SELECT id FROM accounts WHERE account_name = %s;"""
+    parameters = (account_name,)
+    account_id = query(sql, parameters, "cell")
+    sql = """SELECT boards.id as board_id, COUNT(cards.title) as card_count
+             FROM boards
+             LEFT JOIN cards ON boards.id = cards.board_id
+             WHERE account_id = %s
+             GROUP BY boards.id;"""
+    parameters = (account_id,)
+    boards_card_counts = query(sql, parameters, "all")
+    return boards_card_counts
+
+
 def load_cards(board_id):
     """Load cards related to the given board id."""
     sql = """SELECT id, title, card_order, status FROM cards

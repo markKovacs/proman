@@ -7,7 +7,6 @@ app.cards = {
 
     showCards: function (cardsData, boardId, boardTitle) {
         // Show cards on selected board.
-        $("#cards").empty();
         this.appendCardNavDiv(boardId, boardTitle);
 
         if (!cardsData) {
@@ -196,7 +195,6 @@ app.cards = {
             $('.success').remove();
             var cardTitle = $('#new-card-title').val();
             app.dataHandler.createNewCard(boardId, cardTitle, boardTitle);
-
         });
 
         $('#new-card-button').on('click', function () {
@@ -204,7 +202,8 @@ app.cards = {
         });
 
         $('#back-to-boards').on('click', function () {
-            window.location.replace("/boards");
+            // window.location.replace("/boards");
+            app.dataHandler.getCurrentCardCounts();
         });
     },
 
