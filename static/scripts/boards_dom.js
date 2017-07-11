@@ -100,7 +100,6 @@ app.boards = {
     },
 
     removeBoardDiv: function (boardId) {
-        debugger;
         $(`#board-id-${boardId}`).parent().remove();
         var numberOfBoardDivs = $('.board-div').length;
         if (numberOfBoardDivs === 0) {
@@ -109,6 +108,6 @@ app.boards = {
     },
 
     flashDeleteBoardMessage: function (boardTitle) {
-        $('#boards').prepend(`<p class="success">Board '${boardTitle}' deleted.</p>`);
+        $('#boards').prepend(`<p class="success">Board '${boardTitle}' has been deleted.</p>`);
     }
 };

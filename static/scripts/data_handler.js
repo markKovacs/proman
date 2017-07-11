@@ -115,7 +115,7 @@ app.dataHandler = {
         });
     },
 
-    deleteCard: function(cardId, boardId, boardTitle) {
+    deleteCard: function(cardId, cardTitle, boardId, boardTitle) {
         $.ajax({
             url: "/api/delete_card",
             data: {
@@ -123,7 +123,8 @@ app.dataHandler = {
             },
             dataType: "json",
             success: function(response) {
-                app.dataHandler.getCards(boardId, boardTitle);
+                app.cards.removeCardDiv(cardId);
+                app.cards.flashDeleteCardMessage(cardTitle);
             },
             error: function() {
                 window.location.replace('/login');

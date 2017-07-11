@@ -299,7 +299,7 @@ app.cards = {
                     <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
                     <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
                     <div class="delete">
-                        <img data-card-id="${cardId}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
+                        <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
                             src="static/images/trash.svg" class="trash delete" alt="DEL">
                     </div>
                 </div>`;
@@ -318,9 +318,22 @@ app.cards = {
             ev.stopPropagation();
             $('.success').remove();
             var cardId = $(this).data("card-id");
+            var cardTitle = $(this).data("card-title");
             var boardId = $(this).data("board-id");
             var boardTitle = $(this).data("board-title");
-            app.dataHandler.deleteCard(cardId, boardId, boardTitle);
+            app.dataHandler.deleteCard(cardId, cardTitle, boardId, boardTitle);
         });
+    },
+
+    removeCardDiv: function (cardId) {
+        $(`#card-div-id-${cardId}`).remove();
+        var numberOfCardDivs = $('.card-div').length;
+        if (numberOfCardDivs === 0) {
+            $('#cards div.row:first').after(`<p class="no-cards">There are no cards added yet.</p>`);
+        }
+    },
+
+    flashDeleteCardMessage: function (cardTitle) {
+        $('#cards').prepend(`<p class="success">Card '${cardTitle}' has been deleted.</p>`);
     }
 };

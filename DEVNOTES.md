@@ -4,7 +4,6 @@
 
 ## Generic To-Do
 
-- show deletion message for cards
 - back to boards button ==> should not reload whole page...
 - add card_id to cards
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
