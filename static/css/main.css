@@ -9,37 +9,37 @@ h1 {
     text-align: center;
 }
 
-input {
+button {
+    outline: none;
+}
+
+input, textarea {
     border-radius: 10px;
     padding: 5px;
     font-weight: bold;
+    outline: none;
 }
-
 
 .board-div, .card-div {
     text-align: center;
 }
 
-
-
-.card-title {
-    background-color: white;
-    text-align: center;
-}
-
-
-.disabled-title {
-    background-color: gray;
-}
-
 .card-order {
-    text-align: right;
-    color: rgba(0,0,0,0);
-    width: 1px;
+    color: rgba(0,0,0,1);
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.card-id {
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 
 .card-div {
     margin: 10px 5px;
+    position: relative;
 }
 
 .drop-zone {
@@ -87,6 +87,19 @@ input {
     -webkit-line-clamp: 3; /* number of lines to show */
     line-height: 1.15em;        /* fallback */
     max-height: 3.45em;       /* fallback */
+}
+
+.card-title {
+    text-align: center;
+    margin-top: 30px;
+    height: 30px;
+    width: 50%;
+    white-space: normal;
+    -webkit-line-clamp: 3; /* number of lines to show */
+}
+
+.disabled-title {
+    background-color: gray;
 }
 
 .board-div:hover {
@@ -208,42 +221,45 @@ h2 {
 
 
 p.error {
-    margin: 20px auto 30px auto;
+    margin: 20px auto 20px auto;
     background-color: #2A2A2F;
     color: #FFA39B;
     border-radius: 50px;
     padding: 8px 25px;
-    max-width: 50%;
+    max-width: 80%;
     text-align: center;
     font-size: 1em;
     font-weight: bold;
+    overflow: hidden;
+    display: table;
 }
 
-
-
-
 p.success {
-    margin: 20px auto 30px auto;
+    margin: 20px auto 20px auto;
     background-color: #2A2A2F;
     color: #56CC65;
     border-radius: 50px;
     padding: 8px 25px;
-    max-width: 50%;
+    max-width: 80%;
     text-align: center;
     font-size: 1em;
     font-weight: bold;
+    overflow: hidden;
+    display: table;
 }
 
 p.login_error, p.register_error {
-    margin: 20px auto 30px auto;
+    margin: 20px auto 20px auto;
     background-color: #2A2A2F;
     color: #FFA39B;
     border-radius: 50px;
     padding: 8px 25px;
-    max-width: 50%;
+    max-width: 80%;
     text-align: center;
     font-size: 1.1em;
     font-weight: bold;
+    overflow: hidden;
+    display: table;
 }
 
 /* The Modal (background) */

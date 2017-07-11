@@ -4,10 +4,12 @@
 
 ## Generic To-Do
 
-- add card_id to cards
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
+    + card-title css, textarea
+    + html structure in cards_dom.js - getCardHTML function
 - modal delete confirmation
 - autofocus on things, create new by pressing enter
+- edit board title
 
 - validate board and card title input
     + creation

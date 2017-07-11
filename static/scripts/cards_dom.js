@@ -215,7 +215,7 @@ app.cards = {
 
         if (cardPool.length > 0) {
             for (let i = 0; i < cardPool.length; i++) {
-                cardPoolDiv.append(this.getCardHTML(cardPool[i].id, cardPool[i].title, cardPool[i].order, boardTitle, boardId));
+                cardPoolDiv.append(this.getCardHTML(cardPool[i].id, cardPool[i].title, cardPool[i].card_order, boardTitle, boardId));
             }
         }
 
@@ -294,8 +294,9 @@ app.cards = {
 
     getCardHTML: function (cardId, cardTitle, cardOrder, boardTitle, boardId) {
         return `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
-                    <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
                     <div class="card-order" id="card-order-id-${cardId}">Order: ${cardOrder}</div>
+                    <div class="card-id">#${cardId}</div>   
+                    <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
                     <div class="edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
                     <div class="delete">
                         <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
@@ -303,6 +304,8 @@ app.cards = {
                     </div>
                 </div>`;
     },
+
+    // <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled>${cardTitle}</textarea>
 
     flashCardEditSuccess: function (cardId, newTitle) {
         $('#cards').prepend(`<p class="success">Card #${cardId} title edited to '${newTitle}'.</p>`);

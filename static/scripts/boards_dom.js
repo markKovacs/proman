@@ -8,7 +8,7 @@ app.boards = {
     
     showBoards: function () {
         // Show boards page.
-
+        $('#boards').append('<h1>Personal Boards</h1>');
         this.appendBoardNavDiv();
 
         if (boardsData[0]) {
@@ -80,7 +80,7 @@ app.boards = {
 
     appendNewBoard: function (boardTitle, boardId) {
         $('.no-boards').remove();
-        $('#boards').prepend(`<p class="success">Board '${boardTitle}' has been created.</p>`);
+        $('#boards h1').after(`<p class="success">Board '${boardTitle}' has been created.</p>`);
 
         $('#new-board-title').val('');
         $('#new-board-form').toggle();
@@ -110,7 +110,7 @@ app.boards = {
     },
 
     flashDeleteBoardMessage: function (boardTitle) {
-        $('#boards').prepend(`<p class="success">Board '${boardTitle}' has been deleted.</p>`);
+        $('#boards h1').after(`<p class="success">Board '${boardTitle}' has been deleted.</p>`);
     },
 
     refreshCardCount: function (currentCardCounts) {
