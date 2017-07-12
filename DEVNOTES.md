@@ -17,6 +17,8 @@
 
 - modal delete confirmation
 
+- board pagination / ordering / filtering / searching
+
 - profile page
     + register page remains the same, simple
     + profile page can be accessed from menu bar
@@ -45,6 +47,8 @@
     + ajax call every few seconds
     + toast messages
 - mobile drag and drop
+
+- limit boards/user or team, limit cards / board
 
 ## Database Changes Needed
 
