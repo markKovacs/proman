@@ -4,12 +4,6 @@
 
 ## Generic To-Do
 
-- if editable title, dragging over it should not work
-- upon dragging, make all un-editable
-- only 1 card title can be editable at the same time
-    + autofocus when edit button clicked
-    + blur event listener --> will make it disabled
-    + on blur AND upon successful title edit, global variable must be turned into undefined again
 - textarea attributes!!!
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
     + card-title css, textarea

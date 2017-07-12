@@ -105,6 +105,8 @@ textarea {
     font-size: 1.5em;
     width: 95%;
     height: 85px;
+    position: relative;
+    z-index: 1;
 }
 
 .disabled-title {

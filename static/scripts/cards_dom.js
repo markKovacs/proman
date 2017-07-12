@@ -13,19 +13,19 @@ app.cards = {
             $('#cards').append(`
                 <p class="no-cards">There are no cards added yet.</p>
                 <div class="row" id="cards-main-row">
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col">
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="new-cards-col">
                         <h2>New</h2>
                         <div class="drop-zone no-border"></div>
                     </div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col">
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="inprogress-cards-col">
                         <h2>In Progress</h2>
                         <div class="drop-zone no-border"></div>
                     </div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col">
+                    <div class="col-sd-12 col-md-3 card-pool-col" id="review-cards-col">
                         <h2>Review</h2>
                         <div class="drop-zone no-border"></div>
                     </div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col">
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="done-cards-col">
                         <h2>Done</h2>
                         <div class="drop-zone no-border"></div>
                     </div>
@@ -75,10 +75,10 @@ app.cards = {
             // Append 4 card pools:
             $('#cards').append(`
                 <div class="row" id="cards-main-row">
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="new-cards-col"></div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="inprogress-cards-col"></div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="review-cards-col"></div>
-                    <div class="col-sm-12 col-lg-3 card-pool-col" id="done-cards-col"></div>
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="new-cards-col"></div>
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="inprogress-cards-col"></div>
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="review-cards-col"></div>
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="done-cards-col"></div>
                 </div>
             `);
 
@@ -189,8 +189,22 @@ app.cards = {
         });
     },
 
+    cardTitleUponEnter: function (ev) {
+        $('#cards').on('keypress', '.card-title', function(ev) {
+            if (!ev) {
+                ev = window.event;
+            }
+            ev.stopPropagation();
+            var keyCode = ev.keyCode || ev.which;
+
+            if (keyCode == '13'){
+                ev.preventDefault();
+                $('.submit-title').trigger('click');
+            }
+        });
+    },
+
     restoreCardTitle: function (cardId, oldTitle) {
-        debugger;
         $('.success').remove();
         $('.error').remove();
 
@@ -203,6 +217,11 @@ app.cards = {
         // Drag and drop event listeners for card divs:
         $('#cards').on({
             dragstart: function (ev) {
+                $('.card-title').prop('disabled', true);
+                $('.card-title').addClass('disabled-title');
+                $('.edit-submit-button').text('Edit');
+                $('.edit-submit-button').addClass('edit-title');
+                $('.edit-submit-button').removeClass('submit-title');
                 app.cards.drag(ev);
             },
             drop: function (ev) {
