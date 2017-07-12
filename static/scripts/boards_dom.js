@@ -42,8 +42,24 @@ app.boards = {
 
         $('#new-board-button').on('click', function() {
             $('#new-board-form').toggle();
+            $('#new-board-title').focus();
         });
 
+    },
+
+    newBoardOnEnter: function (ev) {
+        $('#new-board-title').on('keypress', function(ev) {
+            if (!ev) {
+                ev = window.event;
+            }
+            ev.stopPropagation();
+            var keyCode = ev.keyCode || ev.which;
+
+            if (keyCode == '13'){
+                ev.preventDefault();
+                $('#new-board-entry').trigger('click');
+            }
+        });
     },
 
     appendBoards: function () {

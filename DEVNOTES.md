@@ -9,7 +9,6 @@
     + card-title css, textarea
     + html structure in cards_dom.js - getCardHTML function
 - modal delete confirmation
-- autofocus on things, create new by pressing enter
 - edit board title
 - h1 formatting
 

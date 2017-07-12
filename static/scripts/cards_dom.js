@@ -189,7 +189,7 @@ app.cards = {
         });
     },
 
-    cardTitleUponEnter: function (ev) {
+    cardTitleOnEnter: function (ev) {
         $('#cards').on('keypress', '.card-title', function(ev) {
             if (!ev) {
                 ev = window.event;
@@ -200,6 +200,21 @@ app.cards = {
             if (keyCode == '13'){
                 ev.preventDefault();
                 $('.submit-title').trigger('click');
+            }
+        });
+    },
+
+    newCardOnEnter: function (ev) {
+        $('#cards').on('keypress', '#new-card-title', function(ev) {
+            if (!ev) {
+                ev = window.event;
+            }
+            ev.stopPropagation();
+            var keyCode = ev.keyCode || ev.which;
+
+            if (keyCode == '13'){
+                ev.preventDefault();
+                $('#new-card-entry').trigger('click');
             }
         });
     },
@@ -279,6 +294,7 @@ app.cards = {
 
         $('#new-card-button').on('click', function () {
             $('#new-card-form').toggle();
+            $('#new-card-title').focus();
         });
 
         $('#back-to-boards').on('click', function () {
