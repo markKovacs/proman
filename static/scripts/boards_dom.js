@@ -41,7 +41,7 @@ app.boards = {
         });
 
         $('#new-board-button').on('click', function() {
-            $('#new-board-form').toggle();
+            $('#new-board-form').slideToggle(100);
             $('#new-board-title').focus();
         });
 

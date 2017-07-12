@@ -2,29 +2,39 @@
 # DEVELOPER NOTES
 
 
-## Generic To-Do
+## Design Improvements
 
-- textarea attributes!!!
+- h1 formatting
 - enhance cards page display visually (similar to boards, maybe 4 colored columns)
     + card-title css, textarea
     + html structure in cards_dom.js - getCardHTML function
-- modal delete confirmation
-- edit board title
-- h1 formatting
-
-- validate board and card title input
-    + creation
-    + edit
-    + validation rules:
-        - 1-30 characters (overflow handling if needed)
-
-- cards should have a description
-    + varchar(255)
-    + shown in modal upon click on title
-    + title needs hover clickable effect
-    + in the modal 'Edit Description' button (textarea)
-
 - drag and drop animation change
+- sandwich menu in mobile view
+
+## New Features
+
+- edit board title
+
+- modal delete confirmation
+
+- profile page
+    + register page remains the same, simple
+    + profile page can be accessed from menu bar
+    + everything is in editable version and is a big form that can be submitted right away
+        - validation applies upon submitting to all fields
+        - account_name cannot be edited, only password, desc, profile pic
+    + upon first login, get notification (once implemented) to upload profile picture and fill in description
+    + profile pic can be seen in menu bar, placeholder pic
+
+- cards/boards should have a description - varchar(255)
+    + cards:
+        - shown in modal upon click on card-div
+        - can be added and edited from modal, after clicking edit, then submit, which does not close modal
+    + boards:
+        - button on board div will open modal for board description
+        - there it can be edited after pressing edit button, then submit, do not close modal
+    + in the modal 'Edit Description' button makes textarea editable
+
 - teams
 - accounts_teams
 - search
@@ -34,7 +44,6 @@
 - notifications
     + ajax call every few seconds
     + toast messages
-- sandwich menu in mobile view
 - mobile drag and drop
 
 ## Database Changes Needed
@@ -42,6 +51,7 @@
 - cards:
     + NEW: description varchar(255) NOT NULL
     + NEW: assigned_to varchar(x) default=NULL
+    + assigned by and assigned when?, created by?
 - boards:
     + NEW: team_id integer
     + MODIFY: account_id can be NULL

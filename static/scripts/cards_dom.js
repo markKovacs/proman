@@ -293,7 +293,7 @@ app.cards = {
         });
 
         $('#new-card-button').on('click', function () {
-            $('#new-card-form').toggle();
+            $('#new-card-form').slideToggle(100);
             $('#new-card-title').focus();
         });
 
