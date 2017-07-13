@@ -1,6 +1,11 @@
 
 # DEVELOPER NOTES
 
+## General
+
+- Check foreign keys: on update, on delete what to do.
+- Composite unique keys.
+
 
 ## Design Improvements
 
@@ -50,6 +55,8 @@
 
 - limit boards/user or team, limit cards / board
 
+- transition to connection pooling
+
 ## Database Changes Needed
 
 - cards:
@@ -77,3 +84,22 @@
     + description
     + owner
     + creation_date
+
+## Roles Explained
+
+- team roles:
+    + member:
+        - cannot see anything by default
+        - can be given either viewer or editor role to any team boards
+            + viewer: can only view that board
+            + editor: can edit any of the cards in board, delete cards, create cards, board itself cannot be edited/deleted
+    + manager:
+        - automatically gets editor role to all team boards
+        - can also edit boards data, delete or create boards
+        - invite accounts to team
+        - accept/decline team joining requests
+        - kick members from team
+        - cannot set roles in team!
+    + owner:
+        - can set roles in team (member or manager)
+        - can kick managers too (or demote them first and kick them then)

@@ -4,11 +4,6 @@ from datetime import datetime
 from psycopg2 import DataError, IntegrityError
 
 
-def create_timestamp():
-    timestamp = '{:%Y-%m-%d %H:%M:%S}'.format(datetime.now())
-    return timestamp
-
-
 def load_boards():
     """Load boards based on the user credentials."""
     account_name = session["user_name"]
@@ -20,7 +15,7 @@ def load_boards():
              LEFT JOIN cards ON boards.id = cards.board_id
              WHERE account_id = %s
              GROUP BY boards.id
-             ORDER BY boards.creation_date ASC;"""
+             ORDER BY boards.created ASC;"""
     parameters = (account_id,)
     boards = query(sql, parameters, "all")
     return boards
@@ -68,14 +63,12 @@ def save_new_card(title, board_id):
     sql = """SELECT MAX(card_order) FROM cards WHERE board_id = %s;"""
     parameters = (board_id,)
     response = query(sql, parameters, 'cell')
-    print(board_id)
     card_order = response + 1 if response else 1
-    date = create_timestamp()
 
-    sql = """INSERT INTO cards (title, card_order, status, board_id, creation_date)
-             VALUES (%s, %s, %s, %s, %s)
+    sql = """INSERT INTO cards (title, card_order, status, board_id)
+             VALUES (%s, %s, %s, %s)
              RETURNING id, card_order;"""
-    parameters = (title, card_order, "new", board_id, date)
+    parameters = (title, card_order, "new", board_id)
     try:
         response = query(sql, parameters, 'one')
     except (DataError, IntegrityError) as err:
@@ -91,11 +84,11 @@ def save_new_board(title):
     sql = """SELECT id FROM accounts WHERE account_name = %s;"""
     parameters = (account_name,)
     account_id = query(sql, parameters, "cell")
-    date = create_timestamp()
-    sql = """INSERT INTO boards (title, status, account_id, creation_date)
-             VALUES(%s, %s, %s, %s)
+
+    sql = """INSERT INTO boards (title, status, account_id)
+             VALUES(%s, %s, %s)
              RETURNING id;"""
-    parameters = (title, "active", account_id, date)
+    parameters = (title, "active", account_id)
     try:
         response = query(sql, parameters, 'cell')
     except (DataError, IntegrityError) as err:
