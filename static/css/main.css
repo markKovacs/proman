@@ -37,10 +37,45 @@ textarea {
     top: 10px;
 }
 
-.card-id {
+.card-id-number, .board-id-number {
+    position: absolute;
+    left: 14px;
+    top: 10px;
+    font-weight: bold;
+}
+
+
+.buttons-div {
     position: absolute;
     right: 10px;
     top: 10px;
+}
+
+.delete, .details {
+    float: right;
+    width: 35px;
+    margin: 0;
+    padding: 5px;
+    border-radius: 30px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.details {
+    filter: invert(100%);
+}
+
+.delete:hover {
+    background-color: black;
+    border: 1px solid #E95846;
+}
+
+.details:hover {
+    background-color: white;
+    border: 1px solid black;
 }
 
 .card-div {
@@ -81,12 +116,12 @@ textarea {
     border: 1px solid #E95846;
     margin-bottom: 15px;
     height: 200px;
+    position: relative;
 }
 
 .board-title {
     text-align: center;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 60px auto 20px auto;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1.7em;
@@ -105,10 +140,6 @@ textarea {
     font-size: 1.5em;
     width: 95%;
     height: 85px;
-}
-
-.disabled-title {
-    background-color: gray;
 }
 
 .board-div:hover {
@@ -142,6 +173,12 @@ h2 {
     background-color: #24A12B;
 }
 
+.card-count {
+    position: absolute;
+    bottom: 10px;
+    right: 10%;
+    left: 10%;
+}
 
 #back-to-boards {
     padding: 15px;
@@ -157,7 +194,7 @@ h2 {
     background-color: #CC4335;
     }
 
-.edit-title, .submit-title {
+.edit-submit-button {
     padding: 5px;
     background-color: #3d3d3d;
     border-radius: 3px;
@@ -175,6 +212,7 @@ h2 {
     font-weight: bold;
     font-size: 1.3em;
     border-bottom: 3px solid #18222B;
+    line-height: 1em;
 }
 
 .card-div {
@@ -272,10 +310,10 @@ p.login_error, p.register_error {
 }
 
 /* The Modal (background) */
-#modal {
+#modal-background {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 999;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -283,32 +321,60 @@ p.login_error, p.register_error {
     height: 100%;
     overflow: auto;
     background-color: rgb(0,0,0);
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.7);
 }
 
 /* Modal Content */
 #modal-content {
     background-color: #1E1E1E;
+    color: white;
     margin: auto;
-    padding: 30px 50px 40px 50px;
+    padding: 30px 60px 40px 60px;
     border: 1px solid #888;
     border-radius: 10px;
-
+    position: relative;
+    font-size: 1.2em;
 }
 
-#modal-content table {
-    border-color: white;
+.modal-title {
+    width: 90%;
+    margin: 35px auto 15px auto;
+    display: block;
+    background-color: rgba(0,0,0,0);
+    border: none;
+    font-size: 1.6em;
+    text-align: center;
+    overflow: auto;
 }
 
-#modal-content h2 {
-    color: #F2F2F2;
-    margin-top: 20px;
+
+.modal-description {
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0);
+    border-radius: 0;
+    border: none;
+    padding: 5px;
+    font-weight: normal;
+    width: 100%;
+    margin: 15px auto 30px auto;
+    display: block;
+    border-radius: 10px;
+    overflow: auto;
+    font-size: 0.9em;
+    text-align: justify;
 }
+
+.modal-description::placeholder {
+    font-style: italic;
+}
+
 
 /* Close Button */
 .close {
     color: #F2F2F2;
-    float: right;
+    position: absolute;
+    right: 35px;
+    top: 23px;
     font-size: 28px;
     font-weight: bold;
 }
@@ -332,9 +398,10 @@ footer .row {
   align-items: center;
 }
 
-header h1 {
-  font-weight: 700;
-  margin: 0;
+h1 {
+  font-weight: bold;
+  font-size: 2.4em;
+  margin: 20px auto 35px auto;
 }
 
 header nav {
@@ -366,4 +433,80 @@ header a:hover {
     border-top: 1px solid #E95846;
     z-index: 1;
     height: 80px;
+}
+
+.loading {
+    display: block;
+    margin: 30px auto;
+}
+
+.modal-edit-submit-button-boards, .modal-edit-submit-button-cards {
+    padding: 15px;
+    margin: 0px auto 15px auto;
+    background-color: #E95846;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    border: 1px solid #E95846;
+    text-align: center;
+    font-size: 1.3em;
+    width: 160px;
+    cursor: pointer;
+}
+
+.modal-board-id-number {
+    position: absolute;
+    left: 35px;
+    top: 23px;
+    font-size: 1.5em;
+}
+
+label.modal-description {
+    margin-top: 30px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+#modal-content p {
+    font-style: italic;
+    font-size: 0.85em;
+    text-align: right;
+}
+
+::-webkit-scrollbar {
+width: 10px;
+height: 10px;
+}
+
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment  {
+height: 10px;
+background-color: transparent;
+}
+
+::-webkit-scrollbar-track-piece  {
+background-color: #eeeeee;
+-webkit-border-radius: 16px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+height: 10px;
+background-color: #666;
+border: 1px solid #eee;
+-webkit-border-radius: 16px;
+}   
+
+.enabled-modal-title, .enabled-modal-description {
+    background-color: #3E3E3E;
+    border: 1px solid white;
+}
+
+.modal-edit-button {
+    background-color: #E95846;
+    border-color: #E95846;
+}
+
+.modal-submit-button {
+    background-color: #52a74f;
+    border-color: #52a74f;
 }

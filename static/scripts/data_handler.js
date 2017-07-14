@@ -114,6 +114,7 @@ app.dataHandler = {
             data: {
                 board_id: boardId
             },
+            method: 'POST',
             dataType: "json",
             success: function(response) {
                 app.boards.removeBoardDiv(boardId);
@@ -131,6 +132,7 @@ app.dataHandler = {
             data: {
                 card_id: cardId
             },
+            method: 'POST',
             dataType: "json",
             success: function(response) {
                 app.cards.removeCardDiv(cardId);
@@ -153,6 +155,53 @@ app.dataHandler = {
             error: function() {
                 window.location.replace('/login?error=timedout');
             }
-        })
+        });
+    },
+
+    getBoardDetails: function (boardId) {
+        $.ajax({
+            url: '/api/board_details',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                board_id: boardId
+            },
+            beforeSend: function() {
+                app.common.showLoadingModal();
+            },
+            success: function(board) {
+                app.boards.loadBoardDetails(board);
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    editBoard: function (boardId, newTitle, newDesc) {
+        $.ajax({
+            url: '/api/edit_board',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                board_id: boardId,
+                board_title: newTitle,
+                board_desc: newDesc
+            },
+            success: function(response) {
+                if (response === 'data_error') {
+                    app.boards.boardChangeFail();
+                } else {
+                    app.boards.boardChangeSuccess(response, boardId, newTitle);
+                }
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            },
+            complete: function() {
+                originalBoardTitle = undefined;
+                originalBoardDesc = undefined;
+            }
+        });
     }
 };

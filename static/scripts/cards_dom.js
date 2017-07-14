@@ -21,7 +21,7 @@ app.cards = {
                         <h2>In Progress</h2>
                         <div class="drop-zone no-border"></div>
                     </div>
-                    <div class="col-sd-12 col-md-3 card-pool-col" id="review-cards-col">
+                    <div class="col-sm-12 col-md-3 card-pool-col" id="review-cards-col">
                         <h2>Review</h2>
                         <div class="drop-zone no-border"></div>
                     </div>
@@ -119,9 +119,9 @@ app.cards = {
         $('#cards').on('click', '.edit-title', function (ev) {
             ev.stopPropagation();
 
-            if (prevCardTitle) {
+            if (originalCardTitle) {
                 var titleInputField = $($('.submit-title')[0]).prev();
-                titleInputField.val(prevCardTitle);
+                titleInputField.val(originalCardTitle);
             }
 
             // Disable all others:
@@ -138,12 +138,12 @@ app.cards = {
             // Change input field appearance:
             titleInputField.removeClass('disabled-title');
             // Store previous title for later:
-            prevCardTitle = titleInputField.val();
+            originalCardTitle = titleInputField.val();
             // Enable input field and put in focus, put cursor at end:
             titleInputField.prop('disabled', false);
             titleInputField.focus();
             titleInputField.val('');
-            titleInputField.val(prevCardTitle);
+            titleInputField.val(originalCardTitle);
             // Change button text:
             $(this).text('Submit');
             // Change class of clicked button:
@@ -158,11 +158,11 @@ app.cards = {
             var cardId = $(this).data('card-id');
             var titleInputField = $(`#card-title-id-${cardId}`);
 
-            if (prevCardTitle && titleInputField.val() !== prevCardTitle) {
-                app.dataHandler.editCard(cardId, titleInputField.val(), prevCardTitle);
+            if (originalCardTitle && titleInputField.val() !== originalCardTitle) {
+                app.dataHandler.editCard(cardId, titleInputField.val(), originalCardTitle);
             }
 
-            prevCardTitle = undefined;
+            originalCardTitle = undefined;
 
             titleInputField.addClass('disabled-title');
             titleInputField.prop('disabled', true);
@@ -176,9 +176,9 @@ app.cards = {
         $(window).on('click', function(event) {
             var cardId = $(event.target).data('card-id');
             var titleInputField = $($('.submit-title')[0]).prev();
-            if (prevCardTitle && !$(event.target).hasClass('edit-submit-button') && $(event.target).attr('id') !== `card-title-id-${cardId}` ) {
-                titleInputField.val(prevCardTitle);
-                prevCardTitle = undefined;
+            if (originalCardTitle && !$(event.target).hasClass('edit-submit-button') && $(event.target).attr('id') !== `card-title-id-${cardId}` ) {
+                titleInputField.val(originalCardTitle);
+                originalCardTitle = undefined;
 
                 $('.card-title').prop('disabled', true);
                 $('.card-title').addClass('disabled-title');
@@ -392,12 +392,12 @@ app.cards = {
     getCardHTML: function (cardId, cardTitle, cardOrder, boardTitle, boardId) {
         return `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
                     <div class="card-order" id="card-order-id-${cardId}">Order:<br>${cardOrder}</div>
-                    <div class="card-id">ID#${cardId}</div>
+                    <div class="card-id-number">#${cardId}</div>
                     <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3" data-card-id="${cardId}">${cardTitle}</textarea>
                     <div class="edit-submit-button edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
-                    <div>
+                    <div class="buttons-div">
                         <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
-                            src="static/images/trash.svg" class="trash delete" alt="DEL">
+                            src="static/images/trash.svg" class="delete" alt="DEL">
                     </div>
                 </div>`;
     },

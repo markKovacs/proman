@@ -1,10 +1,17 @@
 
 # DEVELOPER NOTES
 
+## NEXT
+
+- rework messages: success, error, messages, notifications, requests --> toast message, fixed, nicely animated, with voices
+- missing messages upon board edit (success, error)
+- card html structure reordering (+css)
+
+
 ## General
 
 - Check foreign keys: on update, on delete what to do.
-- Composite unique keys.
+- Composite unique keys. Think where it is needed.
 
 
 ## Design Improvements
@@ -56,6 +63,10 @@
 - limit boards/user or team, limit cards / board
 
 - transition to connection pooling
+
+- virtualenv
+
+- python package
 
 ## Database Changes Needed
 

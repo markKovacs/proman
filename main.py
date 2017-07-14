@@ -122,18 +122,18 @@ def make_drag_and_drop_persistent():
     return jsonify(status="success")
 
 
-@app.route('/api/delete_board')
+@app.route('/api/delete_board', methods=['POST'])
 @account.login_required
 def delete_board():
-    board_id = request.args.get("board_id")
+    board_id = request.form.get("board_id")
     board_logic.delete_board(board_id)
     return jsonify("Done")
 
 
-@app.route('/api/delete_card')
+@app.route('/api/delete_card', methods=['POST'])
 @account.login_required
 def delete_card():
-    card_id = request.args.get("card_id")
+    card_id = request.form.get("card_id")
     board_logic.delete_card(card_id)
     return jsonify("Done")
 
@@ -143,6 +143,24 @@ def delete_card():
 def get_current_card_counts():
     boards_card_counts = board_logic.get_current_card_counts()
     return jsonify(boards_card_counts)
+
+
+@app.route('/api/board_details', methods=['POST'])
+@account.login_required
+def get_board_details():
+    board_id = request.form.get('board_id')
+    board_details = board_logic.get_board_details(board_id)
+    return jsonify(board_details)
+
+
+@app.route('/api/edit_board', methods=['POST'])
+@account.login_required
+def edit_board():
+    board_id = request.form.get('board_id')
+    board_title = request.form.get('board_title')
+    board_desc = request.form.get('board_desc')
+    new_mod_date = board_logic.edit_board(board_id, board_title, board_desc)
+    return jsonify(new_mod_date)
 
 
 if __name__ == '__main__':

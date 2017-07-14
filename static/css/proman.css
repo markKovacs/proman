@@ -75,7 +75,7 @@
 
 .pronav {
     position: fixed;
-    z-index:999;
+    z-index:998;
     display: block;
     background-color: #2A2A2F;
     height: 80px;
@@ -253,24 +253,6 @@ ul {
     color: white;
     border: 1px solid #E95846;
 }
-
-.trash {
-    width: 40px;
-    margin: 15px;
-    padding: 7px;
-    border-radius: 30px;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
-.trash:hover {
-    background-color: white;
-    border: 3px solid #E95846;
-}
-
 
 #boards, #cards {
     padding-top: 40px;

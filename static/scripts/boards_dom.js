@@ -85,7 +85,7 @@ app.boards = {
         });
     },
 
-    addDeleteBoardEventListener: function () {
+    deleteBoardListener: function () {
         $("#boards").on("click", ".delete", function(ev) {
             ev.stopPropagation();
             $('.success').remove();
@@ -94,6 +94,32 @@ app.boards = {
             var boardTitle = $(this).data('board-title');
             app.dataHandler.deleteBoard(boardId, boardTitle);
         });
+    },
+
+    boardDetailsListener: function () {
+        $("#boards").on("click", ".details", function(ev) {
+            ev.stopPropagation();
+            $('.success').remove();
+            $('.error').remove();
+            var boardId = $(this).data("board-id");
+            app.dataHandler.getBoardDetails(boardId);
+        });
+    },
+
+    loadBoardDetails: function (board) {
+        $('#modal-content').empty();
+
+        $('#modal-content').append(`
+            <span class="close">&times;</span>
+            <div class="modal-board-id-number">#${board.id}</div>
+            <textarea class="modal-title" disabled rows="2">${board.title}</textarea>
+            <p>Created: ${board.created.substring(0, board.created.length - 4)}</p>
+            <p id="modal-modified">Modified: ${board.modified.substring(0, board.modified.length - 4)}</p>
+
+            <label class="modal-description" for="mod-desc">Description</label>  
+            <textarea id="mod-desc" class="modal-description" placeholder="No description found." disabled rows="5">${board.description ? board.description : ''}</textarea>
+            <div class="modal-edit-submit-button-boards modal-edit-button" data-entity-id="${board.id}">Edit</div>
+        `);
     },
 
     appendNewBoard: function (boardTitle, boardId) {
@@ -110,11 +136,13 @@ app.boards = {
     getBoardHTML: function (boardTitle, boardId, cardCount) {
         return `<div class="col-sm-3">
                     <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}">
+                        <div class="board-id-number">#${boardId}</div>
+                        <div class="buttons-div">
+                            <img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="delete" alt="DEL">
+                            <img data-board-id="${boardId}" src="static/images/details.svg" class="details" alt="MORE">
+                        </div>
                         <h2 class="board-title">${boardTitle}</h2>
                         <p class="card-count" data-board-id="${boardId}">Cards: ${cardCount}</p>
-                        <div>
-                            <img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="trash delete" alt="DEL">
-                        </div>
                     </div>
                 </div>`;
     },
@@ -156,5 +184,61 @@ app.boards = {
         $('#new-board-form').toggle();
 
         $('#boards h1').after(`<p class="error">Board title must be 1-30 characters long.</p>`);
+    },
+
+    editBoardListener: function () {
+        $('#modal-content').on('click', '.modal-edit-button', function(ev) {
+            ev.stopPropagation();
+
+            originalBoardTitle = $('.modal-title').val();
+            originalBoardDesc = $('textarea.modal-description').val();
+
+            $('.modal-title').prop('disabled', false);
+            $('.modal-title').addClass('enabled-modal-title');
+            $('textarea.modal-description').prop('disabled', false);
+            $('textarea.modal-description').addClass('enabled-modal-description');
+
+            $(this).text('Submit');
+            $(this).addClass('modal-submit-button');
+            $(this).removeClass('modal-edit-button');
+        });
+    },
+
+    submitBoardListener: function () {
+        $('#modal-content').on('click', '.modal-submit-button', function(ev) {
+            ev.stopPropagation();
+
+            var boardId = $(this).data('entity-id');
+            var newTitle = $('.modal-title').val();
+            var newDesc = $('textarea.modal-description').val();
+
+            $('.modal-title').prop('disabled', true);
+            $('.modal-title').removeClass('enabled-modal-title');
+            $('textarea.modal-description').prop('disabled', true);
+            $('textarea.modal-description').removeClass('enabled-modal-description');
+
+            $(this).text('Edit');
+            $(this).removeClass('modal-submit-button');
+            $(this).addClass('modal-edit-button');
+
+            app.dataHandler.editBoard(boardId, newTitle, newDesc);
+        });
+    },
+
+    boardChangeSuccess: function (newModDate, boardId, newTitle) {
+
+        // success message
+
+        $('#modal-modified').text(`Modified: ${newModDate.substring(0, newModDate.length - 4)}`);
+        $(`#board-id-${boardId} h2`).text(newTitle);
+
+    },
+
+    boardChangeFail: function () {
+
+        // error message
+
+        $('.modal-title').val(originalBoardTitle);
+        $('textarea.modal-description').val(originalBoardDesc);
     }
 };

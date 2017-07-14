@@ -57,6 +57,7 @@ DROP SEQUENCE IF EXISTS public.boards_id_seq;
 CREATE TABLE boards (
     id serial NOT NULL,
     title varchar(30) CHECK (char_length(title) >= 1),
+    description varchar(255) DEFAULT NULL,
     status varchar(8) CHECK(status IN ('active', 'deleted')),
     account_id int DEFAULT NULL,
     team_id int DEFAULT NULL,
@@ -286,7 +287,7 @@ ALTER TABLE ONLY messages
 -- Trigger should make assigned_by and assigned_at NULL if assigned_to turns to NULL:
 
 CREATE TRIGGER check_assigned_to_value
-    AFTER UPDATE ON cards
+    BEFORE UPDATE ON cards
     FOR EACH ROW
     WHEN (NEW.assigned_to IS NULL)
     EXECUTE PROCEDURE make_assigned_by_and_to_null();
@@ -310,12 +311,12 @@ INSERT INTO accounts VALUES (5, 'admin', 'pbkdf2:sha512:80000$emejRYOP$d93009f5a
 SELECT pg_catalog.setval('accounts_id_seq', 5, true);
 
 
-INSERT INTO boards VALUES (1, 'Active Board 1', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (2, 'Deleted Board', 'deleted', 5, NULL, '2017-06-23 10:25:33', '2017-06-23 10:25:33');
-INSERT INTO boards VALUES (3, 'Active Board 2', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (4, 'Active Board 3', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (5, 'Active Board 4', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (6, 'Active Board 5', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (1, 'Active Board 1', 'A short description.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (2, 'Deleted Board', NULL, 'deleted', 5, NULL, '2017-06-23 10:25:33', '2017-06-23 10:25:33');
+INSERT INTO boards VALUES (3, 'Active Board 2', 'A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well. A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (4, 'Active Board 3', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (5, 'Active Board 4', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (6, 'Active Board 5', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 SELECT pg_catalog.setval('boards_id_seq', 6, true);
 
 

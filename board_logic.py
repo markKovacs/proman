@@ -132,3 +132,27 @@ def make_drag_and_drop_persistent(moved_card_id, new_status, card_ids):
     parameters = (new_status, moved_card_id)
     fetch = None
     query(sql, parameters, fetch)
+
+
+def get_board_details(board_id):
+    """Return board details required by modal, based on given board_id."""
+    sql = """SELECT id, title, description, created, modified FROM boards WHERE id = %s;"""
+    parameters = (board_id,)
+    fetch = 'one'
+    return query(sql, parameters, fetch)
+
+
+def edit_board(board_id, board_title, board_desc):
+    """Edit board with new title and description. Return new modified date."""
+    sql = """UPDATE boards SET title = %s, description = %s WHERE id = %s
+             RETURNING modified;"""
+    parameters = (board_title, board_desc, board_id)
+    fetch = 'cell'
+
+    try:
+        response = query(sql, parameters, fetch)
+    except (DataError, IntegrityError) as err:
+        print('Data Error:\n{}'.format(err))
+        response = 'data_error'
+
+    return response
