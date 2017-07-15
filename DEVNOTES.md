@@ -7,6 +7,8 @@
 - missing messages upon board edit (success, error)
 - card html structure reordering (+css)
 
+- delete confirmation in modal
+
 
 ## General
 

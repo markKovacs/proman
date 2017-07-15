@@ -75,7 +75,7 @@
 
 .pronav {
     position: fixed;
-    z-index:998;
+    z-index:997;
     display: block;
     background-color: #2A2A2F;
     height: 80px;
@@ -255,5 +255,5 @@ ul {
 }
 
 #boards, #cards {
-    padding-top: 40px;
+    margin-top: 60px;
 }

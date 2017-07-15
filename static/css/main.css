@@ -5,17 +5,13 @@ body {
     background-color: #2A2A2F;
 }
 
-h1 {
-    text-align: center;
-}
-
 button {
     outline: none;
 }
 
 input, textarea {
-    border-radius: 10px;
-    padding: 5px;
+    border-radius: 5px;
+    padding: 8px;
     font-weight: bold;
     outline: none;
 }
@@ -47,8 +43,8 @@ textarea {
 
 .buttons-div {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 8px;
+    top: 8px;
 }
 
 .delete, .details {
@@ -69,12 +65,13 @@ textarea {
 }
 
 .delete:hover {
-    background-color: black;
-    border: 1px solid #E95846;
+    background-color: rgba(225,225,225,1.0);
+    border: 1px solid rgba(225,225,225,1.0);
 }
 
 .details:hover {
-    background-color: white;
+    background-color: rgba(225,225,225,1.0);
+    filter: invert(0%);
     border: 1px solid black;
 }
 
@@ -109,10 +106,9 @@ textarea {
 .board-div {
     text-align: center;
     color: white;
-    background-color:#3e3e45;
+    background-color:rgb(60,60,60);
     padding: 5px 5px 5px 5px;
     border-radius: 10px;
-    border-color: #2C3E50;
     border: 1px solid #E95846;
     margin-bottom: 15px;
     height: 200px;
@@ -121,7 +117,7 @@ textarea {
 
 .board-title {
     text-align: center;
-    margin: 60px auto 20px auto;
+    margin: 55px auto 20px auto;
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 1.7em;
@@ -144,7 +140,7 @@ textarea {
 
 .board-div:hover {
     position: relative;
-    background-color: #19191C;
+    background-color: rgb(40,40,40);
     cursor: pointer;
     border-color: #CC4335;
     transition: background-color 0.2s, border-color 0.2s;
@@ -175,9 +171,10 @@ h2 {
 
 .card-count {
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
     right: 10%;
     left: 10%;
+    font-size: 0.9em;
 }
 
 #back-to-boards {
@@ -238,7 +235,7 @@ h2 {
 }
 
 #new-board-entry, #new-card-entry {
-    padding: 5px;
+    padding: 8px;
     background-color: #3d3d3d;
     border-radius: 3px;
     font-weight: bold;
@@ -248,12 +245,13 @@ h2 {
     margin: 0px 0px 5px 5px;
 }
 
-#boards .row:first-child {
+.row:first-child {
     margin-bottom: 25px;
 }
 
 #boards .row:last-child {
-    margin-bottom: 40px;
+    margin-bottom: 60px;
+    margin-top: 10px;
 }
 
 #new-board-form, #new-card-form {
@@ -265,55 +263,33 @@ h2 {
 }
 
 /* Message flashing class selectors */
-
-
-p.error {
+p.error, p.success, p.login_error, p.register_error {
     margin: 20px auto 20px auto;
-    background-color: #2A2A2F;
-    color: #FFA39B;
-    border-radius: 50px;
-    padding: 8px 25px;
+    border-radius: 5px;
+    background-color: #333030;
+    font-weight: normal;
+    padding: 15px 30px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.8);
     max-width: 80%;
     text-align: center;
-    font-size: 1em;
-    font-weight: bold;
     overflow: hidden;
     display: table;
+    font-size: 1em;
 }
 
 p.success {
-    margin: 20px auto 20px auto;
-    background-color: #2A2A2F;
     color: #56CC65;
-    border-radius: 50px;
-    padding: 8px 25px;
-    max-width: 80%;
-    text-align: center;
-    font-size: 1em;
-    font-weight: bold;
-    overflow: hidden;
-    display: table;
 }
 
-p.login_error, p.register_error {
-    margin: 20px auto 20px auto;
-    background-color: #2A2A2F;
+p.login_error, p.register_error, p.error {
     color: #FFA39B;
-    border-radius: 50px;
-    padding: 8px 25px;
-    max-width: 80%;
-    text-align: center;
-    font-size: 1.1em;
-    font-weight: bold;
-    overflow: hidden;
-    display: table;
 }
 
 /* The Modal (background) */
 #modal-background {
     display: none;
     position: fixed;
-    z-index: 999;
+    z-index: 998;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -327,8 +303,8 @@ p.login_error, p.register_error {
 /* Modal Content */
 #modal-content {
     background-color: #1E1E1E;
-    color: white;
-    margin: auto;
+    color: #d8d8d8;
+    margin: 80px auto 30px auto;
     padding: 30px 60px 40px 60px;
     border: 1px solid #888;
     border-radius: 10px;
@@ -338,7 +314,7 @@ p.login_error, p.register_error {
 
 .modal-title {
     width: 90%;
-    margin: 35px auto 15px auto;
+    margin: 25px auto 15px auto;
     display: block;
     background-color: rgba(0,0,0,0);
     border: none;
@@ -356,7 +332,7 @@ p.login_error, p.register_error {
     padding: 5px;
     font-weight: normal;
     width: 100%;
-    margin: 15px auto 30px auto;
+    margin: 15px auto 15px auto;
     display: block;
     border-radius: 10px;
     overflow: auto;
@@ -399,9 +375,10 @@ footer .row {
 }
 
 h1 {
+  text-align: center;  
   font-weight: bold;
   font-size: 2.4em;
-  margin: 20px auto 35px auto;
+  margin: 20px auto 20px auto;
 }
 
 header nav {
@@ -441,15 +418,15 @@ header a:hover {
 }
 
 .modal-edit-submit-button-boards, .modal-edit-submit-button-cards {
-    padding: 15px;
-    margin: 0px auto 15px auto;
+    padding: 12px;
+    margin: 0px auto 12px auto;
     background-color: #E95846;
     border-radius: 5px;
     font-weight: bold;
     color: white;
     border: 1px solid #E95846;
     text-align: center;
-    font-size: 1.3em;
+    font-size: 1.1em;
     width: 160px;
     cursor: pointer;
 }
@@ -462,7 +439,7 @@ header a:hover {
 }
 
 label.modal-description {
-    margin-top: 30px;
+    margin-top: 10px;
     font-size: 1.4em;
     font-weight: bold;
 }
@@ -509,4 +486,64 @@ border: 1px solid #eee;
 .modal-submit-button {
     background-color: #52a74f;
     border-color: #52a74f;
+}
+
+.modal-edit-button:hover {
+    background-color: #A33D31;
+    border-color: #A33D31;
+}
+
+.modal-submit-button:hover {
+    background-color: #397437;
+    border-color: #397437;
+}
+
+/* Toast Message */
+#toast {
+    visibility: hidden; /* Hidden by default. Visible on click */
+    min-width: 250px; /* Set a default minimum width */
+    margin: 0 auto; /* Divide value of min-width by 2 */
+    background-color: #333030; /* Black background color */
+    color: #EBEBE6; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 5px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 999; /* Add a z-index if needed */
+    left: 20%; /* Center the snackbar */
+    right: 20%;
+    top: 100px; /* 30px from the bottom */
+    font-size: 1.2em;
+    box-shadow: 0 0 30px rgba(220,220,220,1.0);  
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#toast.show {
+    visibility: visible; /* Show the snackbar */
+
+/* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
+However, delay the fade out process for 2.5 seconds */
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+    from {top: 0; opacity: 0;} 
+    to {top: 100px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {top: 0; opacity: 0;}
+    to {top: 100px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {top: 100px; opacity: 1;} 
+    to {top: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {top: 100px; opacity: 1;}
+    to {top: 0; opacity: 0;}
 }

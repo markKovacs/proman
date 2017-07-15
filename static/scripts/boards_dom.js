@@ -227,7 +227,10 @@ app.boards = {
 
     boardChangeSuccess: function (newModDate, boardId, newTitle) {
 
-        // success message
+        app.common.toastMessage(`Board #${boardId} changed successfully.`);
+        $('.success').remove();
+        $('.error').remove();
+        $('#boards h1').after(`<p class="success">Board #${boardId} changed successfully.</p>`);
 
         $('#modal-modified').text(`Modified: ${newModDate.substring(0, newModDate.length - 4)}`);
         $(`#board-id-${boardId} h2`).text(newTitle);
@@ -236,7 +239,10 @@ app.boards = {
 
     boardChangeFail: function () {
 
-        // error message
+        app.common.toastMessage(`Wrong input. Title must be 1-30 characters long, while title cannot exceed 255 characters.`);
+        $('.success').remove();
+        $('.error').remove();
+        $('#boards h1').after(`<p class="error">Wrong input. Title must be 1-30 characters long, while title cannot exceed 255 characters.</p>`);
 
         $('.modal-title').val(originalBoardTitle);
         $('textarea.modal-description').val(originalBoardDesc);
