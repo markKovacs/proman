@@ -104,7 +104,7 @@ app.cards = {
                 app.cards.allowDrop(ev);
             },
             dragenter: function () {
-                $('.card-div').css('border', 'none');
+                $('.card-div').removeClass('drag-enter');
                 $(this).css('border', '3px dashed gray');
             },
             dragleave: function () {
@@ -247,19 +247,20 @@ app.cards = {
             },
             dragenter: function (ev) {
                 if (!$(ev.target).hasClass('card-title')) {
-                    $('.card-div').css('border', 'none');
+                    $('.card-div').removeClass('drag-enter');
                 }
-                $(this).css('border-top', '12px double #243342');
+
+                $(this).addClass('drag-enter');
             },
             dragend: function (ev) {
-                $('.card-div').css('border', 'none');
+                $('.card-div').removeClass('drag-enter');
             }
         }, '.card-div');
     },
 
     insertNewCard: function (id, title, order, boardTitle, boardId) {
         $('.no-cards').remove();
-        $('#new-cards-col div.drop-zone').before(this.getCardHTML(id, title, order, boardTitle, boardId));
+        $('#new-cards-col div.drop-zone').before(this.getCardHTML(id, title, boardTitle, boardId));
     },
 
     resetForm: function (cardTitle) {
@@ -275,7 +276,7 @@ app.cards = {
             <h1>${boardTitle}</h1>
             <div class="row">
                 <div class="col-sm-12">
-                    <button id="new-card-button">Add New Card</button>
+                    <button id="new-card-button">New Card</button>
                     <button id="back-to-boards">Back to Boards</button>
                     <div id="new-card-form">
                         <input type="text" id="new-card-title">
@@ -298,7 +299,6 @@ app.cards = {
         });
 
         $('#back-to-boards').on('click', function () {
-            // window.location.replace("/boards");
             app.dataHandler.getCurrentCardCounts();
         });
     },
@@ -311,7 +311,7 @@ app.cards = {
 
         if (cardPool.length > 0) {
             for (let i = 0; i < cardPool.length; i++) {
-                cardPoolDiv.append(this.getCardHTML(cardPool[i].id, cardPool[i].title, cardPool[i].card_order, boardTitle, boardId));
+                cardPoolDiv.append(this.getCardHTML(cardPool[i].id, cardPool[i].title, boardTitle, boardId));
             }
         }
 
@@ -389,21 +389,18 @@ app.cards = {
         app.dataHandler.makeDragAndDropPersistent(movedCardId, newStatus, iDsOfcardsOnBoard);
     },
 
-    getCardHTML: function (cardId, cardTitle, cardOrder, boardTitle, boardId) {
+    getCardHTML: function (cardId, cardTitle, boardTitle, boardId, assignedTo=null) {
         return `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
-                    <div class="card-order" id="card-order-id-${cardId}">Order:<br>${cardOrder}</div>
-                    <div class="card-id-number">#${cardId}</div>
-                    <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3" data-card-id="${cardId}">${cardTitle}</textarea>
-                    <div class="edit-submit-button edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}">Edit</div>
                     <div class="buttons-div">
                         <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
                             src="static/images/trash.svg" class="delete" alt="DEL">
+                        <img class="edit-submit-button edit-title details" id="card-submit-id-${cardId}" data-card-id="${cardId}" src="static/images/details.svg" alt="EDIT">
                     </div>
+                    <div class="card-id-number">#${cardId}</div>
+                    <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3" data-card-id="${cardId}">${cardTitle}</textarea>
+                    ${assignedTo ? `<p class="assigned" data-card-id="${cardId}">${assignedTo}</p>` : ''}
                 </div>`;
     },
-
-    // <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled>${cardTitle}</textarea>
-    // <input class="card-title disabled-title" id="card-title-id-${cardId}" disabled value="${cardTitle}">
 
     flashCardEditSuccess: function (cardId, newTitle) {
         $('.success').remove();

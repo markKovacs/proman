@@ -296,7 +296,7 @@ CREATE OR REPLACE FUNCTION make_assigned_by_and_to_null() RETURNS trigger AS $ch
     BEGIN
         NEW.assigned_by := NULL;
         NEW.assigned_at := NULL;
-        RETURN NULL;
+        RETURN NEW;
     END;
 $check_assigned_to_value$ LANGUAGE plpgsql;
 

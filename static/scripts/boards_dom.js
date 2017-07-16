@@ -24,7 +24,7 @@ app.boards = {
         $('#boards').append(`
             <div class="row">
                 <div class="col-sm-12">
-                    <button id="new-board-button">Add New Board</button>
+                    <button id="new-board-button">New Board</button>
                     <div id="new-board-form">
                         <input type="text" id="new-board-title">
                         <button id="new-board-entry">Submit</button>
@@ -40,11 +40,10 @@ app.boards = {
             app.dataHandler.createNewBoard(boardTitle);
         });
 
-        $('#new-board-button').on('click', function() {
+        $('#new-board-button').on('click', function(ev) {
             $('#new-board-form').slideToggle(100);
             $('#new-board-title').focus();
         });
-
     },
 
     newBoardOnEnter: function (ev) {
@@ -197,6 +196,10 @@ app.boards = {
             $('.modal-title').addClass('enabled-modal-title');
             $('textarea.modal-description').prop('disabled', false);
             $('textarea.modal-description').addClass('enabled-modal-description');
+
+            $('.modal-title').focus();
+            $('.modal-title').val('');
+            $('.modal-title').val(originalBoardTitle);
 
             $(this).text('Submit');
             $(this).addClass('modal-submit-button');

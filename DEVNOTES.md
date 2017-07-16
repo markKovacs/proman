@@ -3,9 +3,7 @@
 
 ## NEXT
 
-- rework messages: success, error, messages, notifications, requests --> toast message, fixed, nicely animated, with voices
-- missing messages upon board edit (success, error)
-- card html structure reordering (+css)
+- card drag and drop animation rework
 
 - delete confirmation in modal
 
