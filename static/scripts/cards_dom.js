@@ -421,13 +421,11 @@ app.cards = {
     deleteCardEventListener: function () {
         $("#cards").on("click", ".delete", function(ev) {
             ev.stopPropagation();
-            $('.success').remove();
-            $('.error').remove();
             var cardId = $(this).data("card-id");
             var cardTitle = $(this).data("card-title");
             var boardId = $(this).data("board-id");
             var boardTitle = $(this).data("board-title");
-            app.dataHandler.deleteCard(cardId, cardTitle, boardId, boardTitle);
+            app.common.showConfirmationModal(cardId, cardTitle, 'card', boardId, boardTitle);
         });
     },
 
@@ -440,6 +438,8 @@ app.cards = {
     },
 
     flashDeleteCardMessage: function (cardTitle) {
+        $('#modal-background').hide();
+        $('#modal-content').empty();
         $('#cards h1').after(`<p class="success">Card '${cardTitle}' has been deleted.</p>`);
     },
 

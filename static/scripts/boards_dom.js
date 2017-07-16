@@ -89,37 +89,7 @@ app.boards = {
             ev.stopPropagation();
             var boardId = $(this).data("board-id");
             var boardTitle = $(this).data('board-title');
-            app.boards.showConfirmationModal(boardId, boardTitle);
-        });
-    },
-
-    showConfirmationModal: function (boardId, boardTitle) {
-        $('#modal-content').append(`
-            <span class="close">&times;</span>
-            <p id="confirm-question">Are you sure you want to delete board #${boardId} titled as '${boardTitle}'?</p>
-            <div class="confirm-buttons">
-                <div id="confirm" data-board-id="${boardId}" data-board-title="${boardTitle}">Confirm</div>
-                <div id="cancel">Cancel</div>
-            </div>
-        `);
-
-        $('#modal-background').show();
-    },
-
-    confirmDeleteBoardListeners: function () {
-        $("#modal-content").on('click', '#confirm', function (ev) {
-            ev.stopPropagation();
-            $('.success').remove();
-            $('.error').remove();
-            var boardId = $(this).data("board-id");
-            var boardTitle = $(this).data('board-title');
-            app.dataHandler.deleteBoard(boardId, boardTitle);
-        });
-
-        $("#modal-content").on('click', '#cancel', function (ev) {
-            ev.stopPropagation();
-            $('#modal-background').hide();
-            $('#modal-content').empty();
+            app.common.showConfirmationModal(boardId, boardTitle, 'board');
         });
     },
 
