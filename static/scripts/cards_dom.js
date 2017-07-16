@@ -127,7 +127,8 @@ app.cards = {
             // Disable all others:
             $('.card-title').prop('disabled', true);
             $('.card-title').addClass('disabled-title');
-            $('.edit-submit-button').text('Edit');
+            $('.edit-submit-button').attr('alt','Edit');
+            $('.edit-submit-button').attr('src','/static/images/edit.svg');
             $('.edit-submit-button').addClass('edit-title');
             $('.edit-submit-button').removeClass('submit-title');
 
@@ -145,7 +146,8 @@ app.cards = {
             titleInputField.val('');
             titleInputField.val(originalCardTitle);
             // Change button text:
-            $(this).text('Submit');
+            $(this).attr('alt','Submit');
+            $(this).attr('src','/static/images/submit.svg');
             // Change class of clicked button:
             $(this).addClass('submit-title');
             $(this).removeClass('edit-title');
@@ -167,7 +169,8 @@ app.cards = {
             titleInputField.addClass('disabled-title');
             titleInputField.prop('disabled', true);
 
-            $(this).text('Edit');
+            $(this).attr('alt','Edit');
+            $(this).attr('src','/static/images/edit.svg');
             $(this).addClass('edit-title');
             $(this).removeClass('submit-title');
         });
@@ -182,7 +185,9 @@ app.cards = {
 
                 $('.card-title').prop('disabled', true);
                 $('.card-title').addClass('disabled-title');
-                $('.edit-submit-button').text('Edit');
+
+                $('.edit-submit-button').attr('alt','Edit');
+                $('.edit-submit-button').attr('src','/static/images/edit.svg');
                 $('.edit-submit-button').addClass('edit-title');
                 $('.edit-submit-button').removeClass('submit-title');
             }
@@ -234,7 +239,8 @@ app.cards = {
             dragstart: function (ev) {
                 $('.card-title').prop('disabled', true);
                 $('.card-title').addClass('disabled-title');
-                $('.edit-submit-button').text('Edit');
+                $('.edit-submit-button').attr('alt','Edit');
+                $('.edit-submit-button').attr('src','/static/images/edit.svg');
                 $('.edit-submit-button').addClass('edit-title');
                 $('.edit-submit-button').removeClass('submit-title');
                 app.cards.drag(ev);
@@ -394,7 +400,7 @@ app.cards = {
                     <div class="buttons-div">
                         <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
                             src="static/images/trash.svg" class="delete" alt="DEL">
-                        <img class="edit-submit-button edit-title details" id="card-submit-id-${cardId}" data-card-id="${cardId}" src="static/images/details.svg" alt="EDIT">
+                        <img class="edit-submit-button edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}" src="static/images/edit.svg" alt="EDIT">
                     </div>
                     <div class="card-id-number">#${cardId}</div>
                     <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3" data-card-id="${cardId}">${cardTitle}</textarea>

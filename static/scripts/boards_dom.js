@@ -40,7 +40,7 @@ app.boards = {
             app.dataHandler.createNewBoard(boardTitle);
         });
 
-        $('#new-board-button').on('click', function(ev) {
+        $('#new-board-button').on('click', function() {
             $('#new-board-form').slideToggle(100);
             $('#new-board-title').focus();
         });

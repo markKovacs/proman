@@ -40,12 +40,12 @@ textarea {
     top: 8px;
 }
 
-.delete, .details {
+.delete, .details, .edit-submit-button {
     float: right;
     width: 35px;
     margin: 0;
     padding: 5px;
-    border-radius: 30px;
+    border-radius: 10px;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -53,19 +53,28 @@ textarea {
     -ms-user-select: none;
 }
 
-.details {
-    filter: invert(100%);
-}
-
 .delete:hover {
-    background-color: rgba(225,225,225,1.0);
-    border: 1px solid rgba(225,225,225,1.0);
+    background-color: rgba(255,190,190,1.0);
+    border: 1px solid rgba(255,190,190,1.0);
 }
 
 .details:hover {
-    background-color: rgba(225,225,225,1.0);
-    filter: invert(0%);
-    border: 1px solid black;
+    background-color: rgba(190,190,255,1.0);
+    border: 1px solid rgba(190,190,255,1.0);
+}
+
+.edit-submit-button {
+    padding: 6.5;
+}
+
+.edit-title:hover {
+    background-color: rgba(190,190,255,1.0);
+    border: 1px solid rgba(190,190,255,1.0);
+}
+
+.submit-title:hover {
+    background-color: rgba(190,255,190,1.0);
+    border: 1px solid rgba(190,255,190,1.0);
 }
 
 .drop-zone {
