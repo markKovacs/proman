@@ -856,3 +856,47 @@ ul {
 .drag-enter {
     background-color: blue;
 }
+
+p#confirm-question {
+    text-align: center;
+    font-size: 1.2em;
+    margin: 30px auto 60px auto;
+}
+
+.confirm-buttons {
+    width: 270px;
+    margin: 30px auto;
+}
+
+#confirm, #cancel {
+    width: 120px;
+    float: left;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+#confirm {
+    margin-right: 30px;
+    background-color: #52a74f;
+    border: 1px solid #52a74f;
+}
+
+#cancel {
+    background-color: #E95846;
+    border: 1px solid #E95846;
+}
+
+#cancel:hover {
+    background-color: #A33D31;
+    border-color: #A33D31;
+}
+
+#confirm:hover {
+    background-color: #397437;
+    border-color: #397437;
+}

@@ -14,6 +14,7 @@ app.init = function() {
     app.boards.newBoardOnEnter();
     app.boards.editBoardListener();
     app.boards.submitBoardListener();
+    app.boards.confirmDeleteBoardListeners();
 
     app.cards.addDropZoneEventListeners();
     app.cards.addEditTitleEventListener();
