@@ -3,9 +3,16 @@
 
 ## NEXT
 
-- card drag and drop animation rework
+- team profile page:
+    + if member, non-editable
+    + if manager, editable with a button
+    + if owner, deletable with a button (confirm)
+    + if owner, ownership can be given to another member/manager
+- teams page:
+    + create team
+    + manage members
 
-- delete confirmation in modal
+- card drag and drop animation rework
 
 
 ## General

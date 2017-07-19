@@ -6,6 +6,8 @@ from flask import (Flask, flash, jsonify, redirect, render_template, request,
 
 import account_logic as account
 import board_logic
+import team_logic
+import common_logic as common
 
 app = Flask(__name__)
 app.secret_key = urandom(24)
@@ -43,8 +45,52 @@ def index():
 @app.route("/boards")
 @account.login_required
 def boards():
-    boards_data = board_logic.load_boards()
+    account_id = common.get_account_id(session["user_name"])
+    boards_data = board_logic.load_boards(account_id)
     return render_template('boards.html', boards_data=boards_data)
+
+
+@app.route("/teams")
+@account.login_required
+def teams():
+    account_id = common.get_account_id(session["user_name"])
+    teams_data = team_logic.load_teams(account_id)
+    return render_template('teams.html', teams_data=teams_data)
+
+
+@app.route('/team-profile/<team_id>')
+@account.login_required
+def team_profile(team_id):
+    team_data = team_logic.get_team_data(team_id)
+    account_id = common.get_account_id(session["user_name"])
+    role = team_logic.get_account_team_role(team_id, account_id)
+    if role == 'no_permission':
+        flash('You have no permission to view this page. Please select another team.', 'error')
+        return redirect(url_for('teams'))
+
+    categories = team_logic.get_team_categories()
+    return render_template('team_profile.html', team_data=team_data, role=role, categories=categories)
+
+
+# decorator needed to check if user logged in has the right to edit (manager/owner of team)
+@app.route('/team-profile/<team_id>/edit', methods=['POST'])
+def edit_team_profile(team_id):
+    # validate team_id
+    category = request.form.get('category')
+    desc = request.form.get('description')
+    response = team_logic.edit_team_profile(team_id, category, desc)
+
+    if response == 'wrong_desc':
+        flash('Wrong description. Cannot exceed 255 characters.', 'error')
+
+    elif response == 'wrong_category':
+        flash('Wrong category. Must be 1-30 characters long.', 'error')
+    # elif not response:
+    #     abort(404)
+    else:
+        flash('Team profile successfully edited.', 'success')
+
+    return redirect(url_for('team_profile', team_id=team_id))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -96,7 +142,8 @@ def save_new_card():
 @account.login_required
 def save_new_board():
     title = request.form.get("title")
-    response = board_logic.save_new_board(title)
+    account_id = common.get_account_id(session["user_name"])
+    response = board_logic.save_new_board(title, account_id)
     return jsonify(response)
 
 
@@ -141,7 +188,8 @@ def delete_card():
 @app.route('/api/current_card_counts')
 @account.login_required
 def get_current_card_counts():
-    boards_card_counts = board_logic.get_current_card_counts()
+    account_id = common.get_account_id(session["user_name"])
+    boards_card_counts = board_logic.get_current_card_counts(account_id)
     return jsonify(boards_card_counts)
 
 

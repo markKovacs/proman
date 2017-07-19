@@ -1,15 +1,10 @@
-from flask import session
-from data_manager import query, run_statement
-from datetime import datetime
+
+from data_manager import query
 from psycopg2 import DataError, IntegrityError
 
 
-def load_boards():
+def load_boards(account_id):
     """Load boards based on the user credentials."""
-    account_name = session["user_name"]
-    sql = """SELECT id FROM accounts WHERE account_name = %s;"""
-    parameters = (account_name,)
-    account_id = query(sql, parameters, "cell")
     sql = """SELECT boards.id, boards.title, boards.status, COUNT(cards.title) as card_count
              FROM boards
              LEFT JOIN cards ON boards.id = cards.board_id
@@ -21,12 +16,8 @@ def load_boards():
     return boards
 
 
-def get_current_card_counts():
+def get_current_card_counts(account_id):
     """Return board ids with the current card count."""
-    account_name = session["user_name"]
-    sql = """SELECT id FROM accounts WHERE account_name = %s;"""
-    parameters = (account_name,)
-    account_id = query(sql, parameters, "cell")
     sql = """SELECT boards.id as board_id, COUNT(cards.title) as card_count
              FROM boards
              LEFT JOIN cards ON boards.id = cards.board_id
@@ -78,13 +69,8 @@ def save_new_card(title, board_id):
     return response
 
 
-def save_new_board(title):
+def save_new_board(title, account_id):
     """Save a newly created board."""
-    account_name = session["user_name"]
-    sql = """SELECT id FROM accounts WHERE account_name = %s;"""
-    parameters = (account_name,)
-    account_id = query(sql, parameters, "cell")
-
     sql = """INSERT INTO boards (title, status, account_id)
              VALUES(%s, %s, %s)
              RETURNING id;"""

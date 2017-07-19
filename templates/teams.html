@@ -1,0 +1,75 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Teams{% endblock %}
+
+{% block scripts %}
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/teams.css')}}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="{{url_for('static', filename='scripts/teams/data_handler_teams.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/teams/teams_dom.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/teams/main_teams.js')}}" defer></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="teams">
+        <h1>Teams</h1>
+
+        <!-- Messages with Classes: error, success -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+
+        <!-- Page Navigation Section -->
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="new-team-button">Create Team</button>
+                <button id="back-to-dashboard">Back to Dashboard</button>
+            </div>
+        </div>
+
+        <!-- Teams Table Content -->
+        <div class="row">
+            <div class="col-sm-12">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>My Role</th>
+                            <th>Details</th>
+                            <th>Members</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team in teams_data %}
+                        <tr>
+                            <td>{{ team.id }}</td>
+                            <td>{{ team.name }}</td>
+                            <td>{{ team.role }}</td>
+                            <td>
+                                <a href="{{ url_for('team_profile', team_id=team.id) }}">
+                                    <img class="details" src="{{ url_for('static', filename='images/details.svg') }}" alt="Details">
+                                </a>
+                            </td>
+                            <td>{{ team.acc_team_id }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

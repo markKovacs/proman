@@ -29,6 +29,7 @@
                 <ul class="menu">
                     {% if session.user_name %}
                     <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
+                    <li><a href="{{url_for('teams')}}" class="anchor bttn">Teams</a></li>
                     <li><span class="anchor bttn">{{session.user_name}}</san></li>
                     <li><a href="{{url_for('logout')}}" class="anchor bttn">Log out</a></li>
                     {% else %}

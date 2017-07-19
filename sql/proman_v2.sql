@@ -93,7 +93,7 @@ DROP TABLE IF EXISTS public.teams;
 DROP SEQUENCE IF EXISTS public.teams_id_seq;
 CREATE TABLE teams (
     id serial NOT NULL,
-    name varchar(30) NOT NULL,
+    name varchar(30) UNIQUE,
     category_id int NOT NULL,
     description varchar(255),
     logo varchar(100),
@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS public.categories;
 DROP SEQUENCE IF EXISTS public.categories_id_seq;
 CREATE TABLE categories (
     id serial NOT NULL,
-    name varchar(30) UNIQUE
+    name varchar(30) UNIQUE NOT NULL CHECK (char_length(name) >= 1)
 );
 
 ALTER TABLE ONLY categories
@@ -333,3 +333,25 @@ INSERT INTO cards VALUES (10, 'New Card 10', NULL, 10, 'done', 1, 'admin', NULL,
 INSERT INTO cards VALUES (11, 'New Card 11', NULL, 11, 'review', 2, 'admin', 'neo_anderson', '2017-06-24 10:25:32', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO cards VALUES (12, 'New Card 12', NULL, 12, 'in_progress', 3, 'admin', 'neo_anderson', '2017-06-24 10:25:32', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 SELECT pg_catalog.setval('cards_id_seq', 12, true);
+
+
+INSERT INTO categories VALUES (1, 'manufacturing');
+INSERT INTO categories VALUES (2, 'development');
+INSERT INTO categories VALUES (3, 'free-time');
+SELECT pg_catalog.setval('categories_id_seq', 3, true);
+
+
+INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.', 'test.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (2, 'Team Title 2', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (3, 'Team Title 3', 3, 'We like to do anything.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (4, 'Team Title 4', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (5, 'Team Title 5', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+SELECT pg_catalog.setval('teams_id_seq', 5, true);
+
+
+INSERT INTO accounts_teams VALUES (1, 5, 1, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO accounts_teams VALUES (2, 5, 5, 'member', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO accounts_teams VALUES (3, 5, 4, 'manager', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO accounts_teams VALUES (4, 5, 3, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO accounts_teams VALUES (5, 1, 2, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+SELECT pg_catalog.setval('accounts_teams_id_seq', 5, true);

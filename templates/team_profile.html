@@ -1,0 +1,81 @@
+
+{% extends "layout.html" %}
+
+{% block title %}Team Profile{% endblock %}
+
+{% block scripts %}
+
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/team_profile.css')}}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="{{url_for('static', filename='scripts/teams/data_handler_teams.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/teams/teams_dom.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/teams/main_teams.js')}}" defer></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container" id="team-profile">
+        <h1>{{ team_data.name }}</h1>
+        <h4>Team Profile #{{ team_data.id }}</h4>
+
+        <!-- Messages with Classes: error, success -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+
+        {% for msg_category, message in messages %}
+        <p class="{{ msg_category }}">{{ message }}</p>
+        {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+
+        <!-- Page Navigation Section -->
+        <div class="row">
+            <div class="col-sm-12">
+                <button id="edit-team">Edit Team Profile</button>
+                <button id="back-to-teams">Back to Teams</button>
+            </div>
+        </div>
+
+        <!-- Team Profile Content -->
+        <div class="row">
+            <div class="col-sm-9">
+
+                <p>Created: {{ team_data.created }}</p>
+                <p>Modified: {{ team_data.modified }}</p>
+
+                <form action="{{ url_for('edit_team_profile', team_id=team_data.id ) }}" id="edit-team" method="POST">
+                    <label for="category-select">Team Category</label>
+                    <div id="category-buttons">
+                        <div id="select-button" class="select-or-add pressed">Select Existing</div>
+                        <div id="add-button" class="select-or-add">Add New</div>
+                    </div>
+                    <select name="category" id="category-select" class="category-choice">
+                        {% for category in categories %}
+                        <option {{'selected' if team_data.category == category else ''}}>{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                    <input disabled type="text" name="category" id="category-input" class="category-choice" placeholder="Enter new category">
+
+                    <textarea name="description" id="team-description" rows="5">{{ team_data.description }}</textarea>
+
+                    <input type="submit" value="submit">
+                </form>
+            </div>
+
+            <div class="col-sm-3 logo">
+                <p>Team Logo</p>
+                {% if team_data.logo %}
+                <img src="{{ url_for('static', filename='uploads/team_logos/' + team_data.logo) }}" class="profile-pic">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/placeholder-logo.png') }}" class="profile-pic">
+                {% endif %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

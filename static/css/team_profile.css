@@ -1,0 +1,90 @@
+
+select, option {
+    outline: none;
+}
+
+h1 {
+    margin-bottom: 5px;
+    margin-top: 40px;
+}
+
+h4 {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 40px;
+}
+
+input, textarea {
+    display: block;
+    margin: 20px 0 20px 0;
+    font-weight: normal;
+}
+
+input[type=submit] {
+    margin-bottom: 50px;
+}
+
+textarea {
+    width: 80%;
+    overflow: auto;
+}
+
+#team-description {
+    display: block;
+}
+
+.select-or-add {
+    float: left;
+    border: 1px solid black;
+    padding: 5px;
+    margin: 0 5px 0 0;
+    width: 120px;
+}
+
+.category-choice {
+    display: block;
+    padding: 5px;
+    margin: 0;
+}
+
+#category-buttons {
+    display: block;
+    margin: 0 0 5px 0;
+    height: 50px;
+    width: 250px;
+}
+
+#category-input {
+    display: none;
+    width: 245px;
+}
+
+#category-select {
+    width: 245px;
+    text-align: center;
+}
+
+.pressed {
+    background: gray;
+}
+
+#edit-team {
+    margin: 0 0px 20px 0;  
+}
+
+label {
+    margin-top: 10px;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border: 1px solid black;
+    background-color: white;
+    background-position: center;
+    object-fit: cover;
+}
+
+.logo {
+    text-align: center;
+}
