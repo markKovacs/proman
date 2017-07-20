@@ -1,3 +1,4 @@
+
 from os import urandom
 
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
@@ -8,7 +9,6 @@ import account_logic as account
 import board_logic
 import common_logic as common
 import team_logic
-from random import randint
 
 app = Flask(__name__)
 app.secret_key = urandom(24)
@@ -69,10 +69,11 @@ def team_profile(team_id):
         flash('You have no permission to view this page. Please select another team.', 'error')
         return redirect(url_for('teams'))
 
-    rng = randint(1, 99)
+    cur_time = common.get_timestamp()
+
     categories = team_logic.get_team_categories()
-    return render_template('team_profile.html', team_data=team_data, role=role,
-                           categories=categories, rng=rng)
+    return render_template('team_profile.html', team_data=team_data, role=role, categories=categories,
+                           cur_time=cur_time)
 
 
 # decorator needed to check if user logged in has the right to edit (manager/owner of team)
@@ -85,11 +86,8 @@ def edit_team_profile(team_id):
 
     if response == 'wrong_desc':
         flash('Wrong description. Cannot exceed 255 characters.', 'error')
-
     elif response == 'wrong_category':
         flash('Wrong category. Must be 1-30 characters long.', 'error')
-    # elif not response:
-    #     abort(404)
     else:
         flash('Team profile successfully edited.', 'success')
 
@@ -227,6 +225,14 @@ def edit_board():
     board_desc = request.form.get('board_desc')
     new_mod_date = board_logic.edit_board(board_id, board_title, board_desc)
     return jsonify(new_mod_date)
+
+
+# decorator to see if account has permission to delete this team logo
+@app.route('/api/delete_logo', methods=['POST'])
+def delete_logo():
+    team_id = request.form.get('team_id')
+    deleted = team_logic.delete_logo(team_id)
+    return jsonify(deleted)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,6 @@
 
+from datetime import datetime
+
 from data_manager import query
 
 
@@ -22,3 +24,9 @@ def allowed_extension(filename):
         extension = None
 
     return extension, allowed_extension
+
+
+def get_timestamp():
+    """Create timestamp, suitable for database timestamp format."""
+    timestamp = '{:%Y-%m-%d_%H-%M-%S}'.format(datetime.now())
+    return timestamp

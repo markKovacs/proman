@@ -105,9 +105,36 @@ label {
     text-align: left;
 }
 
-.logo p {
+.logo span {
     margin-bottom: 5px;
     font-weight: bold;
+}
+
+.logo span:first-child {
+    margin-right: 20px;
+    display: block;
+    width: 100px;
+}
+
+#delete-image {
+    width: 18px;
+    position: absolute;
+    top: 2px;
+    right: 0;
+    cursor: pointer;
+    padding: 3px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+#logo-outer {
+    position: relative;
+    width: 200px;
+}
+
+#delete-image:hover {
+    background-color: gray;
 }
 
 #upload-logo {

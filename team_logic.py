@@ -132,3 +132,21 @@ def delete_old_image(image_type, base_filename):
             remove("static/uploads/" + image_type + '/' + base_filename + '.' + extension)
         except FileNotFoundError:
             pass
+
+
+def delete_logo(team_id):
+    deleted = False
+    for extension in ['jpeg', 'jpg', 'png']:
+        try:
+            remove("static/uploads/team_logos/team_" + str(team_id) + '.' + extension)
+        except FileNotFoundError:
+            pass
+        else:
+            deleted = True
+
+    sql = """UPDATE teams SET image = NULL WHERE id = %s;"""
+    parameters = (team_id,)
+    fetch = None
+    query(sql, parameters, fetch)
+
+    return deleted

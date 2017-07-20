@@ -38,5 +38,73 @@ app.teams = {
         $('#upload-logo-input').on('change', function() {
             $('#upload-logo-form').submit();
         });
+    },
+
+    deleteImageListener: function () {
+        $('#delete-image').on('click', function() {
+            var teamId = $(this).data('team-id');
+            app.teams.showConfirmationModal(teamId);
+        });
+    },
+
+    showConfirmationModal: function (teamId) {
+        $('#modal-content').append(`
+            <span class="close">&times;</span>
+            <p id="confirm-question">Are you sure you want to delete this image?</p>
+            <div class="confirm-buttons">
+                <div id="confirm" data-team-id="${teamId}">Confirm</div>
+                <div id="cancel">Cancel</div>
+            </div>
+        `);
+
+        $('#modal-background').show();
+    },
+
+    confirmDeleteEntityListeners: function () {
+        $("#modal-content").on('click', '#confirm', function (ev) {
+            ev.stopPropagation();
+            $('.success').remove();
+            $('.error').remove();
+            var teamId = $(this).data("team-id");
+            app.dataHandler.deleteTeamLogo(teamId);
+        });
+
+        $("#modal-content").on('click', '#cancel', function (ev) {
+            ev.stopPropagation();
+            $('#modal-background').hide();
+            $('#modal-content').empty();
+        });
+    },
+
+    switchToPlaceholderImage: function () {
+        $('#profile-pic').attr('src', '/static/images/placeholder-logo.png');
+    },
+
+    flashDeletedLogo: function () {
+        $('#team-profile h1').after(`<p class="success">Team logo has been deleted.</p>`);
+        $('#modal-background').hide();
+        $('#modal-content').empty();
+    },
+
+    flashNothingDeleted: function () {
+        $('#team-profile h1').after(`<p class="error">There were no images to be deleted.</p>`);
+        $('#modal-background').hide();
+        $('#modal-content').empty();
+    },
+
+    closeButtonListener: function () {
+        $('#modal-content').on('click', '.close', function() {
+            $('#modal-content').empty();
+            $('#modal-background').hide();
+        });
+    },
+
+    modalBackgroundListener: function () {
+        $(window).on('click', function(event) {
+            if ($(event.target).attr('id') === 'modal-background') {
+                $('#modal-content').empty();
+                $('#modal-background').hide();
+            }
+        });
     }
 };
