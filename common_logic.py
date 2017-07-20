@@ -10,3 +10,15 @@ def get_account_id(account_name):
     account_id = query(sql, parameters, fetch)
 
     return account_id
+
+
+def allowed_extension(filename):
+    """Takes a filename string and validates extension, returning boolean."""
+    ALLOWED_EXTENSIONS = ['jpeg', 'jpg', 'png']
+    allowed_extension = '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    if allowed_extension:
+        extension = filename.rsplit('.', 1)[1].lower()
+    else:
+        extension = None
+
+    return extension, allowed_extension

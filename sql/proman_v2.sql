@@ -42,7 +42,7 @@ CREATE TABLE accounts (
     id serial NOT NULL,
     account_name varchar(30) UNIQUE,
     password varchar(200) NOT NULL,
-    profile_picture varchar(50),
+    image varchar(50),
     description varchar(255),
     created timestamp without time zone DEFAULT now() NOT NULL,
     modified timestamp without time zone DEFAULT now() NOT NULL
@@ -96,7 +96,7 @@ CREATE TABLE teams (
     name varchar(30) UNIQUE,
     category_id int NOT NULL,
     description varchar(255),
-    logo varchar(100),
+    image varchar(100),
     created timestamp without time zone DEFAULT now() NOT NULL,
     modified timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -341,7 +341,7 @@ INSERT INTO categories VALUES (3, 'free-time');
 SELECT pg_catalog.setval('categories_id_seq', 3, true);
 
 
-INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.', 'test.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.', 'team_1.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO teams VALUES (2, 'Team Title 2', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO teams VALUES (3, 'Team Title 3', 3, 'We like to do anything.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO teams VALUES (4, 'Team Title 4', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');

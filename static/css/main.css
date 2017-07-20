@@ -16,7 +16,7 @@ input, textarea {
     outline: none;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
     box-shadow: 0 0 15px rgba(255,100,100,0.9);
 }
 

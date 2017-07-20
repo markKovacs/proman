@@ -1,6 +1,10 @@
 
-from data_manager import query
+from os import remove
+
 from psycopg2 import DataError, IntegrityError
+
+import common_logic as common
+from data_manager import query
 
 
 def load_teams(account_id):
@@ -18,7 +22,7 @@ def load_teams(account_id):
 
 def get_team_data(team_id):
     """Return team profile information."""
-    sql = """SELECT t.id, t.name, c.name AS category, t.description, t.logo, t.created, t.modified
+    sql = """SELECT t.id, t.name, c.name AS category, t.description, t.image, t.created, t.modified
              FROM teams AS t
              INNER JOIN categories AS c
                 ON t.category_id = c.id
@@ -26,7 +30,10 @@ def get_team_data(team_id):
     parameters = (team_id,)
     fetch = 'one'
 
-    return query(sql, parameters, fetch)
+    team_data = query(sql, parameters, fetch)
+    team_data['created'] = str(team_data['created'])[0:19]
+    team_data['modified'] = str(team_data['modified'])[0:19]
+    return team_data
 
 
 def get_account_team_role(team_id, account_id):
@@ -87,3 +94,41 @@ def create_new_category(category):
     except (DataError, IntegrityError) as err:
         print('Data Error:\n{}'.format(err))
         return 'wrong_category'
+
+
+def update_image(image_type, entity_id, files):
+    image = files.get('image')
+    image_status = None
+
+    if image and image.filename:
+        extension, allowed_extension = common.allowed_extension(image.filename)
+        if allowed_extension:
+            base_filename = ('team' if image_type == 'team_logos' else 'account') + "_" + str(entity_id)
+
+            delete_old_image(image_type, base_filename)
+
+            filename = base_filename + '.' + extension
+            image.save("static/uploads/" + image_type + '/' + filename)
+            image_status = "uploaded"
+
+            table = 'teams' if image_type == 'team_logos' else 'accounts'
+            update_image_database(table, entity_id, filename)
+        else:
+            image_status = "not_allowed_ext"
+
+    return image_status
+
+
+def update_image_database(table, entity_id, filename):
+    sql = """UPDATE {} SET image = %s WHERE id = %s;""".format(table)
+    parameters = (filename, entity_id)
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def delete_old_image(image_type, base_filename):
+    for extension in ['jpeg', 'jpg', 'png']:
+        try:
+            remove("static/uploads/" + image_type + '/' + base_filename + '.' + extension)
+        except FileNotFoundError:
+            pass

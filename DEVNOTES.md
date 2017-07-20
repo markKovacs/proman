@@ -4,6 +4,7 @@
 ## NEXT
 
 - team profile page:
+    + delete picture (if uploaded)
     + if member, non-editable
     + if manager, editable with a button
     + if owner, deletable with a button (confirm)

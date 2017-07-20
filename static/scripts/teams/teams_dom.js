@@ -11,6 +11,7 @@ app.teams = {
             $('#category-input').prop('disabled', true);
             $('#category-select').show();
             $('#category-select').prop('disabled', false);
+            $('#category-select').focus();
             $(this).addClass('pressed');
             $('#add-button').removeClass('pressed');
         });
@@ -22,8 +23,20 @@ app.teams = {
             $('#category-select').prop('disabled', true);
             $('#category-input').show();
             $('#category-input').prop('disabled', false);
+            $('#category-input').focus();
             $(this).addClass('pressed');
             $('#select-button').removeClass('pressed');
+        });
+    },
+
+    uploadButtonReplacer: function () {
+        $('#upload-logo-input').hide();
+        $('#upload-logo-button').on('click', function() {
+            $('#upload-logo-input').trigger('click');
+        });
+
+        $('#upload-logo-input').on('change', function() {
+            $('#upload-logo-form').submit();
         });
     }
 };

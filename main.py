@@ -1,13 +1,14 @@
-
 from os import urandom
 
 from flask import (Flask, flash, jsonify, redirect, render_template, request,
                    session, url_for)
+from werkzeug.utils import secure_filename
 
 import account_logic as account
 import board_logic
-import team_logic
 import common_logic as common
+import team_logic
+from random import randint
 
 app = Flask(__name__)
 app.secret_key = urandom(24)
@@ -68,8 +69,10 @@ def team_profile(team_id):
         flash('You have no permission to view this page. Please select another team.', 'error')
         return redirect(url_for('teams'))
 
+    rng = randint(1, 99)
     categories = team_logic.get_team_categories()
-    return render_template('team_profile.html', team_data=team_data, role=role, categories=categories)
+    return render_template('team_profile.html', team_data=team_data, role=role,
+                           categories=categories, rng=rng)
 
 
 # decorator needed to check if user logged in has the right to edit (manager/owner of team)
@@ -89,6 +92,21 @@ def edit_team_profile(team_id):
     #     abort(404)
     else:
         flash('Team profile successfully edited.', 'success')
+
+    return redirect(url_for('team_profile', team_id=team_id))
+
+
+# decorator needed to check if user logged in has the right to edit (manager/owner of team)
+@app.route('/team-profile/<team_id>/upload', methods=['POST'])
+def upload_logo(team_id):
+    image_status = team_logic.update_image('team_logos', team_id, request.files)
+
+    if image_status == "uploaded":
+        flash("Image was uploaded successfully.", "success")
+    elif image_status == "not_allowed_ext":
+        flash("Image was not uploaded. Allowed extensions: JPEG, JPG, PNG.", "error")
+    else:
+        flash("Something went wrong Please try again.", "error")
 
     return redirect(url_for('team_profile', team_id=team_id))
 

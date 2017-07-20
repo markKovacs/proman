@@ -57,8 +57,9 @@
                         <option {{'selected' if team_data.category == category else ''}}>{{ category }}</option>
                         {% endfor %}
                     </select>
-                    <input disabled type="text" name="category" id="category-input" class="category-choice" placeholder="Enter new category">
+                    <input disabled autocomplete="off" type="text" name="category" id="category-input" class="category-choice" placeholder="Enter new category">
 
+                    <label for="team-description">Team Descripton</label>
                     <textarea name="description" id="team-description" rows="5">{{ team_data.description }}</textarea>
 
                     <input type="submit" value="submit">
@@ -67,11 +68,18 @@
 
             <div class="col-sm-3 logo">
                 <p>Team Logo</p>
-                {% if team_data.logo %}
-                <img src="{{ url_for('static', filename='uploads/team_logos/' + team_data.logo) }}" class="profile-pic">
+                {% if team_data.image %}
+                <img src="{{ url_for('static', filename='uploads/team_logos/' + team_data.image, v=rng) }}" id="profile-pic">
                 {% else %}
-                <img src="{{ url_for('static', filename='images/placeholder-logo.png') }}" class="profile-pic">
+                <img src="{{ url_for('static', filename='images/placeholder-logo.png') }}" id="profile-pic">
                 {% endif %}
+                <form enctype='multipart/form-data' id="upload-logo-form" action="{{ url_for('upload_logo', team_id=team_data.id) }}" method="POST">
+                    <input type="file" name="image" id="upload-logo-input" value="Upload">
+                </form>
+                <div id="upload-logo-button">
+                    <img id="upload-logo-img" src="{{ url_for('static', filename='images/upload.svg') }}" alt="Upload">
+                    <span>Upload</span>
+                </div>
             </div>
 
         </div>
