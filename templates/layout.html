@@ -15,6 +15,10 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='images/favicon.png')}}">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+    <script src="{{url_for('static', filename='scripts/nav.js')}}" defer></script>
+
+    <!-- Page specific scripts -->
     {% block scripts %}{% endblock %}
 
 </head>
@@ -25,20 +29,44 @@
     <nav class="container pronav">
         <div class="row">
             <div class="col-sm-12">
-                <a href="{{url_for('index')}}"><img src="{{url_for('static', filename='images/proman-logo-ondark.png')}}" class="logo"></a>
-                <ul class="menu">
+                <a href="{{url_for('index')}}">
+                    <img src="{{url_for('static', filename='images/proman-logo-ondark.png')}}" class="logo">
+                </a>
+
+                <div id="menu-container" class="visible-xs-block">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+
+                <ul class="visible-xs-block" id="drop-down">
                     {% if session.user_name %}
                     <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
                     <li><a href="{{url_for('teams')}}" class="anchor bttn">Teams</a></li>
                     <li><span class="anchor bttn">{{session.user_name}}</san></li>
                     <li><a href="{{url_for('logout')}}" class="anchor bttn">Log out</a></li>
                     {% else %}
-                    <li><a href="{{url_for('index')}}#home" class="anchor bttn">Home</a></li>
+                    <li><a href="{{url_for('index')}}" class="anchor bttn">Home</a></li>
                     <li><a href="{{url_for('index')}}#engine" class="anchor bttn">About</a></li>
                     <li><a href="{{url_for('index')}}#developers" class="anchor bttn">Developers</a></li>
                     <li><a href="{{url_for('manage_account')}}" class="cta login">Log in</a></li>
                     {% endif %}
                 </ul>
+
+                <ul class="hidden-xs menu">
+                    {% if session.user_name %}
+                    <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
+                    <li><a href="{{url_for('teams')}}" class="anchor bttn">Teams</a></li>
+                    <li><span class="anchor bttn">{{session.user_name}}</san></li>
+                    <li><a href="{{url_for('logout')}}" class="anchor bttn">Log out</a></li>
+                    {% else %}
+                    <li><a href="{{url_for('index')}}" class="anchor bttn">Home</a></li>
+                    <li><a href="{{url_for('index')}}#engine" class="anchor bttn">About</a></li>
+                    <li><a href="{{url_for('index')}}#developers" class="anchor bttn">Developers</a></li>
+                    <li><a href="{{url_for('manage_account')}}" class="cta login">Log in</a></li>
+                    {% endif %}
+                </ul>
+
             </div>
         </div>
     </nav>
@@ -63,9 +91,11 @@
     </section>
 
     <footer class="jumbotron" id="footer">
-        <div class="container">
+        <div class="container" >
             <div class="row">
-                <p class="col-sm-12">&copy; 2017 RushBit</p>
+                <div class="col-sm-12">
+                    <p>&copy; 2017 RushBit</p>
+                </div>
             </div>
         </div>
     </footer>

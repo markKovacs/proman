@@ -30,7 +30,7 @@ input, textarea {
 }
 
 input[type=submit] {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     width: 120px;
 }
 
@@ -171,4 +171,8 @@ label {
     text-transform: uppercase;
     position: relative;
     right: 5px;
+}
+
+#team-profile {
+    margin-bottom: 25px;
 }
