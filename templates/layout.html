@@ -16,7 +16,7 @@
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="{{url_for('static', filename='images/favicon.png')}}">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-    <script src="{{url_for('static', filename='scripts/nav.js')}}" defer></script>
+    <script src="{{url_for('static', filename='scripts/general/nav.js')}}" defer></script>
 
     <!-- Page specific scripts -->
     {% block scripts %}{% endblock %}
@@ -29,7 +29,7 @@
     <nav class="container pronav">
         <div class="row">
             <div class="col-sm-12">
-                <a href="{{url_for('index')}}">
+                <a href="{{ url_for('dashboard') if session.user_name else url_for('index') }}">
                     <img src="{{url_for('static', filename='images/proman-logo-ondark.png')}}" class="logo">
                 </a>
 
@@ -41,6 +41,7 @@
 
                 <ul class="visible-xs-block" id="drop-down">
                     {% if session.user_name %}
+                    <li><a href="{{url_for('dashboard')}}" class="anchor bttn">Dashboard</a></li>
                     <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
                     <li><a href="{{url_for('teams')}}" class="anchor bttn">Teams</a></li>
                     <li><span class="anchor bttn">{{session.user_name}}</san></li>
@@ -55,6 +56,7 @@
 
                 <ul class="hidden-xs menu">
                     {% if session.user_name %}
+                    <li><a href="{{url_for('dashboard')}}" class="anchor bttn">Dashboard</a></li>
                     <li><a href="{{url_for('boards')}}" class="anchor bttn">Boards</a></li>
                     <li><a href="{{url_for('teams')}}" class="anchor bttn">Teams</a></li>
                     <li><span class="anchor bttn">{{session.user_name}}</san></li>

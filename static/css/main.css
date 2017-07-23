@@ -367,7 +367,7 @@ h1 {
   text-align: center;  
   font-weight: bold;
   font-size: 2.4em;
-  margin: 0 auto 30px auto;
+  margin: 60px auto 40px auto;
 }
 
 header nav {
@@ -604,13 +604,13 @@ However, delay the fade out process for 2.5 seconds */
 
 #welcome-text {
     text-align: right;
-    margin-top: 60px;
+    margin-top: 8vh;
     color: #EBEBE6;
     font-size: 3em;
     font-family: 'Open Sans', sans-serif;
     font-weight: 300;
     margin-right: 5%;
-    margin-bottom: 70px;
+    margin-bottom: 10vh;
 }
 
 #welcome-text span {
@@ -653,6 +653,11 @@ However, delay the fade out process for 2.5 seconds */
     color: #EBEBE6;
     font-weight: bold;
     font-size: 1.4em;  
+}
+
+#drop-down a:hover {
+    text-decoration: none;
+    color: #E95846;
 }
 
 .pronav .logo {
@@ -706,7 +711,7 @@ ul {
     text-transform: uppercase;
     color: #EBEBE6;
     text-decoration: none;
-    padding: 15px;
+    padding: 12px;
 }
 
 .pronav .menu .bttn:hover {
@@ -741,7 +746,7 @@ ul {
 
 .main-content {
     padding-top: 80px;
-    min-height: 550px;
+    min-height: 600px;
     background-color: #CBCBCE;
 }
 
@@ -834,10 +839,6 @@ ul {
     border: 1px solid #E95846;
 }
 
-#boards, #cards {
-    margin-top: 60px;
-}
-
 #new-cards-col .card-div {
     border: 3px solid #6666FF;
 }
@@ -905,7 +906,7 @@ p#confirm-question {
     margin: 30px auto;
 }
 
-#confirm, #cancel {
+#confirm, #cancel, #confirm-new-owner, #confirm-delete-team {
     width: 120px;
     float: left;
     padding: 12px;
@@ -917,7 +918,7 @@ p#confirm-question {
     cursor: pointer;
 }
 
-#confirm {
+#confirm, #confirm-new-owner, #confirm-delete-team {
     margin-right: 30px;
     background-color: #52a74f;
     border: 1px solid #52a74f;
@@ -933,7 +934,7 @@ p#confirm-question {
     border-color: #A33D31;
 }
 
-#confirm:hover {
+#confirm:hover, #confirm-new-owner:hover, #confirm-delete-team:hover {
     background-color: #397437;
     border-color: #397437;
 }
@@ -944,7 +945,6 @@ p#confirm-question {
     float: right;
     position: relative;
     top: 4px;
-    /*right: 10px;*/
 }
 
 #menu-container div {
@@ -976,4 +976,8 @@ p.long-text {
     text-align: justify;
     font-size: 16px;
     padding: 15px;
+}
+
+#space-div {
+    height: 100px;
 }

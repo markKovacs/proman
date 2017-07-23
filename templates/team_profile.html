@@ -7,7 +7,6 @@
 
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/team_profile.css')}}">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
     <script src="{{url_for('static', filename='scripts/teams/data_handler_teams.js')}}" defer></script>
     <script src="{{url_for('static', filename='scripts/teams/teams_dom.js')}}" defer></script>
     <script src="{{url_for('static', filename='scripts/teams/main_teams.js')}}" defer></script>
@@ -34,25 +33,54 @@
         <!-- Page Navigation Section -->
         <div class="row">
             <div class="col-sm-12">
-                <button id="edit-team">Edit Team Profile</button>
+                {% if role == 'manager' or role == 'owner' %}
+                <button id="edit-team">Edit Team</button>
+                {% endif %}
+                {% if role == 'owner' %}
+                <button id="hand-over-ownership">Ownership</button>
+                <button id="delete-team" data-team-id="{{ team_data.id }}" data-team-name="{{ team_data.name }}">Delete Team</button>
+                {% endif %}
+                {% if role %}
                 <button id="back-to-teams">Back to Teams</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Ownership manager -->
+        <div class="row" id="ownership-manager">
+            <div class="col-sm-12">
+                <div id="ownership-manager-inner">
+                    <p>Select a team member to hand over ownership.</p>
+                    <form id="ownership-form" action="{{ url_for('hand_over_ownership', team_id=team_data.id) }}" method="POST">
+                        <select name="new-owner" id="new-owner-select">
+                            <option selected disabled>Choose new owner...</option>
+                            {% for member, member_id in team_data.members %}
+                            {% if member != session.user_name %}
+                            <option value="{{ (member, member_id) }}">{{ member }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <input type="submit" id="new-owner-submit">
+                    </form>
+                    <button id="new-owner-fake-submit">Submit</button>
+                </div>
             </div>
         </div>
 
         <!-- Team Profile Content -->
-        <div class="row">
-            <div class="col-sm-9">
+        <div class="row" id="team-profile-content">
+            <div class="col-sm-9" id="team-profile-inner">
 
                 <p>Created: {{ team_data.created }}</p>
                 <p>Modified: {{ team_data.modified }}</p>
 
-                <form action="{{ url_for('edit_team_profile', team_id=team_data.id ) }}" id="edit-team" method="POST">
+                <form action="{{ url_for('edit_team_profile', team_id=team_data.id ) }}" id="edit-team-form" method="POST">
                     <label for="category-select">Team Category</label>
                     <div id="category-buttons">
                         <div id="select-button" class="select-or-add pressed">Select Existing</div>
                         <div id="add-button" class="select-or-add">Add New</div>
                     </div>
-                    <select name="category" id="category-select" class="category-choice">
+                    <select disabled name="category" id="category-select" class="category-choice not-editable">
                         {% for category in categories %}
                         <option {{'selected' if team_data.category == category else ''}}>{{ category }}</option>
                         {% endfor %}
@@ -60,21 +88,24 @@
                     <input disabled autocomplete="off" type="text" name="category" id="category-input" class="category-choice" placeholder="Enter new category">
 
                     <label for="team-description">Team Descripton</label>
-                    <textarea name="description" id="team-description" rows="5">{{ team_data.description }}</textarea>
+                    <textarea disabled class="not-editable" name="description" id="team-description" rows="5">{{ team_data.description }}</textarea>
 
-                    <input type="submit" value="submit">
+                    <input id="submit-edit-team" type="submit" value="submit">
                 </form>
             </div>
 
             <div class="col-sm-3 logo">
                 <div id="logo-outer">
                     <span>Team Logo</span>
+                    {% if role == 'manager' or role == 'owner' %}
                     <img src="{{ url_for('static', filename='images/delete.svg') }}" alt="DEL" id="delete-image" data-team-id="{{ team_data.id }}">
+                    {% endif %}
                     {% if team_data.image %}
                     <img src="{{ url_for('static', filename='uploads/team_logos/' + team_data.image, v=cur_time) }}" id="profile-pic">
                     {% else %}
                     <img src="{{ url_for('static', filename='images/placeholder-logo.png') }}" id="profile-pic">
                     {% endif %}
+                    {% if role == 'manager' or role == 'owner' %}
                     <form enctype='multipart/form-data' id="upload-logo-form" action="{{ url_for('upload_logo', team_id=team_data.id) }}" method="POST">
                         <input type="file" name="image" id="upload-logo-input" value="Upload">
                     </form>
@@ -82,6 +113,7 @@
                         <img id="upload-logo-img" src="{{ url_for('static', filename='images/upload.svg') }}" alt="Upload">
                         <span>Upload</span>
                     </div>
+                    {% endif %}
                 </div>
             </div>
 

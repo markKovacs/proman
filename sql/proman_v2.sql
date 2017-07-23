@@ -94,7 +94,7 @@ DROP SEQUENCE IF EXISTS public.teams_id_seq;
 CREATE TABLE teams (
     id serial NOT NULL,
     name varchar(30) UNIQUE,
-    category_id int NOT NULL,
+    category_id int DEFAULT 0 NOT NULL,
     description varchar(255),
     image varchar(100),
     created timestamp without time zone DEFAULT now() NOT NULL,
@@ -240,15 +240,15 @@ ALTER TABLE ONLY cards
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_cards_assigned_to FOREIGN KEY (assigned_to) REFERENCES accounts(account_name)
-    ON UPDATE CASCADE ON DELETE CASCADE;
+    ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE ONLY cards
     ADD CONSTRAINT fk_cards_assigned_by FOREIGN KEY (assigned_by) REFERENCES accounts(account_name)
-    ON UPDATE CASCADE ON DELETE CASCADE;
+    ON UPDATE CASCADE ON DELETE SET NULL;
 
 ALTER TABLE ONLY teams
     ADD CONSTRAINT fk_teams_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
-    ON UPDATE CASCADE ON DELETE CASCADE;
+    ON UPDATE CASCADE ON DELETE SET DEFAULT;
 
 ALTER TABLE ONLY accounts_teams
     ADD CONSTRAINT fk_accounts_teams_account_id FOREIGN KEY (account_id) REFERENCES accounts(id)
@@ -273,7 +273,6 @@ ALTER TABLE ONLY requests
 ALTER TABLE ONLY requests
     ADD CONSTRAINT fk_requests_account_id FOREIGN KEY (account_id) REFERENCES accounts(id)
     ON UPDATE CASCADE ON DELETE CASCADE;
-
 
 ALTER TABLE ONLY messages
     ADD CONSTRAINT fk_messages_sender FOREIGN KEY (sender) REFERENCES accounts(id)
@@ -335,6 +334,7 @@ INSERT INTO cards VALUES (12, 'New Card 12', NULL, 12, 'in_progress', 3, 'admin'
 SELECT pg_catalog.setval('cards_id_seq', 12, true);
 
 
+INSERT INTO categories VALUES (0, 'unselected');
 INSERT INTO categories VALUES (1, 'manufacturing');
 INSERT INTO categories VALUES (2, 'development');
 INSERT INTO categories VALUES (3, 'free-time');
@@ -354,4 +354,6 @@ INSERT INTO accounts_teams VALUES (2, 5, 5, 'member', '2017-06-24 10:25:32', '20
 INSERT INTO accounts_teams VALUES (3, 5, 4, 'manager', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (4, 5, 3, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (5, 1, 2, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO accounts_teams VALUES (6, 1, 1, 'manager', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO accounts_teams VALUES (7, 2, 1, 'member', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 SELECT pg_catalog.setval('accounts_teams_id_seq', 5, true);

@@ -1,15 +1,43 @@
 
+from functools import wraps
 from os import remove
 
+from flask import flash, redirect, session, url_for
 from psycopg2 import DataError, IntegrityError
 
 import common_logic as common
 from data_manager import query
 
 
+# Decorators for server-side access management
+
+def access_level_required(access_level):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(team_id):
+
+            if 'user_name' in session:
+                account_id = common.get_account_id(session["user_name"])
+                role = get_account_team_role(account_id, team_id)
+
+                if access_level == 'manager' and role in ('manager', 'owner'):
+                    return func(team_id)
+                if access_level == 'owner' and role == 'owner':
+                    return func(team_id)
+
+            flash('You have no authorization to edit this page.', 'error')
+            return redirect(url_for('team_profile', team_id=team_id))
+
+        return wrapper
+    return decorator
+
+
+# Team-logic functions
+
 def load_teams(account_id):
     """Load teams based on account_id."""
-    sql = """SELECT t.id AS id, t.name, at.role, at.id AS acc_team_id FROM accounts_teams AS at
+    sql = """SELECT t.id AS id, t.name, at.role, at.id AS acc_team_id
+             FROM accounts_teams AS at
              INNER JOIN teams AS t
                 ON t.id = at.team_id
              WHERE at.account_id = %s
@@ -22,21 +50,33 @@ def load_teams(account_id):
 
 def get_team_data(team_id):
     """Return team profile information."""
-    sql = """SELECT t.id, t.name, c.name AS category, t.description, t.image, t.created, t.modified
+    sql = """SELECT t.id, t.name, c.name AS category, t.description, t.image, t.created, t.modified,
+                array_agg(a.account_name) AS member_names, array_agg(a.id) AS member_ids
              FROM teams AS t
              INNER JOIN categories AS c
                 ON t.category_id = c.id
-             WHERE t.id = %s;"""
+             INNER JOIN accounts_teams AS at
+                ON t.id = at.team_id
+             INNER JOIN accounts AS a
+                ON a.id = at.account_id
+             WHERE t.id = %s
+             GROUP BY t.id, t.name, c.name, t.description, t.image, t.created, t.modified;"""
     parameters = (team_id,)
     fetch = 'one'
+    try:
+        response = query(sql, parameters, fetch)
+    except DataError:
+        response = 'not_valid'
+    try:
+        response['created'] = str(response['created'])[0:19]
+        response['modified'] = str(response['modified'])[0:19]
+    except TypeError:
+        response = 'not_valid'
 
-    team_data = query(sql, parameters, fetch)
-    team_data['created'] = str(team_data['created'])[0:19]
-    team_data['modified'] = str(team_data['modified'])[0:19]
-    return team_data
+    return response
 
 
-def get_account_team_role(team_id, account_id):
+def get_account_team_role(account_id, team_id):
     """Return role in selected team for account in session."""
     sql = """SELECT role FROM accounts_teams WHERE team_id = %s AND account_id = %s;"""
     parameters = (team_id, account_id)
@@ -44,7 +84,7 @@ def get_account_team_role(team_id, account_id):
     try:
         return query(sql, parameters, fetch)
     except TypeError:
-        return 'no_permission'
+        return None
 
 
 def get_team_categories():
@@ -61,8 +101,8 @@ def edit_team_profile(team_id, category, desc):
     if category_id == 'wrong_category':
         return 'wrong_category'
 
-    sql = """UPDATE teams SET category_id = %s, description = %s;"""
-    parameters = (category_id, desc)
+    sql = """UPDATE teams SET category_id = %s, description = %s WHERE id = %s;"""
+    parameters = (category_id, desc, team_id)
     fetch = None
 
     try:
@@ -150,3 +190,24 @@ def delete_logo(team_id):
     query(sql, parameters, fetch)
 
     return deleted
+
+
+def hand_over_ownership(team_id, prev_owner_id, new_owner_id):
+    sql = """UPDATE accounts_teams SET role = 'owner'
+             WHERE team_id = %s AND account_id = %s;"""
+    parameters = (team_id, new_owner_id)
+    fetch = None
+    query(sql, parameters, fetch)
+
+    sql = """UPDATE accounts_teams SET role = 'manager'
+             WHERE team_id = %s AND account_id = %s;"""
+    parameters = (team_id, prev_owner_id)
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def delete_team(team_id):
+    sql = """DELETE FROM teams WHERE id = %s;"""
+    parameters = (team_id,)
+    fetch = None
+    query(sql, parameters, fetch)

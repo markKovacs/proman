@@ -60,19 +60,23 @@ app.teams = {
         $('#modal-background').show();
     },
 
-    confirmDeleteEntityListeners: function () {
-        $("#modal-content").on('click', '#confirm', function (ev) {
+    confirmDeleteEntityListener: function () {
+        $('#modal-content').on('click', '#confirm', function (ev) {
             ev.stopPropagation();
             $('.success').remove();
             $('.error').remove();
-            var teamId = $(this).data("team-id");
+            var teamId = $(this).data('team-id');
             app.dataHandler.deleteTeamLogo(teamId);
         });
+    },
 
-        $("#modal-content").on('click', '#cancel', function (ev) {
+    cancelConfirmationListener: function () {
+        $('#modal-content').on('click', '#cancel', function (ev) {
             ev.stopPropagation();
             $('#modal-background').hide();
             $('#modal-content').empty();
+
+            $('#ownership-manager').hide();
         });
     },
 
@@ -87,7 +91,7 @@ app.teams = {
     },
 
     flashNothingDeleted: function () {
-        $('#team-profile h1').after(`<p class="error">There were no images to be deleted.</p>`);
+        $('#team-profile h1').after(`<p class="error">Deletion could not be processed Please try again.</p>`);
         $('#modal-background').hide();
         $('#modal-content').empty();
     },
@@ -96,6 +100,8 @@ app.teams = {
         $('#modal-content').on('click', '.close', function() {
             $('#modal-content').empty();
             $('#modal-background').hide();
+
+            $('#ownership-manager').hide();
         });
     },
 
@@ -104,6 +110,152 @@ app.teams = {
             if ($(event.target).attr('id') === 'modal-background') {
                 $('#modal-content').empty();
                 $('#modal-background').hide();
+
+                $('#ownership-manager').hide();
+            }
+        });
+    },
+
+    editTeamButtonListener: function () {
+        $('#edit-team').on('click', function() {
+
+            if (!$(this).hasClass('cancel-button')) {
+                teamProfile.category = $('#category-select').val();
+                teamProfile.description = $('#team-description').val();
+            } else if ($(this).hasClass('cancel-button')) {
+                $('#category-select').val(teamProfile.category);
+                $('#team-description').val(teamProfile.description);
+                $('#category-input').val('');
+            }
+
+            if ($('#team-description').prop('disabled')) {
+                $('#team-description').prop('disabled', false);
+                $('#category-select').prop('disabled', false);
+            } else {
+                $('#team-description').prop('disabled', true);
+                $('#category-select').prop('disabled', true);
+            }
+
+            $('#team-description').toggleClass('not-editable');
+            $('#category-select').toggleClass('not-editable');
+            $('#category-buttons').slideToggle(300);
+
+            $('#submit-edit-team').slideToggle(300);
+
+            if (this.innerText === 'Edit Team') {
+                $(this).text('Cancel');
+                $(this).addClass('cancel-button');
+            } else {
+                $(this).text('Edit Team');
+                $(this).removeClass('cancel-button');
+            }
+
+            $('#category-input').hide();
+            $('#category-input').prop('disabled', true);
+            $('#category-select').show();
+            $('#select-button').addClass('pressed');
+            $('#add-button').removeClass('pressed');
+        });
+    },
+
+    backToTeamsButtonListener: function () {
+        $('#back-to-teams').on('click', function() {
+            window.location.href = '/teams'
+        });
+    },
+
+    ownershipButtonListener: function () {
+        $('#hand-over-ownership').on('click', function() {
+            $('#ownership-manager').slideToggle(300);
+        });
+
+    },
+
+    newOwnerFakeSubmitListener: function () {
+        $('#new-owner-fake-submit').on('click', function() {
+            var newOwnerToBeInfo = $('#new-owner-select').val();
+
+            if (!newOwnerToBeInfo) {
+                $('.success').remove();
+                $('.error').remove();
+                $('#ownership-manager').slideToggle(300);
+                $('#team-profile h1').after(`<p class="error">Please select a team member if you would like to hand over ownership.</p>`);
+                return;
+            }
+
+            var newOwnerToBe = newOwnerToBeInfo.split(', ')[0].substring(1);
+
+            $('#modal-content').append(`
+                <span class="close">&times;</span>
+                <p id="confirm-question">You are about to hand over ownership to ${newOwnerToBe}. It is an irreversible process, if you want to proceed please type in new owner's name to confirm.</p>
+                <div class="confirm-buttons">
+                    <input id="confirm-value" placeholder="Enter new owner's name...">
+                    <div id="confirm-new-owner">Confirm</div>
+                    <div id="cancel">Cancel</div>
+                </div>
+            `);
+
+            $('#modal-background').show();
+        });
+    },
+
+    newOwnerConfirmListener: function () {
+        $('#modal-content').on('click', '#confirm-new-owner', function(ev) {
+            ev.stopPropagation();
+            $('.success').remove();
+            $('.error').remove();
+
+            var newOwnerToBeInfo = $('#new-owner-select').val();
+            var newOwnerToBe = newOwnerToBeInfo.split(', ')[0].substring(1).replace(/'/g, '');
+            var confirmValue = $('#confirm-value').val();
+
+            // 'Whether input was correct or not:
+            if (newOwnerToBe === confirmValue) {
+                $('#ownership-form').submit();
+            } else {
+                $('.success').remove();
+                $('.error').remove();
+                $('#ownership-manager').slideToggle(300);
+                $('#team-profile h1').after(`<p class="error">Incorrect input, failed to confirm ownership hand-over.</p>`);
+                $('#modal-background').hide();
+                $('#modal-content').empty();
+            }
+        });
+    },
+
+    deleteTeamButtonListener: function () {
+        $('#delete-team').on('click', function () {
+            var teamId = $(this).data('team-id');
+            var teamName = $(this).data('team-name');
+
+            $('#modal-content').append(`
+                <span class="close">&times;</span>
+                <p id="confirm-question">Are you sure you want to delete team '${teamName}'? Process cannot be reversed, furthermore all boards and cards will be lost forever. Please type in team name to confirm your intention.</p>
+                <div class="confirm-buttons">
+                    <input id="confirm-value" placeholder="Enter team name...">
+                    <div id="confirm-delete-team" data-team-id="${teamId}" data-team-name="${teamName}">Confirm</div>
+                    <div id="cancel">Cancel</div>
+                </div>
+            `);
+
+            $('#modal-background').show();
+        });
+    },
+
+    deleteTeamConfirmListener: function () {
+        $('#modal-content').on('click', '#confirm-delete-team', function () {
+            var teamId = $(this).data('team-id');
+            var teamName = $(this).data('team-name');
+
+            var confirmValue = $('#confirm-value').val();
+            if (teamName === confirmValue) {
+                app.dataHandler.deleteTeam(teamId, teamName);
+            } else {
+                $('.success').remove();
+                $('.error').remove();
+                $('#team-profile h1').after(`<p class="error">Incorrect input, failed to confirm team deletion.</p>`);
+                $('#modal-background').hide();
+                $('#modal-content').empty();
             }
         });
     }

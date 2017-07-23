@@ -158,7 +158,7 @@ def login_user():
 
     flash('Successfully logged in as {}. Welcome back in ProMan!'.format(user_name), 'success')
 
-    return redirect(url_for('boards'))
+    return redirect(url_for('dashboard'))
 
 
 def valid_credentials(form):

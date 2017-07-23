@@ -9,11 +9,17 @@ td, th {
     padding: 5px;
 }
 
-h1 {
-    margin-bottom: 5px;
-    margin-top: 40px;
-}
-
 .main-content {
     min-height: 90vh;
+}
+
+button {
+    padding: 15px;
+    margin: 0px 5px 15px 0px;
+    /*background-color: #52a74f;*/
+    border-radius: 5px;
+    font-weight: bold;
+    /*color: white;*/
+    /*border: 1px solid #52a74f;*/
+    min-width: 150px;
 }

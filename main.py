@@ -1,8 +1,8 @@
 
 from os import urandom
 
-from flask import (Flask, flash, jsonify, redirect, render_template, request,
-                   session, url_for)
+from flask import (Flask, abort, flash, jsonify, redirect, render_template,
+                   request, session, url_for)
 from werkzeug.utils import secure_filename
 
 import account_logic as account
@@ -56,30 +56,39 @@ def boards():
 def teams():
     account_id = common.get_account_id(session["user_name"])
     teams_data = team_logic.load_teams(account_id)
+
+    if request.args.get('success') == 'team-deleted':
+        deleted_id = request.args.get('id')
+        deleted_name = request.args.get('name')
+        flash("Team #{} named as '{}' deleted from database.".format(deleted_id, deleted_name), 'success')
+
     return render_template('teams.html', teams_data=teams_data)
 
 
-@app.route('/team-profile/<team_id>')
+@app.route('/team/<team_id>')
 @account.login_required
 def team_profile(team_id):
     team_data = team_logic.get_team_data(team_id)
+    if team_data == 'not_valid':
+        abort(404)
+
+    member_ids = team_data.pop('member_ids')
+    member_names = team_data.pop('member_names')
+    team_data['members'] = zip(member_names, member_ids)
+
     account_id = common.get_account_id(session["user_name"])
-    role = team_logic.get_account_team_role(team_id, account_id)
-    if role == 'no_permission':
-        flash('You have no permission to view this page. Please select another team.', 'error')
-        return redirect(url_for('teams'))
+    role = team_logic.get_account_team_role(account_id, team_id)
 
     cur_time = common.get_timestamp()
-
     categories = team_logic.get_team_categories()
-    return render_template('team_profile.html', team_data=team_data, role=role, categories=categories,
-                           cur_time=cur_time)
+
+    return render_template('team_profile.html', team_data=team_data, role=role,
+                           categories=categories, cur_time=cur_time)
 
 
-# decorator needed to check if user logged in has the right to edit (manager/owner of team)
-@app.route('/team-profile/<team_id>/edit', methods=['POST'])
+@app.route('/team/<team_id>/edit', methods=['POST'])
+@team_logic.access_level_required('manager')
 def edit_team_profile(team_id):
-    # validate team_id
     category = request.form.get('category')
     desc = request.form.get('description')
     response = team_logic.edit_team_profile(team_id, category, desc)
@@ -94,8 +103,8 @@ def edit_team_profile(team_id):
     return redirect(url_for('team_profile', team_id=team_id))
 
 
-# decorator needed to check if user logged in has the right to edit (manager/owner of team)
-@app.route('/team-profile/<team_id>/upload', methods=['POST'])
+@app.route('/team/<team_id>/upload', methods=['POST'])
+@team_logic.access_level_required('manager')
 def upload_logo(team_id):
     image_status = team_logic.update_image('team_logos', team_id, request.files)
 
@@ -108,6 +117,27 @@ def upload_logo(team_id):
 
     return redirect(url_for('team_profile', team_id=team_id))
 
+
+@app.route('/dashboard')
+@account.login_required
+def dashboard():
+    # content to be implemented
+    return render_template('dashboard.html')
+
+
+@app.route('/team/<team_id>/ownership', methods=['POST'])
+@team_logic.access_level_required('owner')
+def hand_over_ownership(team_id):
+    new_owner_name, new_owner_id = request.form.get('new-owner').strip("'()").split(', ')
+
+    prev_owner_id = common.get_account_id(session["user_name"])
+    team_logic.hand_over_ownership(team_id, prev_owner_id, new_owner_id)
+
+    flash("Ownership handed over to '{}'.".format(new_owner_name), 'success')
+    return redirect(url_for('team_profile', team_id=team_id))
+
+
+# Register, login, logout functions:
 
 @app.route('/login', methods=['GET', 'POST'])
 @account.not_loggedin
@@ -227,12 +257,20 @@ def edit_board():
     return jsonify(new_mod_date)
 
 
-# decorator to see if account has permission to delete this team logo
-@app.route('/api/delete_logo', methods=['POST'])
-def delete_logo():
+@app.route('/team/<team_id>/delete_logo', methods=['POST'])
+@team_logic.access_level_required('manager')
+def delete_logo(team_id):
     team_id = request.form.get('team_id')
     deleted = team_logic.delete_logo(team_id)
     return jsonify(deleted)
+
+
+@app.route('/team/<team_id>/delete_team', methods=['POST'])
+@team_logic.access_level_required('owner')
+def delete_team(team_id):
+    team_id = request.form.get('team_id')
+    team_logic.delete_team(team_id)
+    return jsonify("Done")
 
 
 if __name__ == '__main__':
