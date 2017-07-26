@@ -62,7 +62,13 @@ def teams():
         deleted_name = request.args.get('name')
         flash("Team #{} named as '{}' deleted from database.".format(deleted_id, deleted_name), 'success')
 
-    return render_template('teams.html', teams_data=teams_data)
+    if request.args.get('success') == 'team-left':
+        left_team = request.args.get('name')
+        flash("You have successfully left the team '{}'.".format(left_team), 'success')
+
+    categories = team_logic.get_team_categories()
+
+    return render_template('teams.html', teams_data=teams_data, categories=categories)
 
 
 @app.route('/team/<team_id>')
@@ -74,7 +80,7 @@ def team_profile(team_id):
 
     member_ids = team_data.pop('member_ids')
     member_names = team_data.pop('member_names')
-    team_data['members'] = zip(member_names, member_ids)
+    team_data['members'] = tuple(zip(member_names, member_ids))
 
     account_id = common.get_account_id(session["user_name"])
     role = team_logic.get_account_team_role(account_id, team_id)
@@ -135,6 +141,52 @@ def hand_over_ownership(team_id):
 
     flash("Ownership handed over to '{}'.".format(new_owner_name), 'success')
     return redirect(url_for('team_profile', team_id=team_id))
+
+
+@app.route('/create_team', methods=['POST'])
+@account.login_required
+def create_team():
+    account_id = common.get_account_id(session["user_name"])
+    name = request.form.get('name')
+
+    if len(name) < 1:
+        flash('Team name field cannot be empty.', 'error')
+        return redirect(url_for('teams'))
+
+    category = request.form.get('category')
+
+    if category is None:
+        flash('Please select a category.', 'error')
+        return redirect(url_for('teams'))
+
+    title = team_logic.create_team(account_id, name, category)
+
+    if title == 'too_long':
+        flash('Team name is too long. Please choose a name that is between 1-30 characters.', 'error')
+    elif title == 'already_exists':
+        flash('Team name already exists, please choose another name.', 'error')
+
+    return redirect(url_for('teams'))
+
+
+@app.route('/team/<team_id>/members')
+@account.login_required
+def team_members(team_id):
+
+    team_name = team_logic.get_team_name(team_id)
+
+    if request.args.get('success') == 'inv-sent':
+        flash("'{}' was invited to team successfully.".format(request.args.get('invited-name')), 'success')
+    elif request.args.get('success') == 'inv-cancelled':
+        flash("Invite successfully cancelled.", 'success')
+
+    # all accounts except current members and invited accounts:
+    accounts_to_invite = team_logic.accounts_to_invite(team_id)
+
+    invited_accounts = team_logic.invited_accounts(team_id)
+
+    return render_template('team_members.html', team_id=team_id, team_name=team_name,
+                           accounts_to_invite=accounts_to_invite, invited_accounts=invited_accounts)
 
 
 # Register, login, logout functions:
@@ -270,6 +322,39 @@ def delete_logo(team_id):
 def delete_team(team_id):
     team_id = request.form.get('team_id')
     team_logic.delete_team(team_id)
+    return jsonify("Done")
+
+
+@app.route('/team/<team_id>/leave_team', methods=['POST'])
+@team_logic.access_level_required('not_owner')
+def leave_team(team_id):
+    account_id = common.get_account_id(session["user_name"])
+    team_id = request.form.get('team_id')
+
+    team_logic.leave_team(team_id, account_id)
+
+    return jsonify("Done")
+
+
+@app.route('/team/<team_id>/send_invite', methods=['POST'])
+@team_logic.access_level_required('manager')
+def send_invite(team_id):
+    team_id = request.form.get('team_id')
+    invited_id = request.form.get('invited_id')
+
+    team_logic.send_invite(team_id, invited_id)
+
+    return jsonify("Done")
+
+
+@app.route('/team/<team_id>/cancel_invite', methods=['POST'])
+@team_logic.access_level_required('manager')
+def cancel_invite(team_id):
+    team_id = request.form.get('team_id')
+    invited_id = request.form.get('invited_id')
+
+    team_logic.cancel_invite(team_id, invited_id)
+
     return jsonify("Done")
 
 

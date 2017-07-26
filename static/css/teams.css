@@ -7,6 +7,21 @@ table {
 td, th {
     border: 1px solid black;
     padding: 5px;
+    background-color: #1E1E1E;
+    color: white;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+th {
+    padding: 8px;
+}
+
+td a, td img {
+    display: inline-block;
+    text-align: center;
+    width: 40px;
+    float: none !important;
 }
 
 .main-content {
@@ -22,4 +37,32 @@ button {
     /*color: white;*/
     /*border: 1px solid #52a74f;*/
     min-width: 150px;
+}
+
+.leave-team-form {
+    display:none;
+}
+
+.inactive {
+    filter: grayscale(100%);
+}
+
+#teams {
+    margin-bottom: 25px;
+}
+
+select {
+    display: block;
+    padding: 5px;
+    margin: 5px 0 10px 0;
+    border-radius: 5px;
+    width: 209px;
+}
+
+.icon-td {
+    width: 40px;
+}
+
+.role-td {
+    width: 70px;
 }

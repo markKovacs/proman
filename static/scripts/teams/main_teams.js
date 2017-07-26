@@ -19,6 +19,12 @@ app.init = function() {
     app.teams.newOwnerConfirmListener();
     app.teams.deleteTeamButtonListener();
     app.teams.deleteTeamConfirmListener();
+    app.teams.leaveTeamButtonListener();
+    app.teams.leaveTeamConfirmListener();
+    app.teams.okButtonListener();
+    app.teams.newTeamButtonListener();
+    app.teams.sendInviteButtonListener();
+    app.teams.cancelInviteListener();
 };
 
 $(document).ready(app.init());

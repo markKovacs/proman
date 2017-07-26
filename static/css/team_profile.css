@@ -28,6 +28,10 @@ input, textarea {
     font-weight: normal;
 }
 
+#team-description {
+    margin-bottom: 0;
+}
+
 #submit-edit-team {
     display: none;
     margin-bottom: 40px;
@@ -153,6 +157,7 @@ label {
 #logo-outer {
     position: relative;
     width: 200px;
+    margin-top: 20px;
 }
 
 #delete-image:hover {

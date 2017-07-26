@@ -82,10 +82,11 @@ app.teams = {
 
     switchToPlaceholderImage: function () {
         $('#profile-pic').attr('src', '/static/images/placeholder-logo.png');
+        $('#delete-image').remove();
     },
 
     flashDeletedLogo: function () {
-        $('#team-profile h1').after(`<p class="success">Team logo has been deleted.</p>`);
+        $('#team-profile h4').after(`<p class="success">Team logo has been deleted.</p>`);
         $('#modal-background').hide();
         $('#modal-content').empty();
     },
@@ -257,6 +258,74 @@ app.teams = {
                 $('#modal-background').hide();
                 $('#modal-content').empty();
             }
+        });
+    },
+
+    leaveTeamButtonListener: function () {
+        $('#teams').on('click', '.leave-team-img', function () {
+            var teamId = $(this).data('team-id');
+            var teamName = $(this).data('team-name');
+            
+            if ($(this).hasClass('inactive')) {
+                $('#modal-content').append(`
+                    <span class="close">&times;</span>
+                    <p id="confirm-question">You cannot leave the team named as '${teamName}' because you are the owner of it. Please hand over ownership first.</p>
+                    <div class="confirm-buttons">
+                        <div id="okay">OK</div>
+                    </div>
+                `);
+            } else {
+                $('#modal-content').append(`
+                    <span class="close">&times;</span>
+                    <p id="confirm-question">Are you sure you want to leave the team named as '${teamName}'?</p>
+                    <div class="confirm-buttons">
+                        <div id="confirm-leave-team" data-team-id="${teamId}" data-team-name="${teamName}">Confirm</div>
+                        <div id="cancel">Cancel</div>
+                    </div>
+                `);
+            }
+
+            $('#modal-background').show();
+        });
+    },
+
+    leaveTeamConfirmListener: function () {
+        $('#modal-content').on('click', '#confirm-leave-team', function () {
+            var teamId = $(this).data('team-id');
+            var teamName = $(this).data('team-name');
+            app.dataHandler.leaveTeam(teamId, teamName);
+        });
+    },
+
+    okButtonListener: function () {
+        $('#modal-content').on('click', '#okay', function() {
+            $('#modal-content').empty();
+            $('#modal-background').hide();
+
+            $('#ownership-manager').hide();
+        });
+    },
+
+    newTeamButtonListener: function () {
+        $('#new-team-button').on('click', function() {
+            $('#new-team-form').slideToggle(300);
+            $('#new-team-name').focus();
+        });
+    },
+
+    sendInviteButtonListener: function () {
+        $('#send-invite').on('click', function() {
+            var sendInvTo = $('#send-invite-input').val().split(' - ');
+            var sendInvToId = Number(sendInvTo[0]);
+            var sendInvToName = sendInvTo[1];
+            app.dataHandler.sendInvite(sendInvToId, sendInvToName);
+        });
+    },
+
+    cancelInviteListener: function () {
+        $('#team-members').on('click', '.cancel-invite', function() {
+            var invitedId = $(this).data('invited-id');
+            app.dataHandler.cancelInvite(invitedId, teamId);
         });
     }
 };

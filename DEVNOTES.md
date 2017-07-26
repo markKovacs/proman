@@ -3,13 +3,29 @@
 
 ## NEXT
 
-- leave team (only if not owner, displayed on teams page, last column)
-
-- teams page:
-    + create team
-    + manage members
+- manage members:
+    + send invites
+    + revoke sent invites
+    + accept/decline requests
+    + manage existing members (name - role pairs)
+        - change role (only of members, rest is fixed as editor)
 
 - FAQ: explaining roles and functions of ProMan
+
+- manager and owner should be editor of all team boards at all times (board connections automatically added if promoted to manager by owner)
+- only owner can promote someone to manager
+- owner should also get editorship over all boards automatically
+- or maybe if someone is owner or manager, they do not need board connections at all, they skip that part and get it even though!!!!
+
+- dashboard could be have these features:
+    + every X seconds new stories prepended on top (almost like fb)
+    + on scrolling down, older stories will be loaded
+
+- create some sort of "log" table that logs all notable activity for dashboard
+
+- messsages MESSAGE LOL!!!!
+
+- profile, edit profile, accept/decline invites, send requests, cancel requests
 
 ## General
 

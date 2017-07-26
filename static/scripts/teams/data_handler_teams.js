@@ -40,5 +40,58 @@ app.dataHandler = {
                 window.location.replace('/login?error=timedout');
             }
         });
+    },
+
+    leaveTeam: function (teamId, teamName) {
+        $.ajax({
+            url: `/team/${teamId}/leave_team`,
+            data: {
+                team_id: teamId
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                window.location.replace(`/teams?success=team-left&name=${teamName}`);
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    sendInvite: function (invitedAccId, invitedAccName) {
+        $.ajax({
+            url: `/team/${teamId}/send_invite`,
+            data: {
+                team_id: teamId,
+                invited_id: invitedAccId
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                window.location.replace(`/team/${teamId}/members?success=inv-sent&invited-name=${invitedAccName}`);
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    cancelInvite: function (invitedId, teamId) {
+        $.ajax({
+            url: `/team/${teamId}/cancel_invite`,
+            data: {
+                team_id: teamId,
+                invited_id: invitedId
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                window.location.replace(`/team/${teamId}/members?success=inv-cancelled`);
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
     }
 };

@@ -93,7 +93,7 @@ DROP TABLE IF EXISTS public.teams;
 DROP SEQUENCE IF EXISTS public.teams_id_seq;
 CREATE TABLE teams (
     id serial NOT NULL,
-    name varchar(30) UNIQUE,
+    name varchar(30) UNIQUE CHECK (char_length(name) >= 1),
     category_id int DEFAULT 0 NOT NULL,
     description varchar(255),
     image varchar(100),
@@ -166,7 +166,7 @@ DROP SEQUENCE IF EXISTS public.messages_id_seq;
 CREATE TABLE messages (
     id serial NOT NULL,
     sender int CHECK(sender != receiver),
-    receiver int,
+    receiver int CHECK(receiver != sender),
     read boolean DEFAULT false NOT NULL,
     type varchar(10) CHECK(type IN ('message', 'notification')),
     created timestamp without time zone DEFAULT now() NOT NULL
@@ -345,7 +345,7 @@ INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.',
 INSERT INTO teams VALUES (2, 'Team Title 2', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO teams VALUES (3, 'Team Title 3', 3, 'We like to do anything.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO teams VALUES (4, 'Team Title 4', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (5, 'Team Title 5', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (5, 'Team Title dsdsdsdsd sddsdsd 5', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 SELECT pg_catalog.setval('teams_id_seq', 5, true);
 
 
@@ -356,4 +356,4 @@ INSERT INTO accounts_teams VALUES (4, 5, 3, 'owner', '2017-06-24 10:25:32', '201
 INSERT INTO accounts_teams VALUES (5, 1, 2, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (6, 1, 1, 'manager', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (7, 2, 1, 'member', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-SELECT pg_catalog.setval('accounts_teams_id_seq', 5, true);
+SELECT pg_catalog.setval('accounts_teams_id_seq', 7, true);

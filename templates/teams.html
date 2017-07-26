@@ -33,45 +33,76 @@
         <div class="row">
             <div class="col-sm-12">
                 <button id="new-team-button">Create Team</button>
+                <form action="{{ url_for('create_team') }}" method="POST" id="new-team-form">
+                    <input type="text" name="name" id="new-team-name">
+                    <select name="category" id="category-select" class="category-choice">
+                        <option selected disabled>Choose category...</option>
+                        {% for category in categories %}
+                        {% if category != 'unselected' %}
+                        <option>{{ category }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                    <input type="submit" id="new-team-submit" value="Submit">
+                </form>
             </div>
         </div>
 
         <!-- Teams Table Content -->
         <div class="row">
             <div class="col-sm-12">
+
                 {% if teams_data %}
                 <table>
+
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th>My Role</th>
-                            <th>Team Profile</th>
-                            <th>Manage Members</th>
+                            <th class="role-td">Role</th>
+                            <th class="icon-td">Details</th>
+                            <th class="icon-td">Members</th>
+                            <th class="icon-td">Leave</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {% for team in teams_data %}
                         <tr>
                             <td>{{ team.id }}</td>
-                            <td>{{ team.name }}</td>
-                            <td>{{ team.role }}</td>
-                            <td>
+                            <td class="team-name-td">{{ team.name }}</td>
+                            <td class="role-td">{{ team.role }}</td>
+
+                            <!-- Team profile -->
+                            <td class="icon-td">
                                 <a href="{{ url_for('team_profile', team_id=team.id) }}">
                                     <img class="details" src="{{ url_for('static', filename='images/details.svg') }}" alt="Details">
                                 </a>
                             </td>
-                            <td>{{ team.acc_team_id }}</td>
+
+                            <!-- Team members -->
+                            <td class="icon-td">
+                                <a href="{{ url_for('team_members', team_id=team.id) }}">
+                                    <img class="members" src="{{ url_for('static', filename='images/members.svg') }}" alt="Members">
+                                </a>
+                            </td>
+
+                            <!-- Leave team -->
+                            <td class="icon-td">
+                                <img class="leave-team-img {{ 'inactive' if team.role == 'owner' else '' }}" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Leave" data-team-id="{{ team.id }}" data-team-name="{{ team.name }}">
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
+
                 </table>
+
                 {% else %}
                 <p>You are not part of any teams yet. Create or join one by browsing.</p>
                 {% endif %}
+
             </div>
         </div>
-
     </div>
 
 {% endblock %}

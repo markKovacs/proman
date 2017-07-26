@@ -40,9 +40,9 @@ textarea {
     top: 8px;
 }
 
-.delete, .details, .edit-submit-button {
+.delete, .details, .edit-submit-button, .members, .leave-team-img {
     float: right;
-    width: 35px;
+    width: 30px;
     margin: 0;
     padding: 5px;
     border-radius: 10px;
@@ -53,12 +53,16 @@ textarea {
     -ms-user-select: none;
 }
 
-.delete:hover {
+.leave-team-img {
+    cursor: pointer;
+}
+
+.delete:hover, .leave-team-img:hover {
     background-color: rgba(255,190,190,1.0);
     border: 1px solid rgba(255,190,190,1.0);
 }
 
-.details:hover {
+.details:hover, .members:hover {
     background-color: rgba(190,190,255,1.0);
     border: 1px solid rgba(190,190,255,1.0);
 }
@@ -171,11 +175,11 @@ h2 {
     font-weight: bold;
 }
 
-#new-board-form {
+#new-board-form, #new-team-form {
     margin-bottom: 15px;
 }
 
-#new-board-button, #new-card-button {
+#new-board-button, #new-card-button, #new-team-button {
     padding: 15px;
     margin: 0px 5px 15px 0px;
     background-color: #52a74f;
@@ -186,7 +190,7 @@ h2 {
     min-width: 150px;
 }
 
-#new-board-button:hover, #new-card-button:hover {
+#new-board-button:hover, #new-card-button:hover, #new-team-button:hover {
     background-color: #24A12B;
 }
 
@@ -230,7 +234,7 @@ h2 {
     font-weight: bold;
 }
 
-#new-board-entry, #new-card-entry {
+#new-board-entry, #new-card-entry, #new-team-submit {
     padding: 8px;
     background-color: #3d3d3d;
     border-radius: 3px;
@@ -239,6 +243,7 @@ h2 {
     color: white;
     border: 1px solid #1f1f1f;
     margin: 0px 0px 5px 5px;
+    width: 100px;
 }
 
 .row:first-child {
@@ -250,7 +255,7 @@ h2 {
     margin-top: 10px;
 }
 
-#new-board-form, #new-card-form {
+#new-board-form, #new-card-form, #new-team-form {
     display: none;
 }
 
@@ -306,6 +311,7 @@ p.login_error, p.register_error, p.error {
     border-radius: 10px;
     position: relative;
     font-size: 1.2em;
+    width: 90%;
 }
 
 .modal-title {
@@ -906,7 +912,7 @@ p#confirm-question {
     margin: 30px auto;
 }
 
-#confirm, #cancel, #confirm-new-owner, #confirm-delete-team {
+#confirm, #cancel, #confirm-new-owner, #confirm-delete-team, #confirm-leave-team, #okay {
     width: 120px;
     float: left;
     padding: 12px;
@@ -918,10 +924,15 @@ p#confirm-question {
     cursor: pointer;
 }
 
-#confirm, #confirm-new-owner, #confirm-delete-team {
+#confirm, #confirm-new-owner, #confirm-delete-team, #confirm-leave-team, #okay {
     margin-right: 30px;
     background-color: #52a74f;
     border: 1px solid #52a74f;
+}
+
+#okay {
+    margin: 30px auto;
+    float: none;
 }
 
 #cancel {
@@ -934,7 +945,7 @@ p#confirm-question {
     border-color: #A33D31;
 }
 
-#confirm:hover, #confirm-new-owner:hover, #confirm-delete-team:hover {
+#confirm:hover, #confirm-new-owner:hover, #confirm-delete-team:hover, #confirm-leave-team:hover, #okay:hover {
     background-color: #397437;
     border-color: #397437;
 }

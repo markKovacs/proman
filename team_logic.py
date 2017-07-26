@@ -24,6 +24,8 @@ def access_level_required(access_level):
                     return func(team_id)
                 if access_level == 'owner' and role == 'owner':
                     return func(team_id)
+                if access_level == 'not_owner' and role in ('member', 'manager'):
+                    return func(team_id)
 
             flash('You have no authorization to edit this page.', 'error')
             return redirect(url_for('team_profile', team_id=team_id))
@@ -209,5 +211,78 @@ def hand_over_ownership(team_id, prev_owner_id, new_owner_id):
 def delete_team(team_id):
     sql = """DELETE FROM teams WHERE id = %s;"""
     parameters = (team_id,)
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def leave_team(team_id, account_id):
+    sql = """DELETE FROM accounts_teams
+    WHERE account_id = %s AND team_id = %s AND role != 'owner';"""
+    parameters = (account_id, team_id)
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def create_team(account_id, name, category):
+    category_id = get_category_id(category)
+
+    sql = """INSERT INTO teams (name, category_id) VALUES (%s, %s)
+             RETURNING id;"""
+    parameters = (name, category_id)
+    fetch = 'cell'
+
+    try:
+        team_id = query(sql, parameters, fetch)
+    except IntegrityError:
+        return 'already_exists'
+    except DataError:
+        return 'too_long'
+
+    sql = """INSERT INTO accounts_teams (account_id, team_id, role) VALUES (%s, %s, %s);"""
+    parameters = (account_id, team_id, 'owner')
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def get_team_name(team_id):
+    sql = """SELECT name FROM teams WHERE id = %s;"""
+    parameters = (team_id,)
+    fetch = 'cell'
+    return query(sql, parameters, fetch)
+
+
+def accounts_to_invite(team_id):
+    """Return all accounts except current members or people who have unresponded invites."""
+    sql = """SELECT id, account_name AS name FROM accounts WHERE id NOT IN (
+                 SELECT account_id FROM accounts_teams WHERE team_id = %s
+                 UNION
+                 SELECT account_id FROM requests WHERE team_id = %s
+             );"""
+    parameters = (team_id, team_id)
+    fetch = 'all'
+    return query(sql, parameters, fetch)
+
+
+def send_invite(team_id, invited_id):
+    sql = """INSERT INTO requests (team_id, account_id, type) VALUES (%s, %s, %s);"""
+    parameters = (team_id, invited_id, 'invitation')
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def invited_accounts(team_id):
+    sql = """SELECT r.account_id AS id, a.account_name AS name
+             FROM requests AS r
+             INNER JOIN accounts AS a
+                ON a.id = r.account_id
+             WHERE team_id = %s;"""
+    parameters = (team_id,)
+    fetch = 'all'
+    return query(sql, parameters, fetch)
+
+
+def cancel_invite(team_id, account_id):
+    sql = """DELETE FROM requests WHERE team_id = %s AND account_id = %s;"""
+    parameters = (team_id, account_id)
     fetch = None
     query(sql, parameters, fetch)

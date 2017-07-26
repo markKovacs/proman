@@ -32,7 +32,7 @@ def not_loggedin(func):
             return func(*args, **kwargs)
         else:
             flash("Cannot access page. You are already logged in.", "error")
-            return redirect(url_for("boards"))
+            return redirect(url_for("dashboard"))
 
     return wrapper
 
