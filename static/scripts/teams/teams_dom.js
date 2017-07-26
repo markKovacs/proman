@@ -327,5 +327,21 @@ app.teams = {
             var invitedId = $(this).data('invited-id');
             app.dataHandler.cancelInvite(invitedId, teamId);
         });
+    },
+
+    acceptRequestListener: function () {
+        $('#team-members').on('click', '.accept-request', function () {
+            var teamId = $(this).data('team-id');
+            var accountId = $(this).data('account-id');
+            app.dataHandler.respondRequest('accept', teamId, accountId);
+        });
+    },
+
+    declineRequestListener: function () {
+        $('#team-members').on('click', '.decline-request', function () {
+            var teamId = $(this).data('team-id');
+            var accountId = $(this).data('account-id');
+            app.dataHandler.respondRequest('decline', teamId, accountId);
+        });
     }
 };

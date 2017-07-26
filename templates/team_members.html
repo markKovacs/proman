@@ -18,7 +18,8 @@
     <script> var teamId = {{ team_id }} </script>
 
     <div class="container" id="team-members">
-        <h1>Team Members of {{ team_name }}</h1>
+        <h1>{{ team_name }}</h1>
+        <h4 class="subtitle">Team Members</h4>
 
         <!-- Messages with Classes: error, success -->
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -41,8 +42,8 @@
         </div>
 
         <!-- Send Invite -->
-        <div class="row" id="team-members-outer">
-            <div class="col-sm-12" id="team-members-inner">
+        <div class="row">
+            <div class="col-sm-12">
                 <h4>Invite Users</h4>
                 {% if accounts_to_invite %}
                 <input list="all-accounts" id="send-invite-input" placeholder="Choose account...">
@@ -53,33 +54,105 @@
                 </datalist>
                 <button id="send-invite">Send</button>
                 {% else %}
-                <p>You are the only account in the system currently.</p>
+                <p>There are no more uninvited users in the ProMan network.</p>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Sent Invites (Cancel, Pagination) -->
-        <div class="row" id="team-members-outer">
-            <div class="col-sm-12" id="team-members-inner">
+        <!-- Sent Invites (Cancel) -->
+        <div class="row">
+            <div class="col-sm-12">
                 <h4>Sent Invites</h4>
                 {% if invited_accounts %}
-                {% for invited_acc in invited_accounts %}
-                <p>{{ invited_acc.id|string + ' - ' + invited_acc.name }}</p>
-                <button class="cancel-invite" data-invited-id="{{ invited_acc.id }}">Cancel</button>
-                {% endfor %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Sent</th>
+                            <th>Cancel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invited_acc in invited_accounts %}
+                        <tr>
+                            <td>{{ invited_acc.id }}</td>
+                            <td>{{ invited_acc.name }}</td>
+                            <td>{{ invited_acc.created }}</td>
+                            <td>
+                                <img class="cancel-invite" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Cancel"
+                                    data-invited-id="{{ invited_acc.id }}">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 {% else %}
                 <p>There are no invites sent out currently.</p>
                 {% endif %}
             </div>
         </div>
 
-        <!-- Join Requests (Accept/Decline, Pagination) -->
+        <!-- Join Requests (Accept/Decline) -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h4>Incoming Requests</h4>
+                {% if requests %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Sent</th>
+                            <th>Accept</th>
+                            <th>Decline</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requests %}
+                        <tr>
+                            <td>{{ request.id }}</td>
+                            <td>{{ request.name }}</td>
+                            <td>{{ request.created }}</td>
+                            <td>
+                                <img class="accept-request" src="{{ url_for('static', filename='images/submit.svg') }}" alt="Accept"
+                                    data-team-id="{{ team_id }}" data-account-id="{{ request.id }}">
+                            </td>
+                            <td>
+                                <img class="decline-request" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Decline"
+                                    data-team-id="{{ team_id }}" data-account-id="{{ request.id }}">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>There are no unresponded requests currently.</p>
+                {% endif %}
+            </div>
+        </div>
 
 
         <!-- Manage Current Members -->
         <div class="row" id="team-members-outer">
             <div class="col-sm-12" id="team-members-inner">
-                <!-- content -->
+                <h4>Current Members</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in current_members %}
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

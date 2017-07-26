@@ -1,2 +1,38 @@
+
+h1 {
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 40px;
+}
+
 .cancel-invite {
+}
+
+table {
+    margin: 30px auto;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid black;
+    padding: 5px;
+    background-color: #1E1E1E;
+    color: white;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+th {
+    padding: 8px;
+}
+
+td a, td img {
+    display: inline-block;
+    text-align: center;
+    width: 40px;
+    float: none !important;
 }

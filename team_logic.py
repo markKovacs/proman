@@ -271,12 +271,23 @@ def send_invite(team_id, invited_id):
 
 
 def invited_accounts(team_id):
-    sql = """SELECT r.account_id AS id, a.account_name AS name
+    sql = """SELECT r.account_id AS id, a.account_name AS name, r.created
              FROM requests AS r
              INNER JOIN accounts AS a
                 ON a.id = r.account_id
-             WHERE team_id = %s;"""
-    parameters = (team_id,)
+             WHERE team_id = %s AND r.type = %s;"""
+    parameters = (team_id, 'invitation')
+    fetch = 'all'
+    return query(sql, parameters, fetch)
+
+
+def get_requests(team_id):
+    sql = """SELECT r.account_id AS id, a.account_name AS name, r.created
+             FROM requests AS r
+             INNER JOIN accounts AS a
+                ON a.id = r.account_id
+             WHERE team_id = %s AND r.type = %s;"""
+    parameters = (team_id, 'request')
     fetch = 'all'
     return query(sql, parameters, fetch)
 
@@ -286,3 +297,28 @@ def cancel_invite(team_id, account_id):
     parameters = (team_id, account_id)
     fetch = None
     query(sql, parameters, fetch)
+
+
+def add_member(team_id, request_acc_id):
+    sql = """INSERT INTO accounts_teams (account_id, team_id, role) VALUES (%s, %s, %s);"""
+    parameters = (request_acc_id, team_id, 'member')
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def delete_request(team_id, request_acc_id):
+    sql = """DELETE FROM requests WHERE team_id = %s AND account_ID = %s;"""
+    parameters = (team_id, request_acc_id)
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def get_team_members(team_id):
+    sql = """SELECT at.account_id AS id, a.account_name AS name
+             FROM accounts_teams AS at
+             INNER JOIN accounts AS a
+                ON a.id = at.account_id
+             WHERE team_id = %s;"""
+    parameters = (team_id,)
+    fetch = 'all'
+    return query(sql, parameters, fetch)

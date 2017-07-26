@@ -357,3 +357,10 @@ INSERT INTO accounts_teams VALUES (5, 1, 2, 'owner', '2017-06-24 10:25:32', '201
 INSERT INTO accounts_teams VALUES (6, 1, 1, 'manager', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (7, 2, 1, 'member', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 SELECT pg_catalog.setval('accounts_teams_id_seq', 7, true);
+
+
+INSERT INTO requests (team_id, account_id, type) VALUES (1, 3, 'request');
+INSERT INTO requests (team_id, account_id, type) VALUES (4, 3, 'request');
+INSERT INTO requests (team_id, account_id, type) VALUES (5, 3, 'request');
+INSERT INTO requests (team_id, account_id, type) VALUES (5, 4, 'invitation');
+SELECT pg_catalog.setval('requests_id_seq', 4, true);

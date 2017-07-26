@@ -93,5 +93,29 @@ app.dataHandler = {
                 window.location.replace('/login?error=timedout');
             }
         });
+    },
+
+    respondRequest: function (action, teamId, accountId) {
+        console.log(teamId);
+        console.log(accountId);
+        $.ajax({
+            url: `/team/${teamId}/${action}_request`,
+            data: {
+                team_id: teamId,
+                request_acc_id: accountId
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                if (action === 'accept') {
+                    window.location.replace(`/team/${teamId}/members?success=request-accepted`);
+                } else if (action === 'decline') {
+                    window.location.replace(`/team/${teamId}/members?success=request-declined`);
+                }
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
     }
 };

@@ -179,14 +179,22 @@ def team_members(team_id):
         flash("'{}' was invited to team successfully.".format(request.args.get('invited-name')), 'success')
     elif request.args.get('success') == 'inv-cancelled':
         flash("Invite successfully cancelled.", 'success')
+    elif request.args.get('success') == 'request-accepted':
+        flash("Request accepted.", 'success')
+    elif request.args.get('success') == 'request-declined':
+        flash("Request declined.", 'success')
 
     # all accounts except current members and invited accounts:
     accounts_to_invite = team_logic.accounts_to_invite(team_id)
 
     invited_accounts = team_logic.invited_accounts(team_id)
+    requests = team_logic.get_requests(team_id)
+
+    current_members = team_logic.get_team_members(team_id)
 
     return render_template('team_members.html', team_id=team_id, team_name=team_name,
-                           accounts_to_invite=accounts_to_invite, invited_accounts=invited_accounts)
+                           accounts_to_invite=accounts_to_invite, invited_accounts=invited_accounts,
+                           requests=requests, current_members=current_members)
 
 
 # Register, login, logout functions:
@@ -354,6 +362,29 @@ def cancel_invite(team_id):
     invited_id = request.form.get('invited_id')
 
     team_logic.cancel_invite(team_id, invited_id)
+
+    return jsonify("Done")
+
+
+@app.route('/team/<team_id>/accept_request', methods=['POST'])
+@team_logic.access_level_required('manager')
+def accept_request(team_id):
+    team_id = request.form.get('team_id')
+    request_acc_id = request.form.get('request_acc_id')
+
+    team_logic.add_member(team_id, request_acc_id)
+    team_logic.delete_request(team_id, request_acc_id)
+
+    return jsonify("Done")
+
+
+@app.route('/team/<team_id>/decline_request', methods=['POST'])
+@team_logic.access_level_required('manager')
+def decline_request(team_id):
+    team_id = request.form.get('team_id')
+    request_acc_id = request.form.get('request_acc_id')
+
+    team_logic.delete_request(team_id, request_acc_id)
 
     return jsonify("Done")
 

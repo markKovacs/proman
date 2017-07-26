@@ -25,6 +25,8 @@ app.init = function() {
     app.teams.newTeamButtonListener();
     app.teams.sendInviteButtonListener();
     app.teams.cancelInviteListener();
+    app.teams.acceptRequestListener();
+    app.teams.declineRequestListener();
 };
 
 $(document).ready(app.init());
