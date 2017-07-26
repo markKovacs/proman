@@ -69,7 +69,11 @@ app.dataHandler = {
             method: 'POST',
             dataType: "json",
             success: function(response) {
-                window.location.replace(`/team/${teamId}/members?success=inv-sent&invited-name=${invitedAccName}`);
+                if (response === 'empty_input') {
+                    window.location.replace(`/team/${teamId}/members?error=empty-input`);
+                } else {
+                    window.location.replace(`/team/${teamId}/members?success=inv-sent&invited-name=${invitedAccName}`);
+                }
             },
             error: function() {
                 window.location.replace('/login?error=timedout');

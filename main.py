@@ -183,6 +183,8 @@ def team_members(team_id):
         flash("Request accepted.", 'success')
     elif request.args.get('success') == 'request-declined':
         flash("Request declined.", 'success')
+    elif request.args.get('error') == 'empty-input':
+        flash('Please select an account to send an invitation.', 'error')
 
     # all accounts except current members and invited accounts:
     accounts_to_invite = team_logic.accounts_to_invite(team_id)
@@ -349,8 +351,10 @@ def leave_team(team_id):
 def send_invite(team_id):
     team_id = request.form.get('team_id')
     invited_id = request.form.get('invited_id')
-
-    team_logic.send_invite(team_id, invited_id)
+    if int(invited_id):
+        team_logic.send_invite(team_id, invited_id)
+    else:
+        return jsonify("empty_input")
 
     return jsonify("Done")
 

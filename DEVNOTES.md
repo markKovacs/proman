@@ -3,12 +3,9 @@
 
 ## NEXT
 
-- manage members:
-    + send invites
-    + revoke sent invites
-    + accept/decline requests
-    + manage existing members (name - role pairs)
-        - change role (only of members, rest is fixed as editor)
+- remove members (owner, manager can remove members, owner can remove managers too)
+- owner can edit members/managers
+- created (formatting in tables)
 
 - FAQ: explaining roles and functions of ProMan
 

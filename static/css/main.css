@@ -40,7 +40,7 @@ textarea {
     top: 8px;
 }
 
-.delete, .details, .edit-submit-button, .members, .leave-team-img {
+.delete, .details, .edit-submit-button, .members, .leave-team-img, .cancel-invite, .decline-request, .accept-request {
     float: right;
     width: 30px;
     margin: 0;
@@ -53,11 +53,11 @@ textarea {
     -ms-user-select: none;
 }
 
-.leave-team-img {
+.leave-team-img, .cancel-invite, .decline-request, .accept-request {
     cursor: pointer;
 }
 
-.delete:hover, .leave-team-img:hover {
+.delete:hover, .leave-team-img:hover, .cancel-invite:hover, .decline-request:hover {
     background-color: rgba(255,190,190,1.0);
     border: 1px solid rgba(255,190,190,1.0);
 }
@@ -76,7 +76,7 @@ textarea {
     border: 1px solid rgba(190,190,255,1.0);
 }
 
-.submit-title:hover {
+.submit-title:hover, .accept-request:hover {
     background-color: rgba(190,255,190,1.0);
     border: 1px solid rgba(190,255,190,1.0);
 }
@@ -179,7 +179,7 @@ h2 {
     margin-bottom: 15px;
 }
 
-#new-board-button, #new-card-button, #new-team-button {
+#new-board-button, #new-card-button, #new-team-button, #send-invite {
     padding: 15px;
     margin: 0px 5px 15px 0px;
     background-color: #52a74f;
@@ -190,7 +190,7 @@ h2 {
     min-width: 150px;
 }
 
-#new-board-button:hover, #new-card-button:hover, #new-team-button:hover {
+#new-board-button:hover, #new-card-button:hover, #new-team-button:hover, #send-invite:hover {
     background-color: #24A12B;
 }
 
