@@ -139,7 +139,8 @@ CREATE TABLE accounts_boards (
     board_id int NOT NULL,
     role varchar(7) CHECK(role IN ('viewer', 'editor')),
     created timestamp without time zone DEFAULT now() NOT NULL,
-    modified timestamp without time zone DEFAULT now() NOT NULL
+    modified timestamp without time zone DEFAULT now() NOT NULL,
+    UNIQUE (account_team_id, board_id)
 );
 
 ALTER TABLE ONLY accounts_boards
@@ -310,12 +311,27 @@ INSERT INTO accounts VALUES (5, 'admin', 'pbkdf2:sha512:80000$emejRYOP$d93009f5a
 SELECT pg_catalog.setval('accounts_id_seq', 5, true);
 
 
+INSERT INTO categories VALUES (0, 'unselected');
+INSERT INTO categories VALUES (1, 'manufacturing');
+INSERT INTO categories VALUES (2, 'development');
+INSERT INTO categories VALUES (3, 'free-time');
+SELECT pg_catalog.setval('categories_id_seq', 3, true);
+
+
+INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.', 'team_1.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (2, 'Team Title 2', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (3, 'Team Title 3', 3, 'We like to do anything.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (4, 'Team Title 4', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (5, 'Team Title dsdsdsdsd sddsdsd 5', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+SELECT pg_catalog.setval('teams_id_seq', 5, true);
+
+
 INSERT INTO boards VALUES (1, 'Active Board 1', 'A short description.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 INSERT INTO boards VALUES (2, 'Deleted Board', NULL, 'deleted', 5, NULL, '2017-06-23 10:25:33', '2017-06-23 10:25:33');
 INSERT INTO boards VALUES (3, 'Active Board 2', 'A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well. A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 INSERT INTO boards VALUES (4, 'Active Board 3', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (5, 'Active Board 4', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (6, 'Active Board 5', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (5, 'Active Board 4', NULL, 'active', NULL, 1, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (6, 'Active Board 5', NULL, 'active', NULL, 1, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 SELECT pg_catalog.setval('boards_id_seq', 6, true);
 
 
@@ -334,21 +350,6 @@ INSERT INTO cards VALUES (12, 'New Card 12', NULL, 12, 'in_progress', 3, 'admin'
 SELECT pg_catalog.setval('cards_id_seq', 12, true);
 
 
-INSERT INTO categories VALUES (0, 'unselected');
-INSERT INTO categories VALUES (1, 'manufacturing');
-INSERT INTO categories VALUES (2, 'development');
-INSERT INTO categories VALUES (3, 'free-time');
-SELECT pg_catalog.setval('categories_id_seq', 3, true);
-
-
-INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.', 'team_1.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (2, 'Team Title 2', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (3, 'Team Title 3', 3, 'We like to do anything.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (4, 'Team Title 4', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (5, 'Team Title dsdsdsdsd sddsdsd 5', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-SELECT pg_catalog.setval('teams_id_seq', 5, true);
-
-
 INSERT INTO accounts_teams VALUES (1, 5, 1, 'owner', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (2, 5, 5, 'member', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 INSERT INTO accounts_teams VALUES (3, 5, 4, 'manager', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
@@ -364,3 +365,9 @@ INSERT INTO requests (team_id, account_id, type) VALUES (4, 3, 'request');
 INSERT INTO requests (team_id, account_id, type) VALUES (5, 3, 'request');
 INSERT INTO requests (team_id, account_id, type) VALUES (5, 4, 'invitation');
 SELECT pg_catalog.setval('requests_id_seq', 4, true);
+
+
+INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (6, 5, 'editor');
+INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (6, 6, 'viewer');
+INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (7, 5, 'editor');
+SELECT pg_catalog.setval('accounts_boards_id_seq', 3, true);

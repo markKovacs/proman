@@ -66,3 +66,60 @@ select {
 .role-td {
     width: 70px;
 }
+
+table {
+    margin: 20px auto 30px auto;
+    min-width: 90%;
+    max-width: 100%;
+    border-collapse: collapse;
+}
+
+table tr:first-child{
+    min-height:40px;
+    height:40px;
+}
+
+table th {
+    text-align: center;
+    background-color: #3F3F3F;
+    color: white;
+    border: 1px solid #3F3F3F;
+    text-align: center;
+}
+
+table td {
+    border: 1px solid #3F3F3F;
+    vertical-align: middle;
+    color: #C8C8C8;
+    text-align: center;
+}
+
+table {
+    border-collapse:separate;
+    border-radius:6px;
+    -moz-border-radius:6px;
+}
+
+th {
+    border-top: none;
+}
+
+td:first-child, th:first-child {
+     border-left: none;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 5px;
+}
+
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 5px;
+}
+
+thead tr:first-child th:first-child {
+    border-top-left-radius: 5px;
+}
+
+thead tr:first-child th:last-child {
+    border-top-right-radius: 5px;
+}

@@ -271,7 +271,7 @@ def send_invite(team_id, invited_id):
 
 
 def invited_accounts(team_id):
-    sql = """SELECT r.account_id AS id, a.account_name AS name, r.created
+    sql = """SELECT r.account_id AS id, a.account_name AS name, substring(r.created::text, 1, 19) AS created
              FROM requests AS r
              INNER JOIN accounts AS a
                 ON a.id = r.account_id
@@ -282,7 +282,7 @@ def invited_accounts(team_id):
 
 
 def get_requests(team_id):
-    sql = """SELECT r.account_id AS id, a.account_name AS name, r.created
+    sql = """SELECT r.account_id AS id, a.account_name AS name, substring(r.created::text, 1, 19) AS created
              FROM requests AS r
              INNER JOIN accounts AS a
                 ON a.id = r.account_id
@@ -314,7 +314,7 @@ def delete_request(team_id, request_acc_id):
 
 
 def get_team_members(team_id):
-    sql = """SELECT at.account_id AS id, a.account_name AS name
+    sql = """SELECT at.account_id AS id, a.account_name AS name, at.role, at.id AS acc_team_id
              FROM accounts_teams AS at
              INNER JOIN accounts AS a
                 ON a.id = at.account_id
@@ -322,3 +322,70 @@ def get_team_members(team_id):
     parameters = (team_id,)
     fetch = 'all'
     return query(sql, parameters, fetch)
+
+
+def remove_member(team_id, member_id):
+    sql = """DELETE FROM accounts_teams
+             WHERE account_id = %s AND team_id = %s AND role = %s
+             RETURNING id;"""
+    parameters = (member_id, team_id, 'member')
+    fetch = 'cell'
+    try:
+        return query(sql, parameters, fetch)
+    except TypeError:
+        return None
+
+
+def change_role(team_id, member_id, new_role):
+    sql = """UPDATE accounts_teams
+             SET role = %s
+             WHERE team_id = %s AND account_id = %s;"""
+    parameters = (new_role, team_id, member_id)
+    fetch = None
+    query(sql, parameters, fetch)
+
+
+def get_boards_access(acc_team_id, team_id):
+    sql = """SELECT ab.id AS acc_board_id, ab.role, b.title, b.id AS board_id
+             FROM accounts_boards AS ab
+             INNER JOIN boards AS b
+                ON b.id = ab.board_id
+             WHERE account_team_id = %s;"""
+    parameters = (acc_team_id,)
+    fetch = 'all'
+    boards_access = query(sql, parameters, fetch)
+    if boards_access:
+        boards_access_ids = tuple(record['board_id'] for record in boards_access)
+    else:
+        boards_access_ids = (0,)
+
+    sql = """SELECT id AS board_id, title FROM boards
+             WHERE team_id = %s AND
+             id NOT IN {};""".format(boards_access_ids).replace(',)', ')')
+
+    parameters = (team_id,)
+    fetch = 'all'
+    not_accessed_boards = query(sql, parameters, fetch)
+
+    return boards_access, not_accessed_boards
+
+
+def save_boards_access_changes(acc_boards_data, acc_team_id):
+    sql = """DELETE FROM accounts_boards WHERE account_team_id = %s;"""
+    parameters = (acc_team_id,)
+    fetch = None
+    query(sql, parameters, fetch)
+
+    if acc_boards_data:
+        for data in acc_boards_data:
+            sql = """INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (%s, %s, %s);"""
+            parameters = (acc_team_id, data['board_id'], data['role'])
+            fetch = None
+            try:
+                query(sql, parameters, fetch)
+            except IntegrityError:
+                sql = """UPDATE accounts_boards SET role = %s
+                         WHERE account_team_id = %s AND board_id = %s;"""
+                parameters = (data['role'], acc_team_id, data['board_id'])
+                fetch = None
+                query(sql, parameters, fetch)

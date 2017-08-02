@@ -343,5 +343,284 @@ app.teams = {
             var accountId = $(this).data('account-id');
             app.dataHandler.respondRequest('decline', teamId, accountId);
         });
+    },
+
+    removeMemberListener: function () {
+        $('#team-members').on('click', '.remove-member-img', function () {
+            var memberId = $(this).data('member-id');
+            var teamId = $(this).data('team-id');
+            app.dataHandler.removeMember(memberId, teamId);
+        });
+    },
+
+    editRoleImageListener: function () {
+        $('#team-members').on('click', '.edit-role-img', function () {
+            $(this).addClass('submit-role-img');
+            $(this).removeClass('edit-role-img');
+            $(this).attr('src', '/static/images/submit.svg');
+
+            $(this).prev().prop('disabled', false);
+            $(this).prev().removeClass('disabled-role-select');
+            $(this).prev().focus();
+        });
+    },
+
+    submitRoleImageListener: function () {
+        $('#team-members').on('click', '.submit-role-img', function () {
+            var newRole = $(this).prev().val();
+            var memberId = $(this).data('member-id');
+            var teamId = $(this).data('team-id');
+
+            $(this).parent().next().find('img').toggleClass('inactive');
+
+            $(this).addClass('edit-role-img');
+            $(this).removeClass('submit-role-img');
+            $(this).attr('src', '/static/images/edit.svg');
+
+            $(this).prev().prop('disabled', true);
+            $(this).prev().addClass('disabled-role-select');
+
+            app.dataHandler.changeRole(teamId, memberId, newRole);
+        });
+    },
+
+    flashChangedRoleMessage: function (memberId, newRole) {
+        $('.success').remove();
+        $('.error').remove();
+        $('#team-members h4:first').after(`<p class="success">Member #${memberId} has its role changed to '${newRole}'.</p>`);
+    },
+
+    boardsAccessButtonListener: function () {
+        $('#team-members-outer').on('click', '.boards-access-img', function() {
+
+            // toggle back any others, if toggled:
+            app.teams.closeBoardsAccess();
+
+            $(this).parent().addClass('pushed-in-boards-access');
+            $(this).attr('src', '/static/images/up-arrow.svg');
+            $(this).addClass('close-boards-access');
+            $(this).removeClass('boards-access-img');
+
+            var accTeamId = $(this).data('acc-team-id');
+            var teamId = $(this).data('team-id');
+            var teamRole = $(this).data('team-role');
+            app.dataHandler.getBoardsAccess(accTeamId, teamId, teamRole);
+        });
+    },
+
+    closeBoardsAccessListener: function () {
+        $('#team-members-outer').on('click', '.close-boards-access', function() {
+            app.teams.closeBoardsAccess();
+        });
+    },
+
+    closeBoardsAccess: function () {
+        $('.board-access-tr').remove();
+        $('.boards-access-open-close').parent().removeClass('pushed-in-boards-access');
+        $('.boards-access-open-close').attr('src', '/static/images/boards.svg');
+        $('.boards-access-open-close').removeClass('close-boards-access');
+        $('.boards-access-open-close').addClass('boards-access-img');
+    },
+
+    showBoardsAccess: function (boardsAccess, notAccessedBoards, accTeamId, teamId, teamRole) {
+        $(`#at-id-${accTeamId}`).after(`
+            <tr id="submit-cancel-row" class="board-access-tr">
+                <td class="board-access-td board-access-title" colspan="5">
+                    <button id="submit-boards-access-changes" data-team-role="${teamRole}">Save</button>
+                    <button id="cancel-boards-access-changes">Cancel</button>
+                </td>
+            </tr>
+        `);
+
+        if (notAccessedBoards) {
+            var options = '';
+            for (let i = 0; i < notAccessedBoards.length; i++) {
+                options += `<option id="option-${notAccessedBoards[i].board_id}" class="boards-access-option">#${notAccessedBoards[i].board_id} - ${notAccessedBoards[i].title}</option>`;
+            }
+
+            $(`#at-id-${accTeamId}`).after(`
+                <tr id="add-board-access-row" class="board-access-tr">
+                    <td class="board-access-td dark-blue-td" colspan="4">
+                        <select id="boards-access-select">
+                            <option class="boards-access-option-default" selected disabled>Select board to add access to this account...</option>
+                            ${options}
+                        </select>
+                    </td>
+                    <td class="board-access-td add-board-access-td">
+                        <img src="/static/images/plus.svg" alt="" class="add-board-access-img" data-acc-team-id="${accTeamId}" data-team-id="${teamId}">
+                    </td>
+                </tr>
+            `);
+        } else {
+            $(`#at-id-${accTeamId}`).after(`
+                <tr id="accessed-all-boards" class="board-access-tr">
+                    <td class="board-access-td dark-blue-td" colspan="5">Account has access to all team boards.</td>
+                </tr>
+            `);
+        }
+
+        if (boardsAccess) {
+            for (let i = 0; i < boardsAccess.length; i++) {
+                $(`#at-id-${accTeamId}`).after(`
+                    <tr class="board-access-tr actual-board-access" data-board-id="${boardsAccess[i].board_id}" data-acc-team-id="${accTeamId}">
+                        <td class="board-access-td">${boardsAccess[i].board_id}</td>
+                        <td class="board-access-td" colspan="2">${boardsAccess[i].title}</td>
+                        <td class="board-access-td">
+                            <select class="board-role-select">
+                                <option ${boardsAccess[i].role === 'viewer' ? 'selected' : ''}>viewer</option>
+                                <option ${boardsAccess[i].role === 'editor' ? 'selected' : ''}>editor</option>
+                            </select>
+                        </td>
+                        <td class="board-access-td remove-board-access-td">
+                            <img class="remove-board-access-img" src="/static/images/trash_2.svg" alt="Del" data-remove-access="${boardsAccess[i].acc_board_id}">
+                        </td>
+                    </tr>
+                `);
+            }
+
+            $(`#at-id-${accTeamId}`).after(`
+                <tr id="board-access-ths" class="board-access-tr">
+                    <td class="board-access-td dark-blue-td">Board ID</td>
+                    <td class="board-access-td dark-blue-td" colspan="2">Board Title</td>
+                    <td class="board-access-td dark-blue-td">Access Level</td>
+                    <td class="board-access-td dark-blue-td">Remove</td>
+                </tr>
+            `);
+
+        } else {
+            $(`#at-id-${accTeamId}`).after(`
+                <tr class="board-access-tr">
+                    <td id="no-board-access-yet" class="board-access-td" colspan="5">Account has no access to any team related boards.</td>
+                </tr>
+            `);
+        }
+
+        $(`#at-id-${accTeamId}`).after(`
+            <tr id="board-access-title-row" class="board-access-tr" data-acc-team-id="${accTeamId}">
+                <td class="board-access-td board-access-title" colspan="5">Board access rights manager</td>
+            </tr>
+        `);
+
+        $('.board-access-td').slideDown(250);
+    },
+
+    addBoardAccessButtonListener: function () {
+        $('#team-members-outer').on('click', '.add-board-access-img', function() {
+            var selectVal = $('#boards-access-select').val();
+
+            if (!selectVal) {
+                return;
+            }
+
+            var selectValues = selectVal.replace('#', '').split(' - ');
+            var boardId = selectValues[0];
+            var boardTitle = selectValues[1];
+            var accTeamId = $(this).data('acc-team-id');
+            var teamId = $(this).data('team-id');
+
+            $(this).parent().parent().before(`
+                <tr class="board-access-tr actual-board-access" data-board-id="${boardId}" data-acc-team-id="${accTeamId}">
+                    <td class="board-access-td visible-td">${boardId}</td>
+                    <td class="board-access-td visible-td" colspan="2">${boardTitle}</td>
+                    <td class="board-access-td visible-td">
+                        <select class="board-role-select">
+                            <option selected>viewer</option>
+                            <option>editor</option>
+                        </select>
+                    </td>
+                    <td class="board-access-td visible-td remove-board-access-td">
+                        <img class="remove-board-access-img" src="/static/images/trash_2.svg" alt="Del" data-remove-access="${null}">
+                    </td>
+                </tr>
+            `);
+
+            $('#no-board-access-yet').remove();
+            $(`#option-${boardId}`).remove();
+            if ($('#boards-access-select').children().length <= 1) {
+                // no more boards so remove select+add and append paragraph with message
+                $('#add-board-access-row').after(`
+                    <tr id="accessed-all-boards" class="board-access-tr">
+                        <td class="board-access-td dark-blue-td visible-td" colspan="5">Account has access to all team boards.</td>
+                    </tr>
+                `);
+                $('#add-board-access-row').remove();
+                
+            } else {
+                // there is at least 1 unaccessed board yet so I just select the default option
+                $('#boards-access-select option:first-child').prop('selected', 'selected');
+            }
+        });
+    },
+
+    removeBoardAccessButtonListener: function () {
+        $('#team-members-outer').on('click', '.remove-board-access-img', function() {
+            var accTeamId = $(this).data('acc-team-id');
+
+            // remove row
+            var boardTitle = $(this).parent().prev().prev().text();
+            var boardId = $(this).parent().prev().prev().prev().text();
+            $(this).parent().parent().remove();
+            // if select+add is not present, add that row first
+            if (!$('#add-board-access-row').length) {
+                $('#accessed-all-boards').after(`
+                    <tr id="add-board-access-row" class="board-access-tr">
+                        <td class="board-access-td dark-blue-td visible-td" colspan="4">
+                            <select id="boards-access-select">
+                                <option class="boards-access-option-default" selected disabled>Select board to add access to this account...</option>
+                            </select>
+                        </td>
+                        <td class="board-access-td add-board-access-td visible-td">
+                            <img src="/static/images/plus.svg" alt="" class="add-board-access-img" data-acc-team-id="${accTeamId}" data-team-id="${teamId}">
+                        </td>
+                    </tr>
+                `);
+            }
+
+            $('#accessed-all-boards').remove();
+
+            // add back to options select
+            $('#boards-access-select').append(`
+                <option id="option-${boardId}" class="boards-access-option">#${boardId} - ${boardTitle}</option>
+            `);
+
+            if ($('.actual-board-access').length < 1) {
+                $('#board-access-title-row').after(`
+                    <tr class="board-access-tr">
+                        <td id="no-board-access-yet" class="board-access-td visible-td" colspan="5">Account has no access to any team related boards.</td>
+                    </tr>
+                `);
+                $('#board-access-ths').remove();
+            }
+        });
+    },
+
+    cancelBoardsAccessListener: function () {
+        $('#team-members-outer').on('click', '#cancel-boards-access-changes', function() {
+            app.teams.closeBoardsAccess();
+        });
+    },
+
+    saveBoardsAccessListener: function () {
+        $('#team-members-outer').on('click', '#submit-boards-access-changes', function() {
+            var teamRole = $(this).data('team-role');
+
+            // get all data for dataHandler function
+            var boardAccessCount = $('.actual-board-access').length;
+            var accBoardsData = new Array();
+            var accTeamId = $('#board-access-title-row').data('acc-team-id');
+
+            for (let i = 0; i < boardAccessCount; i++) {
+                let boardId = $($('.actual-board-access')[i]).data('board-id');
+                let role = $($('.board-role-select')[i]).val();
+
+                accBoardsData.push({
+                    board_id: boardId,
+                    role: role
+                });
+            }
+            
+            app.teams.closeBoardsAccess();
+            app.dataHandler.saveBoardsAccessChanges(accBoardsData, accTeamId, teamRole);
+        });
     }
 };

@@ -2,6 +2,10 @@
 # DEVELOPER NOTES
 
 ## NEXT
+- inactive class: if has inactive class, then "do not listen" on boards-access-img
+- ONLY MEMEBERS access board icon should be available
+
+- role check upon rendering team_members.html to handle client side as well
 
 - remove members (owner, manager can remove members, owner can remove managers too)
 - owner can edit members/managers

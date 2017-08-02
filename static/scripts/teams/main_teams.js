@@ -27,6 +27,15 @@ app.init = function() {
     app.teams.cancelInviteListener();
     app.teams.acceptRequestListener();
     app.teams.declineRequestListener();
+    app.teams.removeMemberListener();
+    app.teams.editRoleImageListener();
+    app.teams.submitRoleImageListener();
+    app.teams.boardsAccessButtonListener();
+    app.teams.closeBoardsAccessListener();
+    app.teams.addBoardAccessButtonListener();
+    app.teams.removeBoardAccessButtonListener();
+    app.teams.cancelBoardsAccessListener();
+    app.teams.saveBoardsAccessListener();
 };
 
 $(document).ready(app.init());

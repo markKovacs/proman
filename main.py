@@ -1,4 +1,5 @@
 
+import json
 from os import urandom
 
 from flask import (Flask, abort, flash, jsonify, redirect, render_template,
@@ -185,6 +186,10 @@ def team_members(team_id):
         flash("Request declined.", 'success')
     elif request.args.get('error') == 'empty-input':
         flash('Please select an account to send an invitation.', 'error')
+    elif request.args.get('error') == 'member-removed':
+        flash('This user cannot be removed.', 'error')
+    elif request.args.get('success') == 'member-removed':
+        flash('User has been removed.', 'success')
 
     # all accounts except current members and invited accounts:
     accounts_to_invite = team_logic.accounts_to_invite(team_id)
@@ -194,9 +199,12 @@ def team_members(team_id):
 
     current_members = team_logic.get_team_members(team_id)
 
+    account_id = common.get_account_id(session["user_name"])
+    role = team_logic.get_account_team_role(account_id, team_id)
+
     return render_template('team_members.html', team_id=team_id, team_name=team_name,
                            accounts_to_invite=accounts_to_invite, invited_accounts=invited_accounts,
-                           requests=requests, current_members=current_members)
+                           requests=requests, current_members=current_members, role=role)
 
 
 # Register, login, logout functions:
@@ -393,5 +401,55 @@ def decline_request(team_id):
     return jsonify("Done")
 
 
+@app.route('/team/<team_id>/remove_member', methods=['POST'])
+@team_logic.access_level_required('manager')
+def remove_member(team_id):
+    team_id = request.form.get('team_id')
+    member_id = request.form.get('member_id')
+
+    deleted = team_logic.remove_member(team_id, member_id)
+
+    return jsonify(deleted)
+
+
+@app.route('/team/<team_id>/change_role', methods=['POST'])
+@team_logic.access_level_required('owner')
+def change_role(team_id):
+    team_id = request.form.get('team_id')
+    member_id = request.form.get('member_id')
+    new_role = request.form.get('new_role')
+
+    if new_role != 'owner':
+        team_logic.change_role(team_id, member_id, new_role)
+
+    return jsonify("Done")
+
+
+@app.route('/team/<team_id>/get_boards_access', methods=['POST'])
+@team_logic.access_level_required('manager')
+def get_boards_access(team_id):
+    acc_team_id = request.form.get('acc_team_id')
+    team_id = request.form.get('team_id')
+
+    boards_access, not_accessed_boards = team_logic.get_boards_access(acc_team_id, team_id)
+
+    return jsonify(boards_access=boards_access, not_accessed_boards=not_accessed_boards)
+
+
+@app.route('/team/<team_id>/save_boards_access_changes', methods=['POST'])
+@team_logic.access_level_required('manager')
+def save_boards_access_changes(team_id):
+    acc_boards_data = json.loads(request.form.get('acc_boards_data'))
+    acc_team_id = request.form.get('acc_team_id')
+    team_role = request.form.get('team_role')
+
+    if team_role == 'member':
+        team_logic.save_boards_access_changes(acc_boards_data, acc_team_id)
+    else:
+        return
+
+    return jsonify("Done")
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=5000, host='0.0.0.0')
+    app.run(debug=True, port=3000, host='0.0.0.0')

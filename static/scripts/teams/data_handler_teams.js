@@ -100,8 +100,6 @@ app.dataHandler = {
     },
 
     respondRequest: function (action, teamId, accountId) {
-        console.log(teamId);
-        console.log(accountId);
         $.ajax({
             url: `/team/${teamId}/${action}_request`,
             data: {
@@ -121,5 +119,89 @@ app.dataHandler = {
                 window.location.replace('/login?error=timedout');
             }
         });
+    },
+
+    removeMember: function (memberId, teamId) {
+        $.ajax({
+            url: `/team/${teamId}/remove_member`,
+            data: {
+                team_id: teamId,
+                member_id: memberId
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(deleted) {
+                if (deleted) {
+                    window.location.replace(`/team/${teamId}/members?success=member-removed`);
+                } else {
+                    window.location.replace(`/team/${teamId}/members?error=member-removed`);
+                }
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    changeRole: function (teamId, memberId, newRole) {
+        $.ajax({
+            url: `/team/${teamId}/change_role`,
+            data: {
+                team_id: teamId,
+                member_id: memberId,
+                new_role: newRole
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                app.teams.flashChangedRoleMessage(memberId, newRole);
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    getBoardsAccess: function (accTeamId, teamId, teamRole) {
+        $.ajax({
+            url: `/team/${teamId}/get_boards_access`,
+            data: {
+                acc_team_id: accTeamId,
+                team_id: teamId
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                app.teams.showBoardsAccess(response.boards_access, response.not_accessed_boards, accTeamId, teamId, teamRole)
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    saveBoardsAccessChanges: function (accBoardsData, accTeamId, teamRole) {
+        // do stuff
+        console.log(accBoardsData);
+        console.log(JSON.stringify(accBoardsData));
+        console.log(typeof(JSON.stringify(accBoardsData)));
+        console.log(teamId);
+        $.ajax({
+            url: `/team/${teamId}/save_boards_access_changes`,
+            data: {
+                acc_boards_data: JSON.stringify(accBoardsData),
+                acc_team_id: accTeamId,
+                team_role: teamRole
+            },
+            method: 'POST',
+            dataType: "json",
+            success: function(response) {
+                console.log('saved');
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+
     }
 };

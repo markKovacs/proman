@@ -142,13 +142,36 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
+                            <th>Role</th>
+                            <th>Boards<br>Access</th>
+                            <th>Remove</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for member in current_members %}
-                        <tr>
+                        <tr id="at-id-{{ member.acc_team_id }}">
                             <td>{{ member.id }}</td>
                             <td>{{ member.name }}</td>
+                            <td>
+                                <select class="role-select disabled-role-select" disabled>
+                                    {% if member.role != 'owner' %}
+                                    {% for selected_role in ['manager', 'member'] %}
+                                    <option {{'selected' if member.role == selected_role else ''}} value="{{ selected_role }}">{{ selected_role|capitalize }}</option>
+                                    {% endfor %}
+                                    {% else %}
+                                    <option value="owner">Owner</option>
+                                    {% endif %}
+                                </select>
+                                {% if member.role != 'owner' and role == 'owner' %}
+                                <img class="edit-role-img" src="{{ url_for('static', filename='images/edit.svg') }}" alt="Edit" data-team-id="{{ team_id }}" data-member-id="{{ member.id }}">
+                                {% endif %}
+                            </td>
+                            <td class="icon-td boards-access-img-td">
+                                <img class="boards-access-img boards-access-open-close {{ 'inactive' if member.role in ('owner', 'manager') else '' }}" src="{{ url_for('static', filename='images/boards.svg') }}" alt="Boards" data-acc-team-id="{{ member.acc_team_id }}" data-team-id="{{ team_id }}" data-team-role="{{ member.role }}">
+                            </td>
+                            <td class="icon-td">
+                                <img class="remove-member-img" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Remove" data-team-id="{{ team_id }}" data-member-id="{{ member.id }}">
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

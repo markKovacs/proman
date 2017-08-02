@@ -40,7 +40,9 @@ textarea {
     top: 8px;
 }
 
-.delete, .details, .edit-submit-button, .members, .leave-team-img, .cancel-invite, .decline-request, .accept-request {
+.delete, .details, .edit-submit-button, .members, .leave-team-img, .cancel-invite, .decline-request,
+.accept-request, .remove-member-img, .edit-role-img, .submit-role-img, .boards-access-img, .close-boards-access, .add-board-access-img,
+.remove-board-access-img {
     float: right;
     width: 30px;
     margin: 0;
@@ -53,16 +55,17 @@ textarea {
     -ms-user-select: none;
 }
 
-.leave-team-img, .cancel-invite, .decline-request, .accept-request {
+.delete, .leave-team-img, .cancel-invite, .decline-request, .accept-request, .remove-member-img,
+.edit-role-img, .submit-role-img, .boards-access-img, .close-boards-access, .add-board-access-img, .remove-board-access-img {
     cursor: pointer;
 }
 
-.delete:hover, .leave-team-img:hover, .cancel-invite:hover, .decline-request:hover {
+.delete:hover, .leave-team-img:hover, .cancel-invite:hover, .decline-request:hover, .remove-member-img:hover {
     background-color: rgba(255,190,190,1.0);
     border: 1px solid rgba(255,190,190,1.0);
 }
 
-.details:hover, .members:hover {
+.details:hover, .members:hover, .boards-access-img:hover {
     background-color: rgba(190,190,255,1.0);
     border: 1px solid rgba(190,190,255,1.0);
 }
@@ -71,12 +74,20 @@ textarea {
     padding: 6.5;
 }
 
-.edit-title:hover {
+.remove-board-access-img {
+    filter: brightness(0) invert(1);
+}
+
+.add-board-access-img {
+    filter: brightness(0) invert(1);
+}
+
+.edit-title:hover, .edit-role-img:hover {
     background-color: rgba(190,190,255,1.0);
     border: 1px solid rgba(190,190,255,1.0);
 }
 
-.submit-title:hover, .accept-request:hover {
+.submit-title:hover, .accept-request:hover, .submit-role-img:hover {
     background-color: rgba(190,255,190,1.0);
     border: 1px solid rgba(190,255,190,1.0);
 }
@@ -214,7 +225,7 @@ h2 {
 
 #back-to-boards:hover {
     background-color: #38383c;
-    }
+}
 
 .card-pool-col h2 {
     padding: 8px 8px 8px 15px;
