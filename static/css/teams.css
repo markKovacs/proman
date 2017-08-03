@@ -123,3 +123,7 @@ thead tr:first-child th:first-child {
 thead tr:first-child th:last-child {
     border-top-right-radius: 5px;
 }
+
+#category-select {
+    background-color: white;
+}

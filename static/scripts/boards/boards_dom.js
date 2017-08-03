@@ -230,10 +230,10 @@ app.boards = {
 
     boardChangeSuccess: function (newModDate, boardId, newTitle) {
 
-        app.common.toastMessage(`Board #${boardId} changed successfully.`);
+        app.common.toastMessage(`Board #${boardId} saved successfully.`);
         $('.success').remove();
         $('.error').remove();
-        $('#boards h1').after(`<p class="success">Board #${boardId} changed successfully.</p>`);
+        $('#boards h1').after(`<p class="success">Board #${boardId} saved successfully.</p>`);
 
         $('#modal-modified').text(`Modified: ${newModDate.substring(0, newModDate.length - 4)}`);
         $(`#board-id-${boardId} h2`).text(newTitle);

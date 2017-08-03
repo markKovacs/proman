@@ -2,21 +2,12 @@
 # DEVELOPER NOTES
 
 ## NEXT
-- inactive class: if has inactive class, then "do not listen" on boards-access-img
-- ONLY MEMEBERS access board icon should be available
 
-- role check upon rendering team_members.html to handle client side as well
-
-- remove members (owner, manager can remove members, owner can remove managers too)
-- owner can edit members/managers
-- created (formatting in tables)
+- boards page: give option to see either personal or any of the user's team boards
+    + editor/viewer...
+    + create board...
 
 - FAQ: explaining roles and functions of ProMan
-
-- manager and owner should be editor of all team boards at all times (board connections automatically added if promoted to manager by owner)
-- only owner can promote someone to manager
-- owner should also get editorship over all boards automatically
-- or maybe if someone is owner or manager, they do not need board connections at all, they skip that part and get it even though!!!!
 
 - dashboard could be have these features:
     + every X seconds new stories prepended on top (almost like fb)
@@ -26,7 +17,7 @@
 
 - messsages MESSAGE LOL!!!!
 
-- profile, edit profile, accept/decline invites, send requests, cancel requests
+- show profile, edit profile (upload picture - shown in header), accept/decline invites, send join requests, cancel requests (maybe: check notifications/messages from here or separate menu)
 
 ## General
 

@@ -19,7 +19,8 @@
 {% block content %}
 
     <div class="container" id="boards">
-        <h1>Personal Boards</h1>
+        <h1>Boards</h1>
+
 
         <!-- Messages with Classes: error, success -->
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -32,6 +33,17 @@
         {% endif %}
         {% endwith %}
 
+        <div id="select-team-div">
+            <p>Please select which boards would you like to see.</p>
+            <select id="">
+                <option selected value="Personal Boards">Personal Boards</option>
+                <option value="Team 1">Team 1</option>
+                <option value="Team 2">Team 2</option>
+            </select>
+        </div>
+
+        <h4 id="current-boards">Currently shown: Personal Boards</h4> 
+    
     </div>
     <div class="container" id="cards"></div>
 

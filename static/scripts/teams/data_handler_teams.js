@@ -181,11 +181,6 @@ app.dataHandler = {
     },
 
     saveBoardsAccessChanges: function (accBoardsData, accTeamId, teamRole) {
-        // do stuff
-        console.log(accBoardsData);
-        console.log(JSON.stringify(accBoardsData));
-        console.log(typeof(JSON.stringify(accBoardsData)));
-        console.log(teamId);
         $.ajax({
             url: `/team/${teamId}/save_boards_access_changes`,
             data: {

@@ -347,6 +347,9 @@ app.teams = {
 
     removeMemberListener: function () {
         $('#team-members').on('click', '.remove-member-img', function () {
+            if ($(this).hasClass('inactive')) {
+                return;
+            }
             var memberId = $(this).data('member-id');
             var teamId = $(this).data('team-id');
             app.dataHandler.removeMember(memberId, teamId);
@@ -371,7 +374,13 @@ app.teams = {
             var memberId = $(this).data('member-id');
             var teamId = $(this).data('team-id');
 
-            $(this).parent().next().find('img').toggleClass('inactive');
+            if ($(this).prev().val() === 'manager') {
+                $(this).parent().next().find('img').addClass('inactive');
+                $(this).parent().next().next().find('img').addClass('inactive');
+            } else {
+                $(this).parent().next().find('img').removeClass('inactive');
+                $(this).parent().next().next().find('img').removeClass('inactive');
+            }
 
             $(this).addClass('edit-role-img');
             $(this).removeClass('submit-role-img');
@@ -392,7 +401,9 @@ app.teams = {
 
     boardsAccessButtonListener: function () {
         $('#team-members-outer').on('click', '.boards-access-img', function() {
-
+            if ($(this).hasClass('inactive')) {
+                return;
+            }
             // toggle back any others, if toggled:
             app.teams.closeBoardsAccess();
 
@@ -454,7 +465,7 @@ app.teams = {
         } else {
             $(`#at-id-${accTeamId}`).after(`
                 <tr id="accessed-all-boards" class="board-access-tr">
-                    <td class="board-access-td dark-blue-td" colspan="5">Account has access to all team boards.</td>
+                    <td class="board-access-td dark-blue-td" colspan="5">No more boards to give access to.</td>
                 </tr>
             `);
         }
@@ -490,7 +501,7 @@ app.teams = {
         } else {
             $(`#at-id-${accTeamId}`).after(`
                 <tr class="board-access-tr">
-                    <td id="no-board-access-yet" class="board-access-td" colspan="5">Account has no access to any team related boards.</td>
+                    <td id="no-board-access-yet" class="board-access-td" colspan="5">Account has no access to any boards in this team.</td>
                 </tr>
             `);
         }
@@ -540,7 +551,7 @@ app.teams = {
                 // no more boards so remove select+add and append paragraph with message
                 $('#add-board-access-row').after(`
                     <tr id="accessed-all-boards" class="board-access-tr">
-                        <td class="board-access-td dark-blue-td visible-td" colspan="5">Account has access to all team boards.</td>
+                        <td class="board-access-td dark-blue-td visible-td" colspan="5">No more boards to give access to.</td>
                     </tr>
                 `);
                 $('#add-board-access-row').remove();
@@ -586,7 +597,7 @@ app.teams = {
             if ($('.actual-board-access').length < 1) {
                 $('#board-access-title-row').after(`
                     <tr class="board-access-tr">
-                        <td id="no-board-access-yet" class="board-access-td visible-td" colspan="5">Account has no access to any team related boards.</td>
+                        <td id="no-board-access-yet" class="board-access-td visible-td" colspan="5">Account has no access to any boards in this team.</td>
                     </tr>
                 `);
                 $('#board-access-ths').remove();

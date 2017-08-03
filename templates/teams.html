@@ -59,8 +59,8 @@
                         <tr>
                             <th>ID</th>
                             <th>Name</th>
-                            <th class="role-td">Role</th>
-                            <th class="icon-td">Details</th>
+                            <th class="role-td">My Role</th>
+                            <th class="icon-td">Team<br>Profile</th>
                             <th class="icon-td">Members</th>
                             <th class="icon-td">Leave</th>
                         </tr>
@@ -89,7 +89,8 @@
 
                             <!-- Leave team -->
                             <td class="icon-td">
-                                <img class="leave-team-img {{ 'inactive' if team.role == 'owner' else '' }}" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Leave" data-team-id="{{ team.id }}" data-team-name="{{ team.name }}">
+                                {% set del_or_info = 'info' if team.role == 'owner' else 'delete' %}
+                                <img class="leave-team-img {{ 'inactive' if team.role == 'owner' else '' }}" src="{{ url_for('static', filename='images/' + del_or_info + '.svg') }}" alt="Leave" data-team-id="{{ team.id }}" data-team-name="{{ team.name }}">
                             </td>
                         </tr>
                         {% endfor %}

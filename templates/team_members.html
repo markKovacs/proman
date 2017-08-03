@@ -42,6 +42,7 @@
         </div>
 
         <!-- Send Invite -->
+        {% if role in ('owner', 'manager') %}
         <div class="row">
             <div class="col-sm-12">
                 <h4>Invite Users</h4>
@@ -58,8 +59,10 @@
                 {% endif %}
             </div>
         </div>
+        {% endif %}
 
         <!-- Sent Invites (Cancel) -->
+        {% if role in ('owner', 'manager') %}
         <div class="row">
             <div class="col-sm-12">
                 <h4>Sent Invites</h4>
@@ -92,8 +95,10 @@
                 {% endif %}
             </div>
         </div>
+        {% endif %}
 
         <!-- Join Requests (Accept/Decline) -->
+        {% if role in ('owner', 'manager') %}
         <div class="row">
             <div class="col-sm-12">
                 <h4>Incoming Requests</h4>
@@ -131,7 +136,7 @@
                 {% endif %}
             </div>
         </div>
-
+        {% endif %}
 
         <!-- Manage Current Members -->
         <div class="row" id="team-members-outer">
@@ -143,8 +148,10 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Role</th>
+                            {% if role in ('owner', 'manager') %}
                             <th>Boards<br>Access</th>
                             <th>Remove</th>
+                            {% endif %}
                         </tr>
                     </thead>
                     <tbody>
@@ -166,12 +173,14 @@
                                 <img class="edit-role-img" src="{{ url_for('static', filename='images/edit.svg') }}" alt="Edit" data-team-id="{{ team_id }}" data-member-id="{{ member.id }}">
                                 {% endif %}
                             </td>
+                            {% if role in ('owner', 'manager') %}
                             <td class="icon-td boards-access-img-td">
                                 <img class="boards-access-img boards-access-open-close {{ 'inactive' if member.role in ('owner', 'manager') else '' }}" src="{{ url_for('static', filename='images/boards.svg') }}" alt="Boards" data-acc-team-id="{{ member.acc_team_id }}" data-team-id="{{ team_id }}" data-team-role="{{ member.role }}">
                             </td>
                             <td class="icon-td">
-                                <img class="remove-member-img" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Remove" data-team-id="{{ team_id }}" data-member-id="{{ member.id }}">
+                                <img class="remove-member-img {{ 'inactive' if member.role in ('owner', 'manager') else '' }}" src="{{ url_for('static', filename='images/delete.svg') }}" alt="Remove" data-team-id="{{ team_id }}" data-member-id="{{ member.id }}">
                             </td>
+                            {% endif %}
                         </tr>
                         {% endfor %}
                     </tbody>

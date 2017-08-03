@@ -1003,3 +1003,8 @@ p.long-text {
 #space-div {
     height: 100px;
 }
+
+#select-team-div {
+    /* border: 1px solid black;
+    background-color: gray; */
+}
