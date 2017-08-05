@@ -3,26 +3,50 @@ var app = app || {};
 
 app.dataHandler = {
 
-    createNewBoard: function (boardTitle) {
+    createNewBoard: function (boardTitle, teamRole, teamId=null) {
         // Create new board, saves it.
-        $.ajax({
-            url:'/api/new_board',
-            method: 'POST',
-            data: {
-                title: boardTitle
-            },
-            dataType: 'json',
-            success: function(boardId) {
-                if (boardId === 'data_error') {
-                    app.boards.flashDataErrorMessage();
-                } else {
-                    app.boards.appendNewBoard(boardTitle, boardId);
+        if (teamRole === 'personal') {
+            $.ajax({
+                url:'/api/new_board',
+                method: 'POST',
+                data: {
+                    title: boardTitle,
+                    team_role: teamRole
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response === 'data_error') {
+                        app.boards.flashDataErrorMessage();
+                    } else {
+                        app.boards.appendNewBoard(boardTitle, response.board_id, response.team_role);
+                    }
+                },
+                error: function() {
+                    window.location.replace('/login?error=timedout');
                 }
-            },
-            error: function() {
-                window.location.replace('/login?error=timedout');
-            }
-        });
+            });
+        } else {
+            $.ajax({
+                url:`/api/new_team_board/${teamId}`,
+                method: 'POST',
+                data: {
+                    title: boardTitle,
+                    team_role: teamRole,
+                    team_id: teamId
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response === 'data_error') {
+                        app.boards.flashDataErrorMessage();
+                    } else {
+                        app.boards.appendNewBoard(boardTitle, response.board_id, response.team_role);
+                    }
+                },
+                error: function() {
+                    window.location.replace('/login?error=timedout');
+                }
+            });
+        }
     },
 
     createNewCard: function (boardId, cardTitle, boardTitle) {
@@ -72,7 +96,7 @@ app.dataHandler = {
         });
     },
 
-    getCards: function (boardId, boardTitle) {
+    getCards: function (boardId, boardTitle, teamRole) {
         $.ajax({
             dataType: "json",
             url: "/api/cards",
@@ -80,7 +104,7 @@ app.dataHandler = {
                 id: boardId
             },
             success: function(cards) {
-                app.cards.showCards(cards, boardId, boardTitle);
+                app.cards.showCards(cards, boardId, boardTitle, teamRole);
             },
             error: function() {
                 window.location.replace('/login?error=timedout');
@@ -144,10 +168,15 @@ app.dataHandler = {
         });
     },
 
-    getCurrentCardCounts: function () {
+    getCurrentCardCounts: function (teamRole, teamId) {
         $.ajax({
             url: '/api/current_card_counts',
             dataType: 'json',
+            method: 'POST',
+            data: {
+                team_role: teamRole,
+                team_id: teamId
+            },
             success: function(response) {
                 app.boards.refreshCardCount(response);
                 app.boards.switchToBoardsPage();
@@ -201,6 +230,41 @@ app.dataHandler = {
             complete: function() {
                 originalBoardTitle = undefined;
                 originalBoardDesc = undefined;
+            }
+        });
+    },
+
+    getTeamBoards: function (selectedAccTeamId, selectedTeamId) {
+        $.ajax({
+            url: `/api/get_team_boards/${selectedTeamId}`,
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                acc_team_id: selectedAccTeamId
+            },
+            success: function(response) {
+                boardsData = response.boards_data;
+                teamId = response.team_id;
+                teamRole = response.team_role;
+                app.boards.showBoards();
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            }
+        });
+    },
+
+    getPersonalBoards: function () {
+        $.ajax({
+            url: '/api/get_personal_boards',
+            dataType: 'json',
+            success: function(response) {
+                boardsData = response.boards_data;
+                teamRole = response.team_role;
+                app.boards.showBoards();
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
             }
         });
     }

@@ -1004,7 +1004,31 @@ p.long-text {
     height: 100px;
 }
 
+#team-select {
+    color: white;
+    background-color: gray;
+    padding: 10px;
+    margin: 0 auto 10px auto;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+#team-select option {
+    font-weight: bold;
+    padding: 5px;
+}
+
+hr {
+	border-top: 3px double #8c8b8b;
+}
+
+.description {
+    font-size: 1.2em;
+    text-align: center;
+}
+
 #select-team-div {
-    /* border: 1px solid black;
-    background-color: gray; */
+    text-align: center;
 }

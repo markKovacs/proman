@@ -7,13 +7,16 @@ var app = app || {};
 app.boards = {
     
     showBoards: function () {
-        // Show boards page.
-        this.appendBoardNavDiv();
+        $('.shown-boards').remove();
 
-        if (boardsData[0]) {
+        if (['personal', 'owner'].indexOf(teamRole) !== -1) {
+            this.appendBoardNavDiv();
+        }
+
+        if (boardsData && boardsData[0]) {
             this.appendBoards();
         } else {
-            $('#boards').append(`<p class="no-boards">There are no boards added yet.</p>`);
+            $('#boards').append(`<p class="no-boards shown-boards">There are no boards added yet.</p>`);
         }
     },
 
@@ -22,7 +25,7 @@ app.boards = {
         // the addition of new boards with given title.
 
         $('#boards').append(`
-            <div class="row">
+            <div class="row shown-boards">
                 <div class="col-sm-12">
                     <button id="new-board-button">New Board</button>
                     <div id="new-board-form">
@@ -37,7 +40,7 @@ app.boards = {
             $('.success').remove();
             $('.error').remove();
             var boardTitle = $('#new-board-title').val();
-            app.dataHandler.createNewBoard(boardTitle);
+            app.dataHandler.createNewBoard(boardTitle, teamRole, teamId);
         });
 
         $('#new-board-button').on('click', function() {
@@ -63,10 +66,10 @@ app.boards = {
 
     appendBoards: function () {
         // Create and append boards,insertNewCard based on stored boards data.
-        var boardsRow = $('<div class="row"></div>');
+        var boardsRow = $('<div class="row shown-boards"></div>');
 
         for (let i = 0; i < boardsData.length; i++) {
-            boardsRow.append(this.getBoardHTML(boardsData[i].title, boardsData[i].id, boardsData[i].card_count));
+            boardsRow.append(this.getBoardHTML(boardsData[i].board_title, boardsData[i].board_id, boardsData[i].card_count, teamRole));
         }
 
         $('#boards').append(boardsRow);
@@ -80,7 +83,7 @@ app.boards = {
             $('.error').remove();
             var boardId = $(this).data('board-id');
             var boardTitle = $(this).data('board-title');
-            app.dataHandler.getCards(boardId, boardTitle);
+            app.dataHandler.getCards(boardId, boardTitle, teamRole);
         });
     },
 
@@ -119,7 +122,7 @@ app.boards = {
         `);
     },
 
-    appendNewBoard: function (boardTitle, boardId) {
+    appendNewBoard: function (boardTitle, boardId, teamRole) {
         $('.no-boards').remove();
         $('#boards h1').after(`<p class="success">Board '${boardTitle}' has been created.</p>`);
 
@@ -127,10 +130,10 @@ app.boards = {
         $('#new-board-form').toggle();
 
         var initCardCount = 0;
-        $('#boards div.row:last').append(this.getBoardHTML(boardTitle, boardId, initCardCount));
+        $('#boards div.row:last').append(this.getBoardHTML(boardTitle, boardId, initCardCount, teamRole));
     },
 
-    getBoardHTML: function (boardTitle, boardId, cardCount) {
+    getBoardHTML: function (boardTitle, boardId, cardCount, teamRole) {
         return `<div class="col-sm-3">
                     <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}">
                         <div class="board-id-number">#${boardId}</div>
@@ -249,5 +252,19 @@ app.boards = {
 
         $('.modal-title').val(originalBoardTitle);
         $('textarea.modal-description').val(originalBoardDesc);
+    },
+
+    teamSelectListener: function () {
+        $('#team-select').on('change', function() {
+            var selectVal = $(this).val();
+            if (selectVal === 'personal boards') {
+                app.dataHandler.getPersonalBoards();
+            } else {
+                selectVal = selectVal.split(' - ');
+                var selectedAccTeamId = selectVal[0];
+                var selectedTeamId = selectVal[1];
+                app.dataHandler.getTeamBoards(selectedAccTeamId, selectedTeamId);
+            }
+        });
     }
 };

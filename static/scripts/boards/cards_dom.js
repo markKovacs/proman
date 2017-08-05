@@ -5,9 +5,9 @@ var app = app || {};
 
 app.cards = {
 
-    showCards: function (cardsData, boardId, boardTitle) {
+    showCards: function (cardsData, boardId, boardTitle, teamRole) {
         // Show cards on selected board.
-        this.appendCardNavDiv(boardId, boardTitle);
+        this.appendCardNavDiv(boardId, boardTitle, teamRole);
 
         if (!cardsData) {
             $('#cards').append(`
@@ -275,7 +275,7 @@ app.cards = {
         $('#cards h1').after(`<p class="success">New card with title '${cardTitle}' added.</p>`);
     },
 
-    appendCardNavDiv: function (boardId, boardTitle) {
+    appendCardNavDiv: function (boardId, boardTitle, teamRole) {
         // Create and append div responsible for
         // navigation back to boards and new card creation.
         $('#cards').append(`
@@ -283,7 +283,7 @@ app.cards = {
             <div class="row">
                 <div class="col-sm-12">
                     <button id="new-card-button">New Card</button>
-                    <button id="back-to-boards">Back to Boards</button>
+                    <button id="back-to-boards" data-team-role="${teamRole}">Back to Boards</button>
                     <div id="new-card-form">
                         <input type="text" id="new-card-title">
                         <button id="new-card-entry">Submit</button>
@@ -305,7 +305,8 @@ app.cards = {
         });
 
         $('#back-to-boards').on('click', function () {
-            app.dataHandler.getCurrentCardCounts();
+            var teamRole = $(this).data('team-role');
+            app.dataHandler.getCurrentCardCounts(teamRole, teamId);
         });
     },
 

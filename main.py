@@ -48,8 +48,10 @@ def index():
 @account.login_required
 def boards():
     account_id = common.get_account_id(session["user_name"])
-    boards_data = board_logic.load_boards(account_id)
-    return render_template('boards.html', boards_data=boards_data)
+    boards_data = board_logic.get_personal_boards(account_id)
+    account_teams = team_logic.get_account_teams(account_id)
+
+    return render_template('boards.html', boards_data=boards_data, account_teams=account_teams)
 
 
 @app.route("/teams")
@@ -206,7 +208,6 @@ def team_members(team_id):
                            accounts_to_invite=accounts_to_invite, invited_accounts=invited_accounts,
                            requests=requests, current_members=current_members, role=role)
 
-
 # Register, login, logout functions:
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -256,11 +257,27 @@ def save_new_card():
 
 @app.route('/api/new_board', methods=["POST"])
 @account.login_required
-def save_new_board():
+def save_new_personal_board():
     title = request.form.get("title")
+    team_role = request.form.get("team_role")
     account_id = common.get_account_id(session["user_name"])
-    response = board_logic.save_new_board(title, account_id)
-    return jsonify(response)
+
+    reponse = board_logic.save_new_personal_board(title, account_id)
+
+    return jsonify(board_id=reponse['id'], team_role=reponse['team_role'])
+
+
+@app.route('/api/new_team_board/<team_id>', methods=["POST"])
+@team_logic.access_level_required('owner')
+def save_new_team_board(team_id):
+    title = request.form.get("title")
+    team_role = request.form.get("team_role")
+    team_id = request.form.get("team_id")
+    account_id = common.get_account_id(session["user_name"])
+
+    reponse = board_logic.save_new_team_board(title, team_id, team_role)
+
+    return jsonify(board_id=reponse['id'], team_role=reponse['team_role'])
 
 
 @app.route('/api/new_card_title', methods=["POST"])
@@ -301,11 +318,13 @@ def delete_card():
     return jsonify("Done")
 
 
-@app.route('/api/current_card_counts')
+@app.route('/api/current_card_counts', methods=['POST'])
 @account.login_required
 def get_current_card_counts():
+    team_role = request.form.get('team_role')
+    team_id = request.form.get('team_id')
     account_id = common.get_account_id(session["user_name"])
-    boards_card_counts = board_logic.get_current_card_counts(account_id)
+    boards_card_counts = board_logic.get_current_card_counts(account_id, team_role, team_id)
     return jsonify(boards_card_counts)
 
 
@@ -449,6 +468,33 @@ def save_boards_access_changes(team_id):
         return
 
     return jsonify("Done")
+
+
+# NEW DECORATOR WILL BE NEEDED!!! or just add a new branch to it
+@app.route('/api/get_team_boards/<team_id>', methods=['POST'])
+@account.login_required  # probably this will be wrong
+def get_team_boards(team_id):
+    acc_team_id = request.form.get('acc_team_id')
+
+    account_id = common.get_account_id(session["user_name"])
+    role = team_logic.get_account_team_role(account_id, team_id)
+
+    if role in ('manager', 'owner'):
+        boards_data = board_logic.get_all_team_boards(team_id)
+    elif role == 'member':
+        boards_data = board_logic.get_accessed_team_boards(acc_team_id)
+
+    return jsonify(boards_data=boards_data, team_role=role, team_id=team_id)
+
+
+# make sure this is the right decorator
+@app.route('/api/get_personal_boards')
+@account.login_required
+def get_personal_boards():
+    account_id = common.get_account_id(session["user_name"])
+    boards_data = board_logic.get_personal_boards(account_id)
+
+    return jsonify(boards_data=boards_data, team_role='personal')
 
 
 if __name__ == '__main__':

@@ -25,6 +25,8 @@ app.init = function() {
     app.common.closeButtonListener();
     app.common.modalBackgroundListener();
     app.common.confirmDeleteEntityListeners();
+
+    app.boards.teamSelectListener();
 };
 
 $(document).ready(app.init());

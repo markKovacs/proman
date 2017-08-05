@@ -5,7 +5,11 @@
 
 {% block scripts %}
 
-    <script type="text/javascript">var boardsData = {{ boards_data|tojson }}</script>
+    <script type="text/javascript">
+        var boardsData = {{ boards_data|tojson }};
+        var teamId = {{ team_id if team_id else 'null' }};
+        var teamRole = '{{ team_role if team_role else 'personal' }}';
+    </script>
 
     <script src="{{url_for('static', filename='scripts/boards/data_handler_boards.js')}}" defer></script>
     <script src="{{url_for('static', filename='scripts/boards/common_dom.js')}}" defer></script>
@@ -33,17 +37,20 @@
         {% endif %}
         {% endwith %}
 
+        <hr>
         <div id="select-team-div">
-            <p>Please select which boards would you like to see.</p>
-            <select id="">
-                <option selected value="Personal Boards">Personal Boards</option>
-                <option value="Team 1">Team 1</option>
-                <option value="Team 2">Team 2</option>
+            <p class="description">Showing either <strong>personal boards</strong> or <strong>team related boards</strong>.</p>
+            <select id="team-select">
+                <option selected value="personal boards">Personal Boards</option>
+                {% if account_teams %}
+                {% for acc_team in account_teams %}
+                <option value="{{ acc_team.acc_team_id }} - {{ acc_team.team_id }}">{{ acc_team.team_name }} ({{ acc_team.team_role }})</option>
+                {% endfor %}
+                {% endif %}
             </select>
         </div>
+        <hr>
 
-        <h4 id="current-boards">Currently shown: Personal Boards</h4> 
-    
     </div>
     <div class="container" id="cards"></div>
 

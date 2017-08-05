@@ -3,9 +3,10 @@ from data_manager import query
 from psycopg2 import DataError, IntegrityError
 
 
-def load_boards(account_id):
+def get_personal_boards(account_id):
     """Load boards based on the user credentials."""
-    sql = """SELECT boards.id, boards.title, boards.status, COUNT(cards.title) as card_count
+    sql = """SELECT boards.id AS board_id, boards.title AS board_title,
+             COUNT(cards.title) AS card_count, 'personal' AS board_role
              FROM boards
              LEFT JOIN cards ON boards.id = cards.board_id
              WHERE account_id = %s
@@ -16,16 +17,44 @@ def load_boards(account_id):
     return boards
 
 
-def get_current_card_counts(account_id):
+def get_current_card_counts(account_id, team_role, team_id):
     """Return board ids with the current card count."""
-    sql = """SELECT boards.id as board_id, COUNT(cards.title) as card_count
-             FROM boards
-             LEFT JOIN cards ON boards.id = cards.board_id
-             WHERE account_id = %s
-             GROUP BY boards.id;"""
-    parameters = (account_id,)
-    boards_card_counts = query(sql, parameters, "all")
-    return boards_card_counts
+    if team_role == 'personal':
+        sql = """SELECT boards.id as board_id, COUNT(cards.title) as card_count
+                FROM boards
+                LEFT JOIN cards ON boards.id = cards.board_id
+                WHERE account_id = %s
+                GROUP BY boards.id;"""
+        parameters = (account_id,)
+
+    elif team_role in ('owner', 'manager'):
+        sql = """SELECT b.id AS board_id, COUNT(c.title) AS card_count
+                FROM boards AS b
+                LEFT JOIN cards AS c
+                    ON b.id = c.board_id
+                WHERE b.team_id = %s
+                GROUP BY b.id
+                ORDER BY b.created ASC;"""
+
+        parameters = (team_id,)
+
+    elif team_role == 'member':
+        sql = """SELECT b.id AS board_id, COUNT(c.title) AS card_count
+                FROM accounts_teams AS at
+                INNER JOIN accounts_boards AS ab
+                    ON at.id = ab.account_team_id
+                INNER JOIN boards AS b
+                    ON ab.board_id = b.id
+                LEFT JOIN cards AS c
+                    ON b.id = c.board_id
+                WHERE at.account_id = %s AND at.team_id = %s
+                GROUP BY b.id, ab.role
+                ORDER BY b.created ASC;"""
+
+        parameters = (account_id, team_id)
+
+    fetch = 'all'
+    return query(sql, parameters, fetch)
 
 
 def load_cards(board_id):
@@ -69,14 +98,28 @@ def save_new_card(title, board_id):
     return response
 
 
-def save_new_board(title, account_id):
+def save_new_personal_board(title, account_id):
     """Save a newly created board."""
     sql = """INSERT INTO boards (title, status, account_id)
              VALUES(%s, %s, %s)
-             RETURNING id;"""
+             RETURNING id, 'personal' AS team_role;"""
     parameters = (title, "active", account_id)
     try:
-        response = query(sql, parameters, 'cell')
+        response = query(sql, parameters, 'one')
+    except (DataError, IntegrityError) as err:
+        print('Data Error:\n{}'.format(err))
+        response = 'data_error'
+
+    return response
+
+
+def save_new_team_board(title, team_id, team_role):
+    sql = """INSERT INTO boards (title, status, team_id)
+             VALUES(%s, %s, %s)
+             RETURNING id, %s AS team_role;"""
+    parameters = (title, "active", team_id, team_role)
+    try:
+        response = query(sql, parameters, 'one')
     except (DataError, IntegrityError) as err:
         print('Data Error:\n{}'.format(err))
         response = 'data_error'
@@ -142,3 +185,38 @@ def edit_board(board_id, board_title, board_desc):
         response = 'data_error'
 
     return response
+
+
+def get_all_team_boards(team_id):
+
+    sql = """SELECT b.id AS board_id, b.title AS board_title,
+                COUNT(c.title) AS card_count, 'editor' AS board_role
+             FROM boards AS b
+             LEFT JOIN cards AS c
+                ON b.id = c.board_id
+             WHERE b.team_id = %s
+             GROUP BY b.id
+             ORDER BY b.created ASC;"""
+
+    parameters = (team_id,)
+    fetch = 'all'
+    return query(sql, parameters, fetch)
+
+
+def get_accessed_team_boards(acc_team_id):
+    sql = """SELECT b.id AS board_id, b.title AS board_title,
+                COUNT(c.title) AS card_count, ab.role AS board_role
+             FROM accounts_teams AS at
+             INNER JOIN accounts_boards AS ab
+                ON at.id = ab.account_team_id
+             INNER JOIN boards AS b
+                ON ab.board_id = b.id
+             LEFT JOIN cards AS c
+                ON b.id = c.board_id
+             WHERE at.id = %s
+             GROUP BY b.id, ab.role
+             ORDER BY b.created ASC;"""
+
+    parameters = (acc_team_id,)
+    fetch = 'all'
+    return query(sql, parameters, fetch)

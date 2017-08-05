@@ -389,3 +389,14 @@ def save_boards_access_changes(acc_boards_data, acc_team_id):
                 parameters = (data['role'], acc_team_id, data['board_id'])
                 fetch = None
                 query(sql, parameters, fetch)
+
+
+def get_account_teams(account_id):
+    sql = """SELECT at.id AS acc_team_id, at.team_id, at.role AS team_role, t.name AS team_name
+             FROM accounts_teams AS at
+             INNER JOIN teams AS t
+                ON at.team_id = t.id
+             WHERE account_id = %s;"""
+    parameters = (account_id,)
+    fetch = 'all'
+    return query(sql, parameters, fetch)

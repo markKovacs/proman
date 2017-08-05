@@ -327,11 +327,11 @@ SELECT pg_catalog.setval('teams_id_seq', 5, true);
 
 
 INSERT INTO boards VALUES (1, 'Active Board 1', 'A short description.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (2, 'Deleted Board', NULL, 'deleted', 5, NULL, '2017-06-23 10:25:33', '2017-06-23 10:25:33');
-INSERT INTO boards VALUES (3, 'Active Board 2', 'A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well. A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (4, 'Active Board 3', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (5, 'Active Board 4', NULL, 'active', NULL, 1, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-INSERT INTO boards VALUES (6, 'Active Board 5', NULL, 'active', NULL, 1, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (2, 'Active Board 2', NULL, 'active', 5, NULL, '2017-06-23 10:25:33', '2017-06-23 10:25:33');
+INSERT INTO boards VALUES (3, 'Active Board 3', 'A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well. A longer description can be read over here. I hope this will be shown approprietly and will help me configure the page well.', 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (4, 'Active Board 4', NULL, 'active', 5, NULL, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (5, 'Active Board 5', NULL, 'active', NULL, 1, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+INSERT INTO boards VALUES (6, 'Active Board 6', NULL, 'active', NULL, 5, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 SELECT pg_catalog.setval('boards_id_seq', 6, true);
 
 
@@ -370,4 +370,5 @@ SELECT pg_catalog.setval('requests_id_seq', 4, true);
 INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (6, 5, 'editor');
 INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (6, 6, 'viewer');
 INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (7, 5, 'editor');
+INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (2, 6, 'editor');
 SELECT pg_catalog.setval('accounts_boards_id_seq', 3, true);
