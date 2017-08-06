@@ -69,7 +69,7 @@ app.boards = {
         var boardsRow = $('<div class="row shown-boards"></div>');
 
         for (let i = 0; i < boardsData.length; i++) {
-            boardsRow.append(this.getBoardHTML(boardsData[i].board_title, boardsData[i].board_id, boardsData[i].card_count, teamRole));
+            boardsRow.append(this.getBoardHTML(boardsData[i].board_title, boardsData[i].board_id, boardsData[i].card_count, boardsData[i].board_role));
         }
 
         $('#boards').append(boardsRow);
@@ -83,6 +83,7 @@ app.boards = {
             $('.error').remove();
             var boardId = $(this).data('board-id');
             var boardTitle = $(this).data('board-title');
+            boardRole = $(this).data('board-role');
             app.dataHandler.getCards(boardId, boardTitle, teamRole);
         });
     },
@@ -130,12 +131,13 @@ app.boards = {
         $('#new-board-form').toggle();
 
         var initCardCount = 0;
-        $('#boards div.row:last').append(this.getBoardHTML(boardTitle, boardId, initCardCount, teamRole));
+        var boardRole = teamId ? 'editor' : 'personal';
+        $('#boards div.row:last').append(this.getBoardHTML(boardTitle, boardId, initCardCount, boardRole));
     },
 
-    getBoardHTML: function (boardTitle, boardId, cardCount, teamRole) {
+    getBoardHTML: function (boardTitle, boardId, cardCount, boardRole) {
         return `<div class="col-sm-3">
-                    <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}">
+                    <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}" data-board-role="${boardRole}">
                         <div class="board-id-number">#${boardId}</div>
                         <div class="buttons-div">
                             <img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="delete" alt="DEL">
@@ -143,6 +145,7 @@ app.boards = {
                         </div>
                         <h2 class="board-title">${boardTitle}</h2>
                         <p class="card-count" data-board-id="${boardId}">Cards: ${cardCount}</p>
+                        ${teamRole === 'member' ? '<p class="board-role">Role: ' + boardRole + '</p>' : ''}
                     </div>
                 </div>`;
     },
@@ -173,6 +176,7 @@ app.boards = {
     },
 
     switchToBoardsPage: function () {
+        boardRole = undefined;
         $('#cards').hide();
         $('#boards').show();
         $('#cards').empty();

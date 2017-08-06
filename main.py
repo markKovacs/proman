@@ -175,7 +175,6 @@ def create_team():
 @app.route('/team/<team_id>/members')
 @account.login_required
 def team_members(team_id):
-
     team_name = team_logic.get_team_name(team_id)
 
     if request.args.get('success') == 'inv-sent':
@@ -195,10 +194,8 @@ def team_members(team_id):
 
     # all accounts except current members and invited accounts:
     accounts_to_invite = team_logic.accounts_to_invite(team_id)
-
     invited_accounts = team_logic.invited_accounts(team_id)
     requests = team_logic.get_requests(team_id)
-
     current_members = team_logic.get_team_members(team_id)
 
     account_id = common.get_account_id(session["user_name"])
@@ -207,6 +204,7 @@ def team_members(team_id):
     return render_template('team_members.html', team_id=team_id, team_name=team_name,
                            accounts_to_invite=accounts_to_invite, invited_accounts=invited_accounts,
                            requests=requests, current_members=current_members, role=role)
+
 
 # Register, login, logout functions:
 
@@ -470,9 +468,8 @@ def save_boards_access_changes(team_id):
     return jsonify("Done")
 
 
-# NEW DECORATOR WILL BE NEEDED!!! or just add a new branch to it
 @app.route('/api/get_team_boards/<team_id>', methods=['POST'])
-@account.login_required  # probably this will be wrong
+@account.login_required
 def get_team_boards(team_id):
     acc_team_id = request.form.get('acc_team_id')
 
@@ -487,7 +484,6 @@ def get_team_boards(team_id):
     return jsonify(boards_data=boards_data, team_role=role, team_id=team_id)
 
 
-# make sure this is the right decorator
 @app.route('/api/get_personal_boards')
 @account.login_required
 def get_personal_boards():

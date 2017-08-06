@@ -9,6 +9,7 @@
         var boardsData = {{ boards_data|tojson }};
         var teamId = {{ team_id if team_id else 'null' }};
         var teamRole = '{{ team_role if team_role else 'personal' }}';
+        var boardRole;
     </script>
 
     <script src="{{url_for('static', filename='scripts/boards/data_handler_boards.js')}}" defer></script>

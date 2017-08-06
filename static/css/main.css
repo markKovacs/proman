@@ -1006,7 +1006,7 @@ p.long-text {
 
 #team-select {
     color: white;
-    background-color: gray;
+    background-color: rgb(60,60,60);
     padding: 10px;
     margin: 0 auto 10px auto;
     border-radius: 5px;
@@ -1031,4 +1031,9 @@ hr {
 
 #select-team-div {
     text-align: center;
+}
+
+.assigned {
+    color: #3D84DB;
+    font-weight: bold;
 }

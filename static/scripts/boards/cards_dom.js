@@ -283,7 +283,7 @@ app.cards = {
             <div class="row">
                 <div class="col-sm-12">
                     <button id="new-card-button">New Card</button>
-                    <button id="back-to-boards" data-team-role="${teamRole}">Back to Boards</button>
+                    <button id="back-to-boards">Back to Boards</button>
                     <div id="new-card-form">
                         <input type="text" id="new-card-title">
                         <button id="new-card-entry">Submit</button>
@@ -305,7 +305,6 @@ app.cards = {
         });
 
         $('#back-to-boards').on('click', function () {
-            var teamRole = $(this).data('team-role');
             app.dataHandler.getCurrentCardCounts(teamRole, teamId);
         });
     },

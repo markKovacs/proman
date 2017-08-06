@@ -3,14 +3,11 @@
 
 ## NEXT
 
-- decorators: 475, 492
+- card assignment + show it
+- decorators: 475, 492 (get_team_boards + ...)
 - check old main.py functions: some of them need new decorators (personal board editor, etc.)
 
 - request.args upon boards.html rendering, pass that into template if there is, otherwise personal boards as default value, which is passed through jinja to find which team/personal option is selected
-
-- boards page: give option to see either personal or any of the user's team boards
-    + editor/viewer...
-    + create board...
 
 - FAQ: explaining roles and functions of ProMan
 
