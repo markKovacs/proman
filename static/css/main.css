@@ -40,7 +40,7 @@ textarea {
     top: 8px;
 }
 
-.delete, .details, .edit-submit-button, .members, .leave-team-img, .cancel-invite, .decline-request,
+.delete, .details, .card-details, .edit-submit-button, .members, .leave-team-img, .cancel-invite, .decline-request,
 .accept-request, .remove-member-img, .edit-role-img, .submit-role-img, .boards-access-img, .close-boards-access, .add-board-access-img,
 .remove-board-access-img {
     float: right;
@@ -65,7 +65,7 @@ textarea {
     border: 1px solid rgba(255,190,190,1.0);
 }
 
-.details:hover, .members:hover, .boards-access-img:hover {
+.details:hover, .card-details:hover, .members:hover, .boards-access-img:hover {
     background-color: rgba(190,190,255,1.0);
     border: 1px solid rgba(190,190,255,1.0);
 }
@@ -486,22 +486,22 @@ border: 1px solid #eee;
     border: 1px solid white;
 }
 
-.modal-edit-button {
+.modal-edit-button, .modal-edit-card-button {
     background-color: #E95846;
     border-color: #E95846;
 }
 
-.modal-submit-button {
+.modal-submit-button, .modal-submit-card-button {
     background-color: #52a74f;
     border-color: #52a74f;
 }
 
-.modal-edit-button:hover {
+.modal-edit-button:hover, .modal-edit-card-button:hover {
     background-color: #A33D31;
     border-color: #A33D31;
 }
 
-.modal-submit-button:hover {
+.modal-submit-button:hover, .modal-submit-card-button:hover {
     background-color: #397437;
     border-color: #397437;
 }
@@ -667,6 +667,12 @@ However, delay the fade out process for 2.5 seconds */
 }
 
 #drop-down a {
+    color: #EBEBE6;
+    font-weight: bold;
+    font-size: 1.4em;  
+}
+
+#drop-down span {
     color: #EBEBE6;
     font-weight: bold;
     font-size: 1.4em;  
@@ -896,16 +902,16 @@ ul {
 }
 
 #done-cards-col .card-div {
-    border: 3px solid #243342;
+    border: 3px solid #003c00;
 }
 
 #done-cards-col .card-div:hover {
-    box-shadow: 0 0 20px #243342;
+    box-shadow: 0 0 20px #003c00;
 }
 
 #done-cards-col h2 {
-    background-color: #243342;
-    border-bottom: 3px solid #151E27;
+    background-color: #003c00;
+    border-bottom: 3px solid #002500;
 }
 
 .drag-enter {
@@ -1011,7 +1017,7 @@ p.long-text {
     margin: 0 auto 10px auto;
     border-radius: 5px;
     font-weight: bold;
-    font-size: 1.3em;
+    font-size: 1.05em;
     text-align: center;
 }
 
@@ -1036,4 +1042,39 @@ hr {
 .assigned {
     color: #3D84DB;
     font-weight: bold;
+}
+
+
+.unassigned {
+    color: rgb(150,150,150);
+    font-weight: bold;
+}
+
+#select-assigned-to {
+    color: #D8D8D8;
+    background-color: #3E3E3E;
+    padding: 5px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    border: 1px solid white;
+}
+
+#select-assigned-to option {
+    font-weight: bold;
+}
+
+.disabled-select {
+    color: #D8D8D8;
+    background-color: rgba(0,0,0,0) !important;
+    border: none !important;
+    /*for firefox*/
+    -moz-appearance: none;
+    /*for chrome*/
+    -webkit-appearance:none;
+}
+
+/* for IE */
+select.disabled-select::-ms-expand {
+    display: none;
 }

@@ -282,7 +282,7 @@ app.cards = {
             <h1>${boardTitle}</h1>
             <div class="row">
                 <div class="col-sm-12">
-                    <button id="new-card-button">New Card</button>
+                    ${['personal', 'editor'].indexOf(boardRole) !== -1 ? `<button id="new-card-button">New Card</button>` : ''}
                     <button id="back-to-boards">Back to Boards</button>
                     <div id="new-card-form">
                         <input type="text" id="new-card-title">
@@ -317,7 +317,8 @@ app.cards = {
 
         if (cardPool.length > 0) {
             for (let i = 0; i < cardPool.length; i++) {
-                cardPoolDiv.append(this.getCardHTML(cardPool[i].id, cardPool[i].title, boardTitle, boardId));
+                cardPoolDiv.append(this.getCardHTML(cardPool[i].id, cardPool[i].title, boardTitle, boardId,
+                    cardPool[i].assigned_to, cardPool[i].assigned_by, cardPool[i].assigned_at, cardPool[i].description));
             }
         }
 
@@ -395,16 +396,21 @@ app.cards = {
         app.dataHandler.makeDragAndDropPersistent(movedCardId, newStatus, iDsOfcardsOnBoard);
     },
 
-    getCardHTML: function (cardId, cardTitle, boardTitle, boardId, assignedTo=null) {
+    getCardHTML: function (cardId, cardTitle, boardTitle, boardId, assignedTo=null, assignedBy=null, assignedAt=null, cardDesc=null) {
         return `<div class="row card-div" id="card-div-id-${cardId}" draggable="true">
                     <div class="buttons-div">
-                        <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
+                        ${['personal', 'editor'].indexOf(boardRole) !== -1 ?
+                        `<img data-card-id="${cardId}" data-card-title="${cardTitle}" data-board-id="${boardId}" data-board-title="${boardTitle}" 
                             src="static/images/trash.svg" class="delete" alt="DEL">
                         <img class="edit-submit-button edit-title" id="card-submit-id-${cardId}" data-card-id="${cardId}" src="static/images/edit.svg" alt="EDIT">
+                        ` : ''}
+                        <img data-card-id="${cardId}" data-card-title="${cardTitle}" data-assigned-to="${assignedTo}"
+                            data-assigned-by="${assignedBy}" data-assigned-at="${assignedAt}" data-card-desc="${cardDesc}"
+                            src="static/images/details.svg" class="card-details" alt="MORE">
                     </div>
                     <div class="card-id-number">#${cardId}</div>
                     <textarea class="card-title disabled-title" id="card-title-id-${cardId}" disabled rows="3" data-card-id="${cardId}">${cardTitle}</textarea>
-                    ${assignedTo ? `<p class="assigned" data-card-id="${cardId}">${assignedTo}</p>` : ''}
+                    ${teamRole !== 'personal' ? `<p class="assigned-unassigned ${assignedTo ? 'assigned' : 'unassigned'}">${assignedTo ? assignedTo : 'unassigned'}</p>` : ''}
                 </div>`;
     },
 
@@ -451,5 +457,128 @@ app.cards = {
         $('#new-card-form').toggle();
 
         $('#cards h1').after(`<p class="error">Card title must be 1-30 characters long.</p>`);
+    },
+
+    cardDetailsListener: function () {
+        $("#cards").on("click", ".card-details", function(ev) {
+            ev.stopPropagation();
+            var cardId = $(this).data("card-id");
+            var cardTitle = $(this).data("card-title");
+            var cardDesc = $(this).data("card-desc");
+            var assignedTo = $(this).data("assigned-to");
+            var assignedBy = $(this).data("assigned-by");
+            var assignedAt = $(this).data("assigned-at");
+    
+            app.common.showLoadingModal();
+            app.cards.loadCardDetails(cardId, cardTitle, cardDesc, assignedTo, assignedBy, assignedAt);
+        });
+    },
+
+    loadCardDetails: function (cardId, cardTitle, cardDesc, assignedTo, assignedBy, assignedAt) {
+        $('#modal-content').empty();
+
+        if (teamMembers) {
+            var options = `<option value="" selected>unassigned</option>`
+            for (let i = 0; i < teamMembers.length; i++) {
+                options += `<option value="${teamMembers[i].name}" ${teamMembers[i].name === assignedTo ? 'selected' : ''}>#${teamMembers[i].id} - ${teamMembers[i].name}</option>`;
+            }
+        }
+
+        $('#modal-content').append(`
+            <span class="close">&times;</span>
+            <div class="modal-board-id-number">#${cardId}</div>
+            <textarea class="modal-title" disabled rows="2">${cardTitle}</textarea>
+            ${teamMembers ? `<label class="modal-description" for="select-assigned-to">Assigned to</label>
+                <select disabled class="disabled-select" id="select-assigned-to">${options}</select>` : ''}
+            <label class="modal-description" for="mod-desc">Description</label>
+            <textarea id="mod-desc" class="modal-description" placeholder="No description found."
+                disabled rows="5">${cardDesc ? cardDesc : ''}</textarea>
+            ${['personal', 'editor'].indexOf(boardRole) !== -1 ?
+            `<div class="modal-edit-submit-button-cards modal-edit-card-button" data-entity-id="${cardId}">Edit</div>`
+            : ''}
+        `);
+    },
+
+    editCardListener: function () {
+        $('#modal-content').on('click', '.modal-edit-card-button', function(ev) {
+            ev.stopPropagation();
+
+            originalCardTitle = $('.modal-title').val();
+            originalCardDesc = $('textarea.modal-description').val();
+
+            $('.modal-title').prop('disabled', false);
+            $('.modal-title').addClass('enabled-modal-title');
+            $('textarea.modal-description').prop('disabled', false);
+            $('textarea.modal-description').addClass('enabled-modal-description');
+
+            $('#select-assigned-to').prop('disabled', false);
+            $('#select-assigned-to').removeClass('disabled-select');
+
+            $('.modal-title').focus();
+            $('.modal-title').val('');
+            $('.modal-title').val(originalCardTitle);
+
+            $(this).text('Submit');
+            $(this).addClass('modal-submit-card-button');
+            $(this).removeClass('modal-edit-card-button');
+        });
+    },
+
+    submitCardListener: function () {
+        $('#modal-content').on('click', '.modal-submit-card-button', function(ev) {
+            ev.stopPropagation();
+
+            var cardId = $(this).data('entity-id');
+            var newTitle = $('.modal-title').val();
+            var newDesc = $('textarea.modal-description').val();
+            var newAssignee = $('#select-assigned-to').val();
+
+            $('.modal-title').prop('disabled', true);
+            $('.modal-title').removeClass('enabled-modal-title');
+            $('textarea.modal-description').prop('disabled', true);
+            $('textarea.modal-description').removeClass('enabled-modal-description');
+
+            $('#select-assigned-to').prop('disabled', true);
+            $('#select-assigned-to').addClass('disabled-select');
+
+            $(this).text('Edit');
+            $(this).removeClass('modal-submit-card-button');
+            $(this).addClass('modal-edit-card-button');
+
+            app.dataHandler.editCardDetails(cardId, newTitle, newDesc, newAssignee);
+        });
+    },
+
+    cardChangeSuccess: function (newModDate, cardId, newTitle, newAssignee, newDesc) {
+        $(`#card-div-id-${cardId} .card-details`).data('card-title', newTitle);
+        $(`#card-div-id-${cardId} .card-details`).data('card-desc', newDesc);
+        $(`#card-div-id-${cardId} .card-details`).data('assigned-to', newAssignee);
+
+        app.common.toastMessage(`Card #${cardId} saved successfully.`);
+        $('.success').remove();
+        $('.error').remove();
+        $('#cards h1').after(`<p class="success">Card #${cardId} saved successfully.</p>`);
+
+        // $('#modal-modified').text(`Modified: ${newModDate.substring(0, newModDate.length - 4)}`);
+        $(`#card-div-id-${cardId} textarea`).val(newTitle);
+        $(`#card-div-id-${cardId} .assigned-unassigned`).text(newAssignee ? newAssignee : 'unassigned');
+        if (newAssignee) {
+            $(`#card-div-id-${cardId} .assigned-unassigned`).addClass('assigned');
+            $(`#card-div-id-${cardId} .assigned-unassigned`).removeClass('unassigned');
+        } else {
+            $(`#card-div-id-${cardId} .assigned-unassigned`).addClass('unassigned');
+            $(`#card-div-id-${cardId} .assigned-unassigned`).removeClass('assigned');
+        }
+    },
+
+    cardChangeFail: function () {
+
+        app.common.toastMessage(`Wrong input. Title must be 1-30 characters long, while description cannot exceed 255 characters.`);
+        $('.success').remove();
+        $('.error').remove();
+        $('#cards h1').after(`<p class="error">Wrong input. Title must be 1-30 characters long, while description cannot exceed 255 characters.</p>`);
+
+        $('.modal-title').val(originalCardTitle);
+        $('textarea.modal-description').val(originalCardDesc);
     }
 };

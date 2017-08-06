@@ -1,17 +1,40 @@
 
 # DEVELOPER NOTES
 
+## Presentation
+
+1. User Interface Design
+2. Technologies
+    - lines of code
+    - what for
+3. Motivation/Goal
+4. Future Plans
+    - Newsfeed
+    - Search (Teams, Accounts)
+    - Notifications
+    - Messages
+    - User profiles (+ accept invitations)
+5. Background / Foreword
+6. Difficulties / Solutions
+7. Differences (Improvements)
+8. Time spent on project
+
+
+
+
 ## NEXT
 
-- card assignment + show it
-- decorators: 475, 492 (get_team_boards + ...)
-- check old main.py functions: some of them need new decorators (personal board editor, etc.)
+- based on team role, remove buttons client side if member/manager
 
-- request.args upon boards.html rendering, pass that into template if there is, otherwise personal boards as default value, which is passed through jinja to find which team/personal option is selected
+- card details listener:
+    + id, title, details, created, modified, assigned to, assigned by, assigned when
+    + while editing, assigned to can be modified from select (all team members)
+
+- validation/decorators where signed in main.py (client-side done)
 
 - FAQ: explaining roles and functions of ProMan
 
-- dashboard could be have these features:
+- dashboard/news feed could be have these features:
     + every X seconds new stories prepended on top (almost like fb)
     + on scrolling down, older stories will be loaded
 

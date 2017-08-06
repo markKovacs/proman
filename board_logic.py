@@ -57,13 +57,59 @@ def get_current_card_counts(account_id, team_role, team_id):
     return query(sql, parameters, fetch)
 
 
-def load_cards(board_id):
+def load_personal_cards(board_id, account_id):
     """Load cards related to the given board id."""
-    sql = """SELECT id, title, card_order, status FROM cards
-             WHERE board_id = %s;"""
+    sql = """SELECT c.id, c.title, c.card_order, c.status,
+             c.created, c.modified, c.description,
+             c.assigned_to, c.assigned_by, c.assigned_at
+             FROM cards AS c
+             INNER JOIN boards AS b
+                ON b.id = c.board_id
+             WHERE c.board_id = %s AND b.account_id = %s;"""
+    parameters = (board_id, account_id)
+    fetch = 'all'
+    return query(sql, parameters, fetch)
+
+
+def load_team_cards(board_id, account_id):
+    sql = """SELECT team_id FROM boards WHERE id = %s;"""
     parameters = (board_id,)
-    cards = query(sql, parameters, "all")
+    fetch = 'cell'
+    team_id = query(sql, parameters, fetch)
+
+    sql = """SELECT id, role FROM accounts_teams
+             WHERE account_id = %s AND team_id = %s;"""
+    parameters = (account_id, team_id)
+    fetch = 'one'
+    acc_team = query(sql, parameters, fetch)
+    acc_team['id']
+    acc_team['role']
+
+    if acc_team['role'] in ('owner', 'manager'):
+        cards = get_team_cards(board_id)
+
+    elif acc_team['role'] == 'member':
+        sql = """SELECT role FROM accounts_boards
+                 WHERE account_team_id = %s AND board_id = %s;"""
+        parameters = (acc_team['id'], board_id)
+        fetch = 'cell'
+        board_role = query(sql, parameters, fetch)
+
+        if board_role in ('viewer', 'editor'):
+            cards = get_team_cards(board_id)
+
     return cards
+
+
+def get_team_cards(board_id):
+    """Load cards related to the given board id."""
+    sql = """SELECT c.id, c.title, c.card_order, c.status,
+             c.created, c.modified, c.description,
+             c.assigned_to, c.assigned_by, c.assigned_at
+             FROM cards AS c WHERE c.board_id = %s;"""
+    parameters = (board_id,)
+    fetch = 'all'
+    return query(sql, parameters, fetch)
 
 
 def save_new_card_title(card_id, title):
@@ -176,6 +222,25 @@ def edit_board(board_id, board_title, board_desc):
     sql = """UPDATE boards SET title = %s, description = %s WHERE id = %s
              RETURNING modified;"""
     parameters = (board_title, board_desc, board_id)
+    fetch = 'cell'
+
+    try:
+        response = query(sql, parameters, fetch)
+    except (DataError, IntegrityError) as err:
+        print('Data Error:\n{}'.format(err))
+        response = 'data_error'
+
+    return response
+
+
+def edit_card(card_id, card_title, card_desc, assigned_to):
+    if not assigned_to:
+        assigned_to = None
+
+    sql = """UPDATE cards SET title = %s, description = %s, assigned_to = %s
+             WHERE id = %s
+             RETURNING modified;"""
+    parameters = (card_title, card_desc, assigned_to, card_id)
     fetch = 'cell'
 
     try:

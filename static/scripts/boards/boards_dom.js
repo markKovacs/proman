@@ -119,7 +119,7 @@ app.boards = {
 
             <label class="modal-description" for="mod-desc">Description</label>  
             <textarea id="mod-desc" class="modal-description" placeholder="No description found." disabled rows="5">${board.description ? board.description : ''}</textarea>
-            <div class="modal-edit-submit-button-boards modal-edit-button" data-entity-id="${board.id}">Edit</div>
+            ${['personal', 'owner'].indexOf(teamRole) !== -1 ? `<div class="modal-edit-submit-button-boards modal-edit-button" data-entity-id="${board.id}">Edit</div>` : ''}
         `);
     },
 
@@ -140,7 +140,7 @@ app.boards = {
                     <div class="board-div" id="board-id-${boardId}" data-board-id="${boardId}" data-board-title="${boardTitle}" data-board-role="${boardRole}">
                         <div class="board-id-number">#${boardId}</div>
                         <div class="buttons-div">
-                            <img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="delete" alt="DEL">
+                            ${['personal', 'owner'].indexOf(teamRole) !== -1 ? `<img data-board-id="${boardId}" data-board-title="${boardTitle}" src="static/images/trash.svg" class="delete" alt="DEL">` : ''}
                             <img data-board-id="${boardId}" src="static/images/details.svg" class="details" alt="MORE">
                         </div>
                         <h2 class="board-title">${boardTitle}</h2>
@@ -249,10 +249,10 @@ app.boards = {
 
     boardChangeFail: function () {
 
-        app.common.toastMessage(`Wrong input. Title must be 1-30 characters long, while title cannot exceed 255 characters.`);
+        app.common.toastMessage(`Wrong input. Title must be 1-30 characters long, while description cannot exceed 255 characters.`);
         $('.success').remove();
         $('.error').remove();
-        $('#boards h1').after(`<p class="error">Wrong input. Title must be 1-30 characters long, while title cannot exceed 255 characters.</p>`);
+        $('#boards h1').after(`<p class="error">Wrong input. Title must be 1-30 characters long, while description cannot exceed 255 characters.</p>`);
 
         $('.modal-title').val(originalBoardTitle);
         $('textarea.modal-description').val(originalBoardDesc);

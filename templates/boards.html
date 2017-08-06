@@ -10,6 +10,7 @@
         var teamId = {{ team_id if team_id else 'null' }};
         var teamRole = '{{ team_role if team_role else 'personal' }}';
         var boardRole;
+        var teamMembers = null;
     </script>
 
     <script src="{{url_for('static', filename='scripts/boards/data_handler_boards.js')}}" defer></script>
@@ -38,8 +39,8 @@
         {% endif %}
         {% endwith %}
 
-        <hr>
-        <div id="select-team-div">
+        <div class="col-sm-12" id="select-team-div">
+            <hr>
             <p class="description">Showing either <strong>personal boards</strong> or <strong>team related boards</strong>.</p>
             <select id="team-select">
                 <option selected value="personal boards">Personal Boards</option>
@@ -49,8 +50,8 @@
                 {% endfor %}
                 {% endif %}
             </select>
+            <hr>
         </div>
-        <hr>
 
     </div>
     <div class="container" id="cards"></div>

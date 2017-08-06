@@ -333,7 +333,8 @@ INSERT INTO boards VALUES (4, 'Active Board 4', NULL, 'active', 5, NULL, '2017-0
 INSERT INTO boards VALUES (5, 'Active Board 5', NULL, 'active', NULL, 1, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 INSERT INTO boards VALUES (6, 'Active Board 6', NULL, 'active', NULL, 5, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
 INSERT INTO boards VALUES (7, 'Active Board 7', NULL, 'active', NULL, 5, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
-SELECT pg_catalog.setval('boards_id_seq', 7, true);
+INSERT INTO boards VALUES (8, 'Active Board 8', NULL, 'active', NULL, 4, '2017-06-23 10:25:32', '2017-06-23 10:25:32');
+SELECT pg_catalog.setval('boards_id_seq', 8, true);
 
 
 INSERT INTO cards VALUES (1, 'New Card 1', NULL, 1, 'new', 1, 'admin', 'neo_anderson', '2017-06-24 10:25:32', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
@@ -373,4 +374,4 @@ INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (6, 6, 'vie
 INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (7, 5, 'editor');
 INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (2, 6, 'editor');
 INSERT INTO accounts_boards (account_team_id, board_id, role) VALUES (2, 7, 'viewer');
-SELECT pg_catalog.setval('accounts_boards_id_seq', 5, true);
+SELECT pg_catalog.setval('accounts_boards_id_seq', 6, true);

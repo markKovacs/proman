@@ -236,14 +236,25 @@ def logout():
 @app.route('/api/cards')
 @account.login_required
 def load_cards():
-    board_id = request.args.get("id")
-    cards = board_logic.load_cards(board_id)
+    """Decorator validates only login, but further validation happens inside."""
+    account_id = common.get_account_id(session["user_name"])
+    board_id = request.args.get("board_id")
+    team_role = request.args.get("team_role")
+
+    if team_role == 'personal':
+        cards = board_logic.load_personal_cards(board_id, account_id)
+    elif team_role in ('owner', 'manager', 'member'):
+        cards = board_logic.load_team_cards(board_id, account_id)
+    else:
+        cards = None
+
     return jsonify(cards)
 
 
 @app.route('/api/new_card', methods=["POST"])
 @account.login_required
 def save_new_card():
+    # TO BE IMPLEMENTED: can do only if editor
     title = request.form.get("title")
     board_id = request.form.get("board_id")
     response = board_logic.save_new_card(title, board_id)
@@ -281,6 +292,7 @@ def save_new_team_board(team_id):
 @app.route('/api/new_card_title', methods=["POST"])
 @account.login_required
 def add_new_card_title():
+    # TO BE IMPLEMENTED: can do only if editor
     title = request.form.get("title")
     card_id = request.form.get("card_id")
     response = board_logic.save_new_card_title(card_id, title)
@@ -293,6 +305,7 @@ def add_new_card_title():
 @app.route('/api/persistent_dnd', methods=['POST'])
 @account.login_required
 def make_drag_and_drop_persistent():
+    # TO BE IMPLEMENTED: can do only if editor
     moved_card_id = request.form.get("moved_card_id")
     new_status = request.form.get("new_status")
     card_ids = request.form.get("card_ids")
@@ -303,6 +316,7 @@ def make_drag_and_drop_persistent():
 @app.route('/api/delete_board', methods=['POST'])
 @account.login_required
 def delete_board():
+    # TO BE IMPLEMENTED: can do only if owner
     board_id = request.form.get("board_id")
     board_logic.delete_board(board_id)
     return jsonify("Done")
@@ -311,6 +325,7 @@ def delete_board():
 @app.route('/api/delete_card', methods=['POST'])
 @account.login_required
 def delete_card():
+    # TO BE IMPLEMENTED: can do only if editor
     card_id = request.form.get("card_id")
     board_logic.delete_card(card_id)
     return jsonify("Done")
@@ -319,6 +334,7 @@ def delete_card():
 @app.route('/api/current_card_counts', methods=['POST'])
 @account.login_required
 def get_current_card_counts():
+    # TO BE IMPLEMENTED: can do only if viewer at least
     team_role = request.form.get('team_role')
     team_id = request.form.get('team_id')
     account_id = common.get_account_id(session["user_name"])
@@ -329,6 +345,7 @@ def get_current_card_counts():
 @app.route('/api/board_details', methods=['POST'])
 @account.login_required
 def get_board_details():
+    # TO BE IMPLEMENTED: can do only if viewer at least
     board_id = request.form.get('board_id')
     board_details = board_logic.get_board_details(board_id)
     return jsonify(board_details)
@@ -337,10 +354,23 @@ def get_board_details():
 @app.route('/api/edit_board', methods=['POST'])
 @account.login_required
 def edit_board():
+    # TO BE IMPLEMENTED: can do only if editor OR manager
     board_id = request.form.get('board_id')
     board_title = request.form.get('board_title')
     board_desc = request.form.get('board_desc')
     new_mod_date = board_logic.edit_board(board_id, board_title, board_desc)
+    return jsonify(new_mod_date)
+
+
+@app.route('/api/edit_card', methods=['POST'])
+@account.login_required
+def edit_card():
+    # TO BE IMPLEMENTED: can do only if editor
+    card_id = request.form.get('card_id')
+    card_title = request.form.get('card_title')
+    card_desc = request.form.get('card_desc')
+    assigned_to = request.form.get('assigned_to')
+    new_mod_date = board_logic.edit_card(card_id, card_title, card_desc, assigned_to)
     return jsonify(new_mod_date)
 
 
@@ -481,7 +511,9 @@ def get_team_boards(team_id):
     elif role == 'member':
         boards_data = board_logic.get_accessed_team_boards(acc_team_id)
 
-    return jsonify(boards_data=boards_data, team_role=role, team_id=team_id)
+    team_members = team_logic.get_team_members(team_id)
+
+    return jsonify(boards_data=boards_data, team_role=role, team_id=team_id, team_members=team_members)
 
 
 @app.route('/api/get_personal_boards')

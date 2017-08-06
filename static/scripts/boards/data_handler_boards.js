@@ -101,7 +101,8 @@ app.dataHandler = {
             dataType: "json",
             url: "/api/cards",
             data: {
-                id: boardId
+                board_id: boardId,
+                team_role: teamRole
             },
             success: function(cards) {
                 app.cards.showCards(cards, boardId, boardTitle, teamRole);
@@ -234,6 +235,34 @@ app.dataHandler = {
         });
     },
 
+    editCardDetails: function (cardId, newTitle, newDesc, newAssignee) {
+        $.ajax({
+            url: '/api/edit_card',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                card_id: cardId,
+                card_title: newTitle,
+                card_desc: newDesc,
+                assigned_to: newAssignee
+            },
+            success: function(response) {
+                if (response === 'data_error') {
+                    app.cards.cardChangeFail();
+                } else {
+                    app.cards.cardChangeSuccess(response, cardId, newTitle, newAssignee, newDesc);
+                }
+            },
+            error: function() {
+                window.location.replace('/login?error=timedout');
+            },
+            complete: function() {
+                originalCardTitle = undefined;
+                originalCardDesc = undefined;
+            }
+        });
+    },
+
     getTeamBoards: function (selectedAccTeamId, selectedTeamId) {
         $.ajax({
             url: `/api/get_team_boards/${selectedTeamId}`,
@@ -246,6 +275,7 @@ app.dataHandler = {
                 boardsData = response.boards_data;
                 teamId = response.team_id;
                 teamRole = response.team_role;
+                teamMembers = response.team_members;
                 app.boards.showBoards();
             },
             error: function() {
@@ -261,6 +291,7 @@ app.dataHandler = {
             success: function(response) {
                 boardsData = response.boards_data;
                 teamRole = response.team_role;
+                teamMembers = null;
                 app.boards.showBoards();
             },
             error: function() {

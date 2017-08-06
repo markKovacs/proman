@@ -1,6 +1,8 @@
 
 // Global variable:
 var originalCardTitle;
+var originalCardDesc;
+var originalCardAssignedTo;
 var originalBoardTitle;
 var originalBoardDesc;
 
@@ -27,6 +29,10 @@ app.init = function() {
     app.common.confirmDeleteEntityListeners();
 
     app.boards.teamSelectListener();
+
+    app.cards.cardDetailsListener();
+    app.cards.editCardListener();
+    app.cards.submitCardListener();
 };
 
 $(document).ready(app.init());
