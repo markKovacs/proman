@@ -84,7 +84,7 @@ def register_account():
     session['user_name'] = user_name
     flash("Successful registration as '{}'.".format(user_name), "success")
 
-    return redirect(url_for('boards'))
+    return redirect(url_for('dashboard'))
 
 
 def get_user_names():
@@ -127,12 +127,11 @@ def valid_password(password_1, password_2):
 
 def create_account(account_name, password):
     """Create account in accounts table."""
-    reg_date = create_timestamp()
     hashed_pw = generate_password_hash(password, method='pbkdf2:sha512:80000', salt_length=8)
 
-    sql = """INSERT INTO accounts (account_name, password, reg_date)
-             VALUES (%s, %s, %s);"""
-    parameters = (account_name, hashed_pw, reg_date)
+    sql = """INSERT INTO accounts (account_name, password)
+             VALUES (%s, %s);"""
+    parameters = (account_name, hashed_pw)
     fetch = None
 
     data_manager.query(sql, parameters, fetch)
