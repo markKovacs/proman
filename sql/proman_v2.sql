@@ -318,11 +318,11 @@ INSERT INTO categories VALUES (3, 'free-time');
 SELECT pg_catalog.setval('categories_id_seq', 3, true);
 
 
-INSERT INTO teams VALUES (1, 'Team Title 1', 1, 'We like to manufacture stuff.', 'team_1.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (2, 'Team Title 2', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (3, 'Team Title 3', 3, 'We like to do anything.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (4, 'Team Title 4', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
-INSERT INTO teams VALUES (5, 'Team Title dsdsdsdsd sddsdsd 5', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (1, 'Apple Project X', 1, 'We like create stuff.', 'team_1.jpg', '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (2, 'Conquer the World', 2, 'We like to develop stuff.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (3, 'Just a Grocery List', 3, 'We like to do shopping.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (4, 'Rocket to Mars', 2, 'Nothing special.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
+INSERT INTO teams VALUES (5, 'Amazon Cloud Services', 3, 'Explained later.', NULL, '2017-06-24 10:25:32', '2017-06-24 10:25:32');
 SELECT pg_catalog.setval('teams_id_seq', 5, true);
 
 
