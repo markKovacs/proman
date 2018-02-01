@@ -1,8 +1,8 @@
 
 # DEVELOPER NOTES
 
-## NEXT
-- drag and drop animations - make nicer
+## UP NEXT
+- drag and drop animations - make it look better
 
 - card details listener:
     + id, title, details, created, modified, assigned to, assigned by, assigned when
@@ -18,7 +18,7 @@
 
 - create some sort of "log" table that logs all notable activity for dashboard
 
-- messsages MESSAGE LOL!!!!
+- messsages
 
 - show profile, edit profile (upload picture - shown in header), accept/decline invites, send join requests, cancel requests (maybe: check notifications/messages from here or separate menu)
 
